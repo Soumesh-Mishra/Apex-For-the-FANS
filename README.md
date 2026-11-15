@@ -38,6 +38,8 @@ The same commands work on Windows, macOS and Linux. Equivalent npm scripts are `
 
 ## Install on your devices
 
+**Windows local installation:** run `./windows/install.ps1` in PowerShell to install a local copy with desktop/Start shortcuts and a bundled, checksum-verified Node runtime. Edge or Chrome is required. See [Windows installation details](docs/INSTALLATION.md#windows). No HTTPS host is needed for this local option.
+
 Host the app at an HTTPS address using [the deployment guide](docs/DEPLOYMENT.md), then open **`https://YOUR-DOMAIN/install`**.
 
 | Device | Install |
@@ -47,7 +49,7 @@ Host the app at an HTTPS address using [the deployment guide](docs/DEPLOYMENT.md
 | Windows | Edge / Chrome → address-bar install icon or menu → install as app |
 | macOS | Safari on Sonoma 14+ → File / Share → Add to Dock; or Chrome's install icon |
 
-This release installs as a **Progressive Web App**, not an APK, IPA, EXE or DMG. See [complete platform instructions, updates and removal](docs/INSTALLATION.md). Internet access is required for the dashboard and feeds; the service worker only caches a generic offline connection page. Google sign-in is optional.
+Browser installation uses a **Progressive Web App**. An experimental, directly installable Android APK is also available through the [Android build](android/README.md); iOS has no native IPA package. See [complete platform instructions, updates and removal](docs/INSTALLATION.md). Internet access is required for the dashboard and feeds; the service worker only caches a generic offline connection page. Google sign-in is optional.
 
 ## Host your own copy
 

@@ -26,6 +26,22 @@ iOS does not use the Chromium in-page install prompt. Browser and installed-app 
 
 ## Windows
 
+### Local desktop installation (no hosted server needed)
+
+For a local copy on Windows x64, clone/download this repository, open PowerShell in its folder and run:
+
+```powershell
+./windows/install.ps1
+```
+
+This downloads Node.js 24.22.3 from nodejs.org, verifies its pinned SHA-256 checksum, builds APEX and installs it under `%LOCALAPPDATA%\APEX-For-the-FANS`. Microsoft Edge or Chrome must already be installed. No administrator rights, Windows service or login startup task is used.
+
+Open **APEX - For the Fans** from Start or the desktop. The launcher starts a server on `http://127.0.0.1:41732` and opens a browser app window. Use **Start → APEX → Stop APEX server** when you want to stop the background server. Closing the app window alone leaves the server running. Local settings remain in that browser's site storage. Google login is disabled in this local copy; external racing/news feeds still need internet.
+
+This is a local browser-backed desktop installation, not a signed native EXE/MSIX or a browser-registered PWA. It bundles its runtime so the source checkout and development terminal are not needed after installation. Keep the included `INSTALLATION.txt` for removal/update details. A pre-existing installation directory is preserved; the installer stops instead of overwriting it. If Windows organisational policy blocks local scripts or Windows Script Host, use the hosted browser installation below rather than disabling security protections.
+
+### Install from an HTTPS deployment
+
 1. Open the deployed address in Microsoft Edge or Chrome.
 2. Select the address-bar install icon. Alternatively use Edge's **Apps → Install this site as an app**, or Chrome's browser-menu install option.
 3. Confirm, launch APEX from Start and optionally pin it to the taskbar.

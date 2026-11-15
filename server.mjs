@@ -5,7 +5,7 @@ const port=Number(process.env.PORT||4173);
 if(!Number.isInteger(port)||port<1||port>65535)throw Error('PORT must be between 1 and 65535');
 const server=http.createServer(async(req,res)=>{
  try{
-  if(req.url==='/healthz'){res.writeHead(200,{'Content-Type':'text/plain'});res.end('ok');return;}
+  if(req.url==='/healthz'){res.writeHead(200,{'Content-Type':'text/plain','X-APEX-Server':'apex-f1'});res.end('ok');return;}
   const origin=process.env.PUBLIC_ORIGIN||'http://localhost:'+port;
   const headers=new Headers();for(const [key,value] of Object.entries(req.headers))if(value!==undefined)headers.set(key,Array.isArray(value)?value.join(', '):value);
   // A standalone server must not trust a client-supplied Sites identity header.
@@ -19,5 +19,5 @@ const server=http.createServer(async(req,res)=>{
  }catch{if(!res.headersSent)res.writeHead(500);res.end('APEX encountered an error.');}
 });
 server.requestTimeout=30000;server.headersTimeout=15000;
-server.listen(port,'0.0.0.0',()=>console.log('APEX listening on port '+port));
+server.listen(port,process.env.HOST||'0.0.0.0',()=>console.log('APEX listening on port '+port));
 for(const signal of ['SIGTERM','SIGINT'])process.on(signal,()=>server.close(()=>process.exit(0)));

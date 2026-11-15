@@ -11,3 +11,9 @@ node_modules/
 *.log
 coverage/
 public-release/
+android/.gradle/
+android/**/build/
+android/app/src/main/assets/
+android/local.properties
+*.jks
+*.keystore
