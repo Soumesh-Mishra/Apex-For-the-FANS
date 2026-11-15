@@ -1,0 +1,112 @@
+{
+  "alpine": {
+    "name": "Fernando Alonso",
+    "label": "Renault / Alpine heritage",
+    "note": "Renault’s double champion, part of the Enstone story that became Alpine.",
+    "file": "assets/team-legends/alpine.jpg",
+    "art": "AI-generated anime fan art",
+    "accent": "#FFD447",
+    "accentSecondary": "#59C6F2",
+    "accentLabel": "Alonso · gold / sky blue"
+  },
+  "aston-martin": {
+    "name": "Fernando Alonso",
+    "label": "Aston Martin icon",
+    "note": "A defining figure of Aston Martin’s modern F1 era.",
+    "file": "assets/team-legends/aston-martin.jpg",
+    "art": "AI-generated anime fan art",
+    "accent": "#FFD447",
+    "accentSecondary": "#59C6F2",
+    "accentLabel": "Alonso · gold / sky blue"
+  },
+  "audi": {
+    "name": "Nico Hülkenberg",
+    "label": "Audi • First chapter",
+    "note": "One of Audi’s inaugural F1 drivers. A new history begins in 2026.",
+    "file": "assets/team-legends/audi.jpg",
+    "art": "AI-generated anime fan art",
+    "accent": "#B9F43D",
+    "accentSecondary": "#F3F3F3",
+    "accentLabel": "Hülkenberg · electric lime / white"
+  },
+  "cadillac": {
+    "name": "Sergio Pérez & Valtteri Bottas",
+    "label": "Cadillac • First chapter",
+    "note": "Cadillac’s debut F1 pairing. The first chapter starts in 2026.",
+    "file": "assets/team-legends/cadillac.jpg",
+    "art": "AI-generated anime fan art",
+    "accent": "#FFD447",
+    "accentSecondary": "#75CFF0",
+    "accentLabel": "Pérez & Bottas · gold / ice blue"
+  },
+  "ferrari": {
+    "name": "Michael Schumacher",
+    "label": "Scuderia legend",
+    "note": "Five consecutive titles with Ferrari, from 2000 to 2004.",
+    "file": "assets/team-legends/ferrari.jpg",
+    "art": "AI-generated anime fan art",
+    "accent": "#FFD166",
+    "accentSecondary": "#FFF3D6",
+    "accentLabel": "Schumacher · golden light / ivory"
+  },
+  "haas": {
+    "name": "Kevin Magnussen",
+    "label": "Haas icon",
+    "note": "The driver behind Haas’ first pole position, at São Paulo in 2022.",
+    "file": "assets/team-legends/haas.jpg",
+    "art": "AI-generated anime fan art",
+    "accent": "#EF4050",
+    "accentSecondary": "#FFFFFF",
+    "accentLabel": "Magnussen · crimson / white"
+  },
+  "mclaren": {
+    "name": "Ayrton Senna",
+    "label": "McLaren legend",
+    "note": "Three world titles with McLaren: 1988, 1990 and 1991.",
+    "file": "assets/team-legends/mclaren.jpg",
+    "art": "AI-generated anime fan art",
+    "accent": "#FFDD33",
+    "accentSecondary": "#43D17A",
+    "accentLabel": "Senna · yellow / green"
+  },
+  "mercedes": {
+    "name": "Lewis Hamilton",
+    "label": "Mercedes legend",
+    "note": "Six world titles with Mercedes, shaping a remarkable era.",
+    "file": "assets/team-legends/mercedes.jpg",
+    "art": "AI-generated anime fan art",
+    "accent": "#BB8CFF",
+    "accentSecondary": "#F4DC64",
+    "accentLabel": "Hamilton · violet / gold"
+  },
+  "racing-bulls": {
+    "name": "Sebastian Vettel",
+    "label": "Toro Rosso heritage",
+    "note": "Toro Rosso’s Monza winner in 2008, honoured as part of the team’s lineage.",
+    "file": "assets/team-legends/racing-bulls.jpg",
+    "art": "AI-generated anime fan art",
+    "accent": "#FFD34D",
+    "accentSecondary": "#F04B55",
+    "accentLabel": "Vettel · gold / red"
+  },
+  "red-bull-racing": {
+    "name": "Max Verstappen",
+    "label": "Red Bull icon",
+    "note": "A champion who helped define Red Bull Racing’s modern identity.",
+    "file": "assets/team-legends/red-bull-racing.jpg",
+    "art": "AI-generated anime fan art",
+    "accent": "#FF9638",
+    "accentSecondary": "#F3F5FF",
+    "accentLabel": "Verstappen · orange / white"
+  },
+  "williams": {
+    "name": "Nigel Mansell",
+    "label": "Williams legend",
+    "note": "Williams’ 1992 world champion, remembered for his fearless style.",
+    "file": "assets/team-legends/williams.jpg",
+    "art": "AI-generated anime fan art",
+    "accent": "#ED535C",
+    "accentSecondary": "#FFD45A",
+    "accentLabel": "Mansell · red / gold"
+  }
+}

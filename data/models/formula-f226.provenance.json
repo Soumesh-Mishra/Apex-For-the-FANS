@@ -1,0 +1,10 @@
+{
+  "title": "Formula F226",
+  "author": "CarlosCG31",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "original": "https://sketchfab.com/3d-models/formula-f226-a4dd03155ab64a6a9b7c677af189c1a1",
+  "derivative": "https://github.com/BadCodesGG/interactive-f1/blob/main/public/models/f226.f3ba7133.glb",
+  "sha256": "f3ba7133850222a50f2301698ff830fcb5a4a77b48de97243718e62df6a94e29",
+  "modifications": "Reoriented, team-inspired PBR material masks, wheel pivots and animation. Upstream model grouped, repainted and compressed."
+}

@@ -1,0 +1,73 @@
+{
+  "source": "https://www.formula1.com/en/teams",
+  "retrievedAt": "2026-11-11T08:43:27.317Z",
+  "method": "Primary colours from the --f1-team-colour CSS property on official 2026 team cards. accessible is F1’s separate accessible-colour value, not a brand secondary.",
+  "teams": [
+    {
+      "url": "https://www.formula1.com/en/teams/mercedes",
+      "primary": "#27F4D2",
+      "accessible": "#067E6A",
+      "label": "Mercedes George Russell Kimi Antonelli"
+    },
+    {
+      "url": "https://www.formula1.com/en/teams/ferrari",
+      "primary": "#E8002D",
+      "accessible": "#5C0012",
+      "label": "Ferrari Charles Leclerc Lewis Hamilton"
+    },
+    {
+      "url": "https://www.formula1.com/en/teams/red-bull-racing",
+      "primary": "#3671C6",
+      "accessible": "#142948",
+      "label": "Red Bull Racing Max Verstappen Isack Hadjar"
+    },
+    {
+      "url": "https://www.formula1.com/en/teams/mclaren",
+      "primary": "#FF8000",
+      "accessible": "#804000",
+      "label": "McLaren Lando Norris Oscar Piastri"
+    },
+    {
+      "url": "https://www.formula1.com/en/teams/racing-bulls",
+      "primary": "#6692FF",
+      "accessible": "#0038C2",
+      "label": "Racing Bulls Liam Lawson Arvid Lindblad"
+    },
+    {
+      "url": "https://www.formula1.com/en/teams/alpine",
+      "primary": "#00A1E8",
+      "accessible": "#004E70",
+      "label": "Alpine Pierre Gasly Franco Colapinto"
+    },
+    {
+      "url": "https://www.formula1.com/en/teams/haas",
+      "primary": "#DEE1E2",
+      "accessible": "#667175",
+      "label": "Haas F1 Team Oliver Bearman Rafael Câmara"
+    },
+    {
+      "url": "https://www.formula1.com/en/teams/audi",
+      "primary": "#FF2D00",
+      "accessible": "#751500",
+      "label": "Audi Nico Hulkenberg Gabriel Bortoleto"
+    },
+    {
+      "url": "https://www.formula1.com/en/teams/williams",
+      "primary": "#1868DB",
+      "accessible": "#082145",
+      "label": "Williams Carlos Sainz Alexander Albon"
+    },
+    {
+      "url": "https://www.formula1.com/en/teams/aston-martin",
+      "primary": "#229971",
+      "accessible": "#0F4331",
+      "label": "Aston Martin Fernando Alonso Lance Stroll"
+    },
+    {
+      "url": "https://www.formula1.com/en/teams/cadillac",
+      "primary": "#AAAAAD",
+      "accessible": "#58585B",
+      "label": "Cadillac Sergio Perez Valtteri Bottas"
+    }
+  ]
+}

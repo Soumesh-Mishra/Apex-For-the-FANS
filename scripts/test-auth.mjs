@@ -1,0 +1,40 @@
+import {spawnSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import vm from 'node:vm';
+const source=await readFile('dist/server/index.js','utf8');
+const worker=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+const origin='https://apex.test';
+const env={GOOGLE_CLIENT_ID:'123-test.apps.googleusercontent.com',APEX_SESSION_SECRET:'test-only-session-secret-32-bytes-minimum-not-production'};
+const identity={'oai-authenticated-user-id':'test-platform-user'};
+const get=(path,environment=env,extra={})=>worker.default.fetch(new Request(origin+path,{headers:{...identity,...extra}}),environment);
+const configResponse=await get('/api/auth/config');const config=await configResponse.json();
+assert(config.enabled);assert.equal(configResponse.headers.get('cache-control'),'no-store');
+const flowCookie=configResponse.headers.get('set-cookie').split(';')[0];assert.match(configResponse.headers.get('set-cookie'),/Secure; HttpOnly; SameSite=Lax/);
+const now=Math.floor(Date.now()/1000);
+const claims={iss:'https://accounts.google.com',aud:env.GOOGLE_CLIENT_ID,sub:'test-google-subject',nonce:config.nonce,email:'test@example.com',email_verified:true,name:'Test Driver',iat:now,exp:now+3600};
+const pair=await crypto.subtle.generateKey({name:'RSASSA-PKCS1-v1_5',modulusLength:2048,publicExponent:new Uint8Array([1,0,1]),hash:'SHA-256'},true,['sign','verify']);
+const publicKey={...await crypto.subtle.exportKey('jwk',pair.publicKey),kid:'test-google-key',alg:'RS256',use:'sig'};
+const encode=value=>Buffer.from(JSON.stringify(value)).toString('base64url');
+async function jwt(patch={},header={}){const body=encode({alg:'RS256',kid:'test-google-key',typ:'JWT',...header})+'.'+encode({...claims,...patch});const signature=await crypto.subtle.sign('RSASSA-PKCS1-v1_5',pair.privateKey,new TextEncoder().encode(body));return body+'.'+Buffer.from(signature).toString('base64url')}
+const realFetch=globalThis.fetch;
+globalThis.fetch=async request=>{assert.equal(String(request),'https://www.googleapis.com/oauth2/v3/certs');return Response.json({keys:[publicKey]},{headers:{'Cache-Control':'public,max-age=3600'}})};
+const post=(token,options={})=>worker.default.fetch(new Request(origin+'/api/auth/google',{method:'POST',headers:{Origin:options.origin||origin,'Content-Type':'application/json',Cookie:options.cookie??flowCookie,...identity},body:JSON.stringify({credential:token,csrf:options.csrf??config.csrf})}),env);
+try{
+ const validToken=await jwt();const valid=await post(validToken);assert.equal(valid.status,200);const payload=await valid.json();assert.equal(payload.user.name,'Test Driver');assert.equal(payload.credential,undefined);
+ const sessionCookie=valid.headers.getSetCookie().find(value=>value.startsWith('__Host-apex_session=')).split(';')[0];
+ const me=await(await get('/api/auth/me',env,{Cookie:sessionCookie})).json();assert.equal(me.user.id,'google:test-google-subject');
+ assert.equal((await(await get('/api/auth/me',env,{Cookie:sessionCookie,'oai-authenticated-user-id':'another-platform-user'})).json()).user,null,'Session bound to hosting identity');
+ const tampered=sessionCookie.replace(/=./,'=x');assert.equal((await(await get('/api/auth/me',env,{Cookie:tampered})).json()).user,null);
+ assert.equal((await post(validToken,{origin:'https://other.test'})).status,403);assert.equal((await post(validToken,{csrf:'wrong'})).status,403);assert.equal((await post(validToken,{cookie:''})).status,403);
+ for(const patch of [{aud:'wrong.apps.googleusercontent.com'},{iss:'https://other.test'},{exp:now-1},{iat:now+1000},{nonce:'wrong'},{email_verified:false},{sub:''}])assert.equal((await post(await jwt(patch))).status,401,JSON.stringify(patch));
+ assert.equal((await post(await jwt({},{alg:'HS256'}))).status,401);
+ const parts=validToken.split('.');parts[2]=(parts[2][0]==='A'?'B':'A')+parts[2].slice(1);assert.equal((await post(parts.join('.'))).status,401,'Forged signature rejected');
+ const logout=await worker.default.fetch(new Request(origin+'/api/auth/signout',{method:'POST',headers:{Origin:origin,Cookie:sessionCookie,...identity}}),env);assert.equal(logout.status,200);assert.equal(logout.headers.getSetCookie().length,2);assert(logout.headers.getSetCookie().every(value=>value.includes('Max-Age=0')));
+ assert.equal((await(await get('/api/auth/config',{})).json()).enabled,false,'No fake sign-in without configuration');
+ assert.equal((await(await get('/api/auth/me',{})).json()).user,null);
+ const disabled=await worker.default.fetch(new Request(origin+'/api/auth/google',{method:'POST'}),{});assert.equal(disabled.status,503);
+ const login=await get('/login');assert.equal(login.status,200);const html=await login.text();for(const match of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)){if(match[1].includes('type="module"')){const checked=spawnSync(process.execPath,['--input-type=module','--check'],{input:match[2],encoding:'utf8'});assert.equal(checked.status,0,checked.stderr);}else new vm.Script(match[2]);}assert(!html.includes('__TEAM_'));assert(html.includes('accounts.google.com/gsi/client'));
+ assert.equal((await get('/privacy')).status,200);
+ console.log('Passed Google signature/issuer/audience/expiry/nonce checks, CSRF/origin checks, hosting identity binding, session tampering, logout, unconfigured state and login script syntax.');
+}finally{globalThis.fetch=realFetch}

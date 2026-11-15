@@ -1,0 +1,73 @@
+{
+  "source": "https://www.formula1.com/en/teams",
+  "retrievedAt": "2026-11-11T09:06:10.354Z",
+  "note": "Official white team-logo assets from Formula1.com team cards; CDN width requested at 192px. Stored without recolouring or alteration.",
+  "logos": {
+    "red-bull-racing": {
+      "source": "https://media.formula1.com/image/upload/c_lfill,w_192/q_auto/v1740000001/common/f1/2026/redbullracing/2026redbullracinglogowhite.webp",
+      "profile": "https://www.formula1.com/en/teams/red-bull-racing",
+      "dataUrl": "data:image/webp;base64,UklGRgICAABXRUJQVlA4TPUBAAAvX8AXECcw//M//wKBFG52gQ4wQHZtW1FsbSkDwCYACgnAhgAUVv5J0Xhffb+PiP5PgP4Pbs98beaHjmWSrPc/cyyquvAjblHTLT9hN3U+5heeoUf+F1Z17+bf7UOflj/wfdZvevlcvm+SnmB6EpgXB5gOm1fpJrZsBkKfA4JpPYySToaazZSmK1GaRo6DJCXVH6qxZ4cTwNSSSrdWXKZM8GnZTEgFvrJ/ijRUMtUHQuuBQN0UuiS5VZJspp4B0wByg63YP9JtJB20i7Xm6A+S7FjbeRlr6QVB0irdH1leD39DkBslG8/8VwAx9xAxkjx9GcZsCkvIb65F1RvIPdvzKRzzQ3xqMUNUc+9KwDUWe0hAg3epFtIFrMUd4cu38XRZ4AY2opscEIsErNOUuIDwQGjtEL7z5E3iHm4AI+kEonzivLwfDoiNE5iNJDn8J3ERVskFIgwji8oFYJBkBdeUjDTZmNYxcxJO6UmF3+JZ2Z5ikDYX5zMHSXk97zBmWNJs7JK+Edy1bmmUtAe/5c8pO2Qfv7MkPUw5b+ds5WbJLZLzN3HGSJK/8NEN/iAOqifitA/q3xysqjtYrpBHtd0iaelzRvY0Ddk9HjqHjuozdG16663e263nMK/+1pmWW/Sbaa59N/2q3yZpOhb9rvP52mb9HxwA",
+      "sha256": "c18fab015b0ecdade0a789fc95ff1afe160f536f5697c4e6d7191f83c11a2874"
+    },
+    "mercedes": {
+      "source": "https://media.formula1.com/image/upload/c_lfill,w_192/q_auto/v1740000001/common/f1/2026/mercedes/2026mercedeslogowhite.webp",
+      "profile": "https://www.formula1.com/en/teams/mercedes",
+      "dataUrl": "data:image/webp;base64,UklGRuICAABXRUJQVlA4TNYCAAAvX8AXECcw//M//wKBFG52gQ4wAHJtW1Wk+54GgJ8AnkoAWhKAws0/qSof2MMeRfR/AvAvdRjGMMgw/pWggp9h1T+xCLCs5TwngS1/AVgKGUlyQlhfGxAyyVPjSTKJbS8NsMw0AhKBoTCJra8EscwNADQCCAeTmL4hyFR8S8L3zoj1hQGZil/8gYOTdc2CGFfU4KDe0mpEjvgdhPILOWJrFGSnPsFh1FsaoUQ8GqgPuGOY24hR2gTqpw3yDFf3hDvuXQsxSiujbA1M7ghf70Dub6kDinqGCot7V6eWUDF7kMe5wTW7RjD6urPKUDpXV2PxlqpAqUkucO9qdE94JY9zDfa5ir6rTzV6d65QZ3OpMBTxKUjxxVt8qDEBqS7w6nwWEtx7g3JUiL2Wx9mnNvsugOx891Qhe9+g911T9KHmaDHXXF2D2bf3yScVISnIj/jmiuH2fbAINWyuMJ++8VaPKTAoYOorvuNybQDCCOAQz1jxuTrHB4DFogAmh4XTlz2mgDEVCmDqQPKVvX9aAStfSYDjKSD68vF0AMj8YhJgbLbMv0yBzMcImP6SUHGvDyuQSXI7SHIClger6eIPAxaSHIGDJCdAH2bf3p1fQWEkkwJAKCQ7mHzp1VfM+WuFkYyCn6GQVCwAgtzqC/OtAGAkNzgPMkkQwJArkK4eEGRyhPsgkwQBUFBZlogVmUlRGQoTBojFmruLAZlRUB0KI0Tr9j4jc0PTg1OQ3NeEuBtHND44SdYaFMuK5mFbEqpvTXhRLNbt863tDFnrAi22U2MD5C5LK5MrouEe97nVgqwtULRIm6CW0PSOFtusyH2bQM3awsQobZCjpRZAjmgcqMdUt2KntMKe5JhqFIET2ueIY6oqCS8aI45RHKq4qW9gZUTYpl/DAhyc8G7mCoRhGYdhBMLJCW9ncsTjUjjh/ZVM6zoMw6eQE/6iZT6egj+6rJ+SznXAv1Q=",
+      "sha256": "c994e1908cf7ac564c18e0fa899c0dc1ad714ea55d983168d3f32a72d3492980"
+    },
+    "racing-bulls": {
+      "source": "https://media.formula1.com/image/upload/c_lfill,w_192/q_auto/v1740000001/common/f1/2026/racingbulls/2026racingbullslogowhite.webp",
+      "profile": "https://www.formula1.com/en/teams/racing-bulls",
+      "dataUrl": "data:image/webp;base64,UklGRk4CAABXRUJQVlA4TEECAAAvX8AXECcw//M//wKBFG52gQ4wAHZtW0GjK1gAGgsgkQI0oQCF039ToOD8zk9E/ydA/2o36vFVydR/02Pwugev57ANmOdiS3gO28AfCC3mgd8vF9Ti75eLpV+UlApTMZLLQHjGFeOVjueUgOWGB3joaHB/YOsQ/1x46ADGGxuwPJQAeyMB4zOeO9uPcnjknYuhdlAGPeCoBt2zf2BsiM9FNRAes8VqnC4wDwVJWiVpuwhNr3ur6tMsTdNe0OKYJX811nYIkrQXpkEQjdJFqOwAVpKKsSUBw3GBkbRTHSSlHh6wG0QVo1ymHiSdwNKib75IhFnKXJtecpiKx0gbN0O3LeosZOT2fAer3Cdb5Yo812sRdAJj0x7lgVVy+YbNAMYDtsVhtcFH0snN5SwWJRhaNqSNl+R27sYKOohqPYO0BbkvjaliPWNTstJmlGjNlSCGLtJO56hZzecoydF9UIcoudzPdPCEPdPfdlCif9gYe/gU116L61NW4q1QWJOWR5a2GI9nwq2xgD32ysV661NLDJ3OYq4liPMR55Oy13HrhMUbKVVsp1To+/t8cnxDPEY5qqHLtAOENKia4B10VpZselA1UZcZy5BhycRz7OArrz3U3NuzJJvAJHjHpkkHcZ2HHVP8gmcgnCZRtck2eJTi9M0QVGYsNodkcmFT0LfhCDtzjpk4VE6W70QIysTPLJdX3fd+ghQHOdV9Zs4wys8q3afhNBmwuuuBOKl7WmGedD/zG9Q/vwlq9bOe3Dds079dAA==",
+      "sha256": "734934d3867e9ffc013245409b8f2bcb3b7cc41f94aa0103d2cf352053a73095"
+    },
+    "alpine": {
+      "source": "https://media.formula1.com/image/upload/c_lfill,w_192/q_auto/v1740000001/common/f1/2026/alpine/2026alpinelogowhite.webp",
+      "profile": "https://www.formula1.com/en/teams/alpine",
+      "dataUrl": "data:image/webp;base64,UklGRkABAABXRUJQVlA4TDQBAAAvX8AXECcw//M//wKBFG52gQ4wwFVt26qynwTAAtgNgAV4cvqHgiP7bX75iOi/A7dtI0kzewk1MJezf8Cf1LbYZ2tCziZmtzpGHbM5eqFTswbUzprORZROmnxYpFc5NUuGzGlX7vzaRcfi84sseXevd7e6lTo3gE/uSIczn7xSzjrc6ZX3VpUzOEwsu3XkHEAnl+JSnqMD2OTZrCfcEUCerA6MKGfLzpBqbyNcn9CovjTO0cnvgY2lewOoktWB9bULMCvPVuDdCR5jWItL/0hcmSwP7Oq3p3e3/DDe17i5WaLchu8sUdLcLFHSfdur5PgLd5d+9h/2xbb640+PZE4PhB5c1sV6U6UmR0XNsHGMIsKVmhoVzLFsc0cQvOn/06rAdKmpcoqSmWOSGx2V3Oio5D/RBg==",
+      "sha256": "f568ce983937e64115874b4fdc8dd27d8893a50d245c6eb46a9ec6f6f2966f55"
+    },
+    "ferrari": {
+      "source": "https://media.formula1.com/image/upload/c_lfill,w_192/q_auto/v1740000001/common/f1/2026/ferrari/2026ferrarilogowhite.webp",
+      "profile": "https://www.formula1.com/en/teams/ferrari",
+      "dataUrl": "data:image/webp;base64,UklGRrADAABXRUJQVlA4TKMDAAAvX8AXEGegJJIV6kiA+1sUjv7hqKG0kRRoqQD3WxSO/otDaSMp0FIB7rcoHP0Xh5naNn6hj1FOidiMAhj1EACA/3+IyAELFJBmFrvL7u6Z8bsbVTXQmf+/bd7QhZr1eyqDc9Nv4uFhis5vIL24SunJ5G6vnnwaybSnaE8vQJqOl957Qkw6he8KIAxi8xbR/wlI7lHeePyRFwbxXHpiA/b0ehSXXtwAbr/9P9+9D8DzaV83Hgdw50+SO+QP724Dj7wwCHfpyQ3gzu8F+edsG2+/u0N+MAPw/PUwk8eB27/ukH/OtuF++92CfH8G4IUQQ7z9J/nXbBv+b/9Omne3EeI78q/ZNuzxY6edcL79O/lDkNk27DGAXWcGnIbz7d9DDOEu65adpt3H2AJCjbGQvEvzVTbuYV1Jdpr9wkFyjvVAY9Ts1rVQXTTZOMhDkPQ9BqguGvFIiKGkr8kA7HaRIkjh02YAoHyO9aThVE0Ry1oHPc6FeNhHCweW0bA1NQAlGQ1JAKWOSQNQy5jWLF30I/0EgP2c3Wd60wDQrOLQkqSwIOMQJWlgr1ZRaECZzLGQUayVgICd1QVJLfsSUsBdNiRZs6+y1V11Sxq5CjZxaAXlampJUq+k9Wo4IdDZcEWyEsZ6OUjuUh0l7Upp61aISw7M869c6FiFG1nl2ojCJS0DaV0OkTiKakQtHMrrUJDGom7IygFJkg5zNMhnDlOSxqX6+tzBTJLHHMitnGSVBnnDdawhtav0GAQZuqqGpHBAUkOSXEuCPlw4zIikcTVcc5wLM5EO91cOZbKSJM8Eyr1qoQAgQ27dCpOMvLISTkX7UKDPvI6hBqCypWWOBvr8LmyV1VY1CDT0qiAAjMTKWgs1kT6mzAAUx2ifSyLgbgY0rB23QiUjr2MZyoLSMoeCfd7Rtm0rBCTdVRps6Mpg76LoWBsEm0iHaNq2zlYeZ5LwI0dnlndc7uFzP9Ghj/Yw9NIoXGuDHibSRyzpPpP02Vh6RXKuyLrlVzSXe/ncmpslCcm6zRaSVdrLw5LkfqFZleSCC5Jnkl4vNSSrsiAasjUj0lzuJ3mDJOfK7EuSQpFV2tNEkgsKkqbhsYI8k/StSMk1S3KX1Id625LM+RVJSj0ijw16mzSsamnNF6SZJv2/Qe8qjWCSe72cxPhG4XEsjWLSdJlpEudm0SHSSCbKpadJrJu5Q6TRXHq9IDm/lsT7sCL1NIl5a6mRRpVsZGkS96Vpcq8SAA==",
+      "sha256": "b620fd55007f6c7a89d37faa3dee5e5ad18e8250f7e9ebdca7619dfe5360d2e0"
+    },
+    "haas": {
+      "source": "https://media.formula1.com/image/upload/c_lfill,w_192/q_auto/v1740000001/common/f1/2026/haasf1team/2026haasf1teamlogowhite.webp",
+      "profile": "https://www.formula1.com/en/teams/haas",
+      "dataUrl": "data:image/webp;base64,UklGRkQCAABXRUJQVlA4TDgCAAAvX8AXECcw//M//wKBFG52gQ4wAHJtW1UkQQP4EYALDcASAyiR/IPqeu/d+xz2KKL/DiVbqZtL7AvFCxVCfqH7H5Qxn08r2xzeQm5KrukVrLVZUsILowG5wgsDXu5ByO5DZdAWD47GiWPOaPiep3E6H/9PVYU2Kh4fdUV6DeHG+PgM3ozXq+ttlCMgXz3qg3Thdrw9pgd4TuJnBwPTnwTDXXp2QlEcDH8j+z2gKEYj/AOxGuqr/r+/YDH0A9FO5mHjNBek3ZtnOVKaBKOuVwqjlKZHtC91TqSCQqCtXozioDRRn56NydYbhaaC70FMJDBAq8Z2gnZPrOxpq0lgABCRoa1GcbZ2BozVKjc6ALS/lEYRWAkYtoyjHY3tnDC8t7dbUXFSRFBK2duNHHbaqg4rAWTV2M4B2irz5SyCWlEivD+2WW7KYGyMxNpaUbmIlx0UDO6BwU3d/AR3xQ6fw4dBr7knA8mnCZp7tLLYpbkM7lQWVwZJc9+pLM4/EYXiR+ARmjUXuZ1VtKj7lxF0nXItmKQYRCInQI0mCsFA5ARTow3z0p+KKgwssh1R2BsokOAWQymGFRTIBIospdhvrVktq5I73bRo77+WVcmdwFeglLLJ1C1lM491oO/7kfV357uoi6GvvtNvCxnOjpNH/kSNROLbiKv6Grvxwd139jaOB+q+10r3jUzFKVs+DRKLr61+u7H+cCXW2Yh7Bm0QIvufgSr5VPDWgmt+6TGr2NNe+jDlnKfuP0o6",
+      "sha256": "892ebd7a685e68be8c82be84e49f5307ec86c6fb96395242e1526acacd01602e"
+    },
+    "audi": {
+      "source": "https://media.formula1.com/image/upload/c_lfill,w_192/q_auto/v1740000001/common/f1/2026/audi/2026audilogowhite.webp",
+      "profile": "https://www.formula1.com/en/teams/audi",
+      "dataUrl": "data:image/webp;base64,UklGRvYBAABXRUJQVlA4TOkBAAAvX8AXECcw//M//wKBFG52gQ4wAEJs23EbyTaAFcASAcjyASTS4w9K+u/JANqZiP47cCPJUfrugCUs3nDziPA/4Jg/BY/BZfnALo95FXxWcsEeUeSAOxrv5QRpqLbiCQKDQV0EYREstsufDdM5C+p4z6u9BOyxXLnqMmACg8dyNozLE9hEt+Zmp5oY4wiRXKN/TvRPaqgZNzHmIBYDQ/YgdENQOia0pyxEAYL0BUaOa1Ofe8PpP413Goo8A9WROD+8mdR+xiNcsavm8FXtbDORDkxfImeEYkE0p59oByQmVfyMyW+KFBStjiNLxFRJlMhBagq2FStJfXMMXxfXXdl9pvC8n4FJ2Tizy6imVk36Uya1IfBgD5Uf+hn85LaPbqb0Ixouc4tcavS/Eh1fZurEiomOej8D/WzXHeXU2QS1b173494+CagZBMKCuHVHntxiIcs7YXrqXXxiEvuN/D9EpBq1P+UuLqKUWE6MeRA++Hu0iOYMQO0HytwpYKmSVLOIET91HaBP6LuzIM01N+uGxHhI5BHQOUOM/tUwnWEcVHerqPhivBRXAgdVl6Ory2KpgM/H+UsjFKCtO2CNYDEzZuOp5GItSvjWwRAhBT6ulk/tkkybwFgXw0t+XQsRzmuNNzBLw/xNPwIA",
+      "sha256": "ec02f7b2d3b4ac034e555667b166fcd7da05edad9e75fe01ced39902f5479784"
+    },
+    "williams": {
+      "source": "https://media.formula1.com/image/upload/c_lfill,w_192/q_auto/v1740000001/common/f1/2026/williams/2026williamslogowhite.webp",
+      "profile": "https://www.formula1.com/en/teams/williams",
+      "dataUrl": "data:image/webp;base64,UklGRvwAAABXRUJQVlA4TO8AAAAvX8AXECcw//M//wKBFG52gQ4wAHJtu3GbLzAFTCyA8UEBngpQKPTfVET8D6+9iOj/BOAtbpx/rH6PiIh+skfSZSNOz45Mk83UiCxUI1Iz02Uz9RlZk0VqzzhU19yRabKZGpGFakTq9kh02cxhJEwWxN/Koboyx6rJJjFiDdUIYq66bBIj1iYLYl85VFfmWDXZJEasoRpBzFWXTeIZa5OF2qF6ykymx6v1l7MyZxxlxlgdGJR1ptcZY2UOwlHWGKsDg7LO9DpjrMxBOMoaY3VgUNaZXmeMlTkIR1ljrA6Eo8yJ51ZwOd8Wl//fG97EAgA=",
+      "sha256": "b943f2c3999ebe6c9ff747f43b3b294bdda17dff5b148fa71af8107626d6486c"
+    },
+    "mclaren": {
+      "source": "https://media.formula1.com/image/upload/c_lfill,w_192/q_auto/v1740000001/common/f1/2026/mclaren/2026mclarenlogowhite.webp",
+      "profile": "https://www.formula1.com/en/teams/mclaren",
+      "dataUrl": "data:image/webp;base64,UklGRhIBAABXRUJQVlA4TAYBAAAvX8AXECcw//M//wKBFG52gQ4wwHEkyZHSexgwgjVAsciBywBCav+dAkajefOI6P8E4A+qhLvU+ro3J6Hy98OBFOr3VZI5vS2RTMNrRR60THZSadvM8qC1kRTa28igfTPJXJksMpeeBp1r9ykZXIxZGVycZmRw9Tkhg8t3nQwuT1DL4PpDJYPrG7Qy+NlejxAAhLtYnKpOsr0CtLHPbZpM1oDpPnNBmVk3WPaJTRFbgG3UXfgtD5h31aZY+dZccBkVbfMhigNOfyV4270leNvcyLcDbuOXBG+7o/fHE447yQTPJLl7iiSf8PwmE1x3cvNFHnAdmeC7t80Zd/iOTzi/4X1z97cR",
+      "sha256": "9e8a2beaab1447de2ddecaefde765d5b2626cbbd66fdf530a28a83e1e558da89"
+    },
+    "cadillac": {
+      "source": "https://media.formula1.com/image/upload/c_lfill,w_192/q_auto/v1740000001/common/f1/2026/cadillac/2026cadillaclogowhite.webp",
+      "profile": "https://www.formula1.com/en/teams/cadillac",
+      "dataUrl": "data:image/webp;base64,UklGRsQBAABXRUJQVlA4TLgBAAAvX8AXEFcw//M//2oiSVKD54DxMfzoA/DGA+OC8CEYSCAkKdueVc+LIMJZRRoQwWm30AWIJUgzbjsWQYTM+7ODv9FBCPm4t2nyxp5xBxH9nwD573nkxf2Kdy8ceRiCvHCkkUj7OhNeZGXcjhuHL1+zFSetiCGsAL3VL5Hr34qEiEikvXSid4UT7YS/rIwnMP47f9JeJAW5syBqkGzEUu+//cyqDD530t8heWOVE2PuSXfUL4UT5cQjt9LNrrr/kFetmkcCvG6JXP9qwpM2NzFGoBO1K2q8wjCewKNC8qpT4421ttGZgrHlJiJFwpPymJP9qO406RYn6hN4pKBg1bxx9Td0+NLJpvn95/qpIgKtzmokb+sNY+lJf5SHQqR65lFa6UT5Pn/DRHfTG1c/u9r+SVsyjJMr9vedGklhSuTHgrPaCKGJiPLEic03JVFuhEE2Bo1EfC/5KrOlw4o9CKJ3ENwd9ghLY+ZEGKTaJXCNyHeF2dLRi9kh9I3cOe/gezEff4HftxSGRuYDDiu3G5dgaeXd52VfrNgdwtDIv513CK4RMVuCw8oLGpcgHBCGRl51ciksVv7PDg==",
+      "sha256": "e3070151cb8334ee161344acb06f5ddcc0e9856e8e4ed9bb006f59bea704e538"
+    },
+    "aston-martin": {
+      "source": "https://media.formula1.com/image/upload/c_lfill,w_192/q_auto/v1740000001/common/f1/2026/astonmartin/2026astonmartinlogowhite.webp",
+      "profile": "https://www.formula1.com/en/teams/aston-martin",
+      "dataUrl": "data:image/webp;base64,UklGRpABAABXRUJQVlA4TIQBAAAvX8AXECcw//M//wKBFG52gQ4wQHZsu3XdbIAuACRTAASqAF5QBdiS+m/KLyX/mYno/wTw393zfvKQT3bdT+6FJ71/eglPzvEILwHbeTTe16PXfd/3sR4tJD805VHnpztMxeoWuda91InsVcVQQ1usTczXfayIVgVX4FxrRKsVXGctLtqG85aurbSZ7gJWt4h1HQD2BlC3dS1NPbeqEWGRs6e22Yave0QFeJdPZMt1jFZxbS02Karhr4xs2qamCxZ5rWiDL/3uAva6loo1MMTAMAzDPI8Q4HXrV/gZsVYT6/XRDbY8Io/KD+PuUK8R18iR44z9jD323OOO2Bu8js7PLY+rC6faIAjTKUGQ+I7FcXXh136OuoQP8WLF1cqUqb7je3sdwqPbIXghcZ1QrDBwxa/O0x9iAy8EEzqdqaTYHx73fQkJbwRU3qFjkfocsYsXXCmmL1yZamfnb27XBQFl5RQ6dh2Nvxx3FjzVuzLX6vyDcbSPAblvVxf+Scsl4GsI/wMG",
+      "sha256": "1ea13aef2366e5903570645b6cde5277edfc21f71fc7c29eab130f2159a9dd66"
+    }
+  }
+}

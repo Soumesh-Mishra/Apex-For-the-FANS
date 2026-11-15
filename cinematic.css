@@ -1,0 +1,44 @@
+/* One continuous rightward pass: approach, sustained slide, countersteer, exit. */
+.drift-scene.cinematic{--shot-duration:8s;background:radial-gradient(ellipse at 60% 80%,#ffffff09,transparent 60%)}
+.cinematic .drift-camera{position:absolute;inset:0;transform-origin:58% 65%;animation:drift-camera var(--shot-duration) linear infinite;overflow:hidden}
+.drift-scene.cinematic .drift-car{width:87%;left:0;top:43%;transform-origin:68% 78%;animation:cinematic-pass var(--shot-duration) linear infinite;will-change:transform,filter,opacity}
+.drift-scene.cinematic.login-drift-stage .drift-car{width:88%;top:12%;left:0}
+.drift-scene.cinematic .drift-car>img{filter:contrast(1.07) saturate(.92) drop-shadow(0 13px 7px #000c)}
+.cinematic .drift-car:after{content:'';position:absolute;inset:65% 5% 7%;background:var(--accent-glow);filter:blur(13px);opacity:.7;z-index:-1}
+.drift-scene.cinematic .drift-smoke{inset:0;z-index:1;opacity:0;animation:smoke-envelope var(--shot-duration) linear infinite;pointer-events:none}
+.drift-scene.cinematic .drift-smoke i{left:15%;bottom:13%;width:100px;height:80px;border-radius:48%;background:radial-gradient(ellipse,#d5dce096,#89929e40 34%,#7d879622 53%,transparent 71%);filter:blur(7px);animation:rear-tyre-plume 1.25s ease-out infinite;animation-delay:calc(var(--i)*-.21s);mix-blend-mode:screen}
+.drift-scene.cinematic .drift-smoke i:nth-child(even){bottom:9%;width:135px;height:95px;filter:blur(12px)}
+.drift-scene.cinematic .skid-marks{stroke-width:5;stroke:#020304;stroke-dasharray:1500;stroke-dashoffset:1500;animation:lay-rubber var(--shot-duration) linear infinite;opacity:0}
+.drift-scene.cinematic .scene-grid{background:repeating-linear-gradient(102deg,#ffffff06 0 1px,transparent 1px 33px),repeating-linear-gradient(0deg,#0005 0 2px,transparent 2px 18px);animation:asphalt-rush .65s linear infinite}
+.cinematic .speed-streaks{position:absolute;inset:8% -20% 10%;background:repeating-linear-gradient(0deg,transparent 0 37px,#e5efff28 38px,transparent 39px 67px);mask-image:linear-gradient(90deg,transparent,#000 25%,transparent 90%);transform:rotate(-8deg);animation:speed-envelope var(--shot-duration) linear infinite;opacity:0;pointer-events:none}
+.drift-scene.cinematic:after{content:'';position:absolute;inset:0;box-shadow:inset 0 18px 22px #0008,inset 0 -18px 22px #000a;background:linear-gradient(100deg,#0004,transparent 35%,transparent 75%,#0006);pointer-events:none;z-index:3}
+.cinematic .drift-caption{z-index:4}
+@keyframes cinematic-pass{
+0%{transform:translate(-100%,12%) rotate(-7deg) rotateY(-12deg) scale(.76);opacity:0;filter:blur(3px)}
+12%{transform:translate(-52%,6%) rotate(-5deg) rotateY(-14deg) scale(.85);opacity:1;filter:blur(1.5px)}
+28%{transform:translate(-14%,0) rotate(5deg) rotateY(-24deg) scale(.97);opacity:1;filter:blur(0)}
+42%{transform:translate(0,7%) rotate(10deg) rotateY(-28deg) scale(1.02);opacity:1;filter:blur(0)}
+58%{transform:translate(12%,11%) rotate(7deg) rotateY(-22deg) scale(1.04);opacity:1;filter:blur(0)}
+70%{transform:translate(27%,3%) rotate(-3deg) rotateY(-10deg) scale(1.02);opacity:1;filter:blur(.4px)}
+84%{transform:translate(80%,-6%) rotate(-5deg) rotateY(0) scale(.98);opacity:1;filter:blur(2px)}
+94%,100%{transform:translate(150%,-12%) rotate(-5deg) scale(.94);opacity:0;filter:blur(4px)}
+}
+@keyframes drift-camera{0%,18%{transform:scale(1)}35%{transform:scale(1.06) translateX(-1%)}42%{transform:scale(1.09) translate(-1%,-1px)}43%{transform:scale(1.09) translate(-1.2%,1px)}44%{transform:scale(1.09) translate(-.9%,-1px)}45%,58%{transform:scale(1.09) translate(-1%,0)}80%,100%{transform:scale(1)}}
+@keyframes smoke-envelope{0%,17%{opacity:0}27%{opacity:.5}39%,60%{opacity:1}74%{opacity:.65}86%,100%{opacity:0}}
+@keyframes rear-tyre-plume{0%{transform:translate(0,0) scale(.35);opacity:0}15%{opacity:.85}45%{opacity:.6}100%{transform:translate(-230px,-45px) scale(2.5);opacity:0}}
+@keyframes lay-rubber{0%,20%{stroke-dashoffset:1500;opacity:0}28%{opacity:.6}70%{stroke-dashoffset:0;opacity:.8}88%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes speed-envelope{0%,10%{opacity:0;translate:0}20%{opacity:.3}35%,64%{opacity:.06}80%{opacity:.5}94%,100%{opacity:0;translate:-25%}}
+@keyframes asphalt-rush{to{background-position:-132px 72px}}
+body[data-motion-paused="true"] .drift-scene.cinematic .animated,body[data-motion-paused="true"] .cinematic .drift-smoke{animation-play-state:paused}
+body[data-motion-paused="true"] .drift-scene.cinematic .drift-car{animation:none;transform:translate(6%,0) rotate(-3deg);opacity:1;filter:none}
+body[data-motion-paused="true"] .cinematic .drift-smoke,body[data-motion-paused="true"] .cinematic .speed-streaks{opacity:0}
+@media(max-width:650px){.drift-scene.cinematic .drift-car{top:45%}.drift-scene.cinematic.login-drift-stage .drift-car{top:22%}.drift-scene.cinematic .drift-smoke i{width:75px;height:65px}.drift-scene.cinematic .drift-smoke i:nth-child(even){width:95px;height:75px}}
+@media(prefers-reduced-motion:reduce){.cinematic .animated,.cinematic .drift-smoke{animation:none!important}.cinematic .drift-smoke,.cinematic .speed-streaks{display:none}.cinematic .drift-camera{transform:none}.drift-scene.cinematic .drift-car{transform:translate(6%,0) rotate(-3deg)!important;opacity:1!important;filter:none}}
+
+/* Real WebGL replaces every flat scene layer only after initialization succeeds. */
+.drift-webgl{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.drift-scene[data-render-mode="webgl"]{mask-image:none;-webkit-mask-image:none;background:#101012;perspective:none}
+.drift-scene[data-render-mode="webgl"]>.drift-camera{display:none}
+.drift-scene[data-render-mode="webgl"]:after{box-shadow:inset 0 15px 25px #10101288,inset 0 -15px 25px #10101288}
+.login-drift-stage[data-render-mode="webgl"]{flex-basis:300px}
+@media(max-width:650px){.login-drift-stage[data-render-mode="webgl"]{flex-basis:240px}}

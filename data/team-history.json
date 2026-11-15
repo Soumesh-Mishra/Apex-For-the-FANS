@@ -1,0 +1,101 @@
+{
+  "alpine": {
+    "era": "2021 · Alpine name",
+    "history": "Alpine carries the Enstone factory’s story into a new era. The operation raced as Toleman, Benetton, Renault and Lotus before adopting Alpine’s name in 2021. Renault’s 2005 and 2006 titles with Fernando Alonso are part of that lineage, rather than championships won under the Alpine name.",
+    "year": "2021 · Hungary",
+    "kind": "Alpine breakthrough",
+    "title": "Ocon turns a career setback into a first win",
+    "story": "After losing his race seat for 2019, Esteban Ocon returned to the grid and eventually found his breakthrough with Alpine. At the chaotic 2021 Hungarian Grand Prix, he survived the opening-lap incidents and controlled the race under pressure. Alonso’s defence against the recovering Lewis Hamilton helped protect the opportunity. Ocon delivered his first Grand Prix victory and Alpine’s first win.",
+    "url": "https://media.alpinecars.com/alpine-f1-team-secures-incredible-maiden-win-in-formula-1/?lang=fra"
+  },
+  "aston-martin": {
+    "era": "2021 · Modern Aston Martin era",
+    "history": "Aston Martin’s modern F1 operation returned under the marque’s name in 2021. Its Silverstone-based lineage runs through Jordan, Midland, Spyker, Force India and Racing Point. That continuity of people and facilities is distinct from Aston Martin’s original 1959–1960 F1 entry.",
+    "year": "2020 · Sakhir",
+    "kind": "Racing Point heritage",
+    "title": "From last place to a maiden victory",
+    "story": "Sergio Pérez was caught in a first-lap collision and dropped to last after pitting. He recovered through the field while Racing Point kept him in contention. Mercedes’ late pit-stop problems opened the door, and Pérez took his first F1 win. It happened under the Racing Point name, just before the operation became Aston Martin.",
+    "url": "https://www.formula1.com/en/latest/article/sergio-perez-takes-sensational-maiden-win-in-sakhir-gp-as-tyre-issues-ruin.2TBf7rg5wpgELNALXJLRHV.html"
+  },
+  "audi": {
+    "era": "2026 · Audi works entry",
+    "history": "Audi entered Formula 1 in 2026 through its takeover of Sauber, pairing the Hinwil chassis operation with its own power-unit project. Sauber first joined F1 in 1993, with BMW Sauber and Alfa Romeo identities also featuring in its history. Those earlier results belong to those teams, not retrospectively to Audi.",
+    "year": "2008 · Canada",
+    "kind": "BMW Sauber heritage",
+    "title": "Kubica returns to the scene of his crash",
+    "story": "A year after his enormous accident in Montreal, Robert Kubica returned to win the Canadian Grand Prix for BMW Sauber. Nick Heidfeld completed a team one-two. The recovery belongs to the Sauber lineage that Audi inherited; it was not an Audi-branded F1 victory.",
+    "url": "https://www.formula1.com/en/latest/article/in-his-own-words-kubica-on-his-08-canadian-gp-win.3Bs5Ap5XuM8sCWiimqGCuM"
+  },
+  "cadillac": {
+    "era": "2026 · F1 debut",
+    "history": "Cadillac joined the Formula 1 grid as a new entrant in 2026. Unlike teams formed by renaming an established constructor, its F1 story begins with building a new operation. Sergio Pérez and Valtteri Bottas brought extensive Grand Prix experience to its debut driver pairing.",
+    "year": "2020 · Sakhir",
+    "kind": "Driver story · before Cadillac",
+    "title": "The resilience Pérez brings to a new team",
+    "story": "Pérez’s recovery from last place after a first-lap collision to victory at Sakhir is a striking example of the experience in Cadillac’s inaugural line-up. He won that race for Racing Point in 2020. This is a driver’s earlier fightback story, not a Cadillac result; the new team’s own history is still being written.",
+    "url": "https://www.formula1.com/en/latest/article/sergio-perez-takes-sensational-maiden-win-in-sakhir-gp-as-tyre-issues-ruin.2TBf7rg5wpgELNALXJLRHV.html"
+  },
+  "ferrari": {
+    "era": "1950 · World Championship debut",
+    "history": "Ferrari has competed in every season of the Formula 1 World Championship since 1950. The Maranello team’s history spans the early championship years, Niki Lauda’s era and the sustained success of Michael Schumacher. Its identity is tied as closely to its supporters, the tifosi, as to its scarlet cars.",
+    "year": "2007 · Championship finale",
+    "kind": "Championship fightback",
+    "title": "Räikkönen wins the final two races",
+    "story": "In his first season with Ferrari, Kimi Räikkönen stayed in the title contest against McLaren’s Lewis Hamilton and Fernando Alonso. Victories in China and Brazil transformed the final two rounds. He finished the championship on 110 points, just one ahead of each McLaren driver, completing a dramatic late reversal.",
+    "url": "https://www.formula1.com/en/information/drivers-hall-of-fame-kimi-raikkonen.4Ykdt9U76gWO40cNbjaMXf"
+  },
+  "haas": {
+    "era": "2016 · F1 debut",
+    "history": "Founded by Gene Haas, the American team made its F1 debut in 2016. Its model combined its own race operation with technical partnerships, including Ferrari. Haas established itself in the midfield, but its history also includes difficult seasons and the challenge of rebuilding with limited resources.",
+    "year": "2022 · Bahrain",
+    "kind": "Team recovery",
+    "title": "A points-free season, then fifth on return",
+    "story": "Haas ended 2021 without a championship point while prioritising its next car. Kevin Magnussen returned to the team for 2022 and finished fifth at the Bahrain opener. Later that year he delivered Haas’ first pole position in São Paulo qualifying. The season gave a struggling team tangible reasons to believe again.",
+    "url": "https://www.formula1.com/en/information/haas-year-by-year.7DczM4FtRLOOlbMMrMVSaE"
+  },
+  "mclaren": {
+    "era": "1966 · F1 debut",
+    "history": "Bruce McLaren’s team made its F1 debut in 1966 and grew into one of the sport’s defining constructors. Emerson Fittipaldi, James Hunt, Niki Lauda, Alain Prost, Ayrton Senna and Mika Häkkinen helped shape its championship history. Its story also includes difficult rebuilding periods between eras of success.",
+    "year": "2023–2024 · Rebuilding",
+    "kind": "Team turnaround",
+    "title": "From the back of the pack to champions",
+    "story": "McLaren began 2023 struggling for pace, then upgrades brought it back into regular podium contention. Further progress in 2024 turned Lando Norris and Oscar Piastri into race winners. Norris’ victory in the Abu Dhabi finale secured the constructors’ championship, McLaren’s first since 1998: a recovery built over many races, not one lucky weekend.",
+    "url": "https://www.mclaren.com/racing/heritage/formula-1/cars/2024-formula-1-mclaren-mcl38/"
+  },
+  "mercedes": {
+    "era": "1954 · First works entry / 2010 · Return",
+    "history": "Mercedes first raced as a works F1 team in the 1950s, then returned as a constructor in 2010 after acquiring Brawn GP. Its modern Brackley operation became the dominant force of the early turbo-hybrid era. Lewis Hamilton and Nico Rosberg were central figures in that period.",
+    "year": "2021 · São Paulo",
+    "kind": "Race-weekend fightback",
+    "title": "Hamilton climbs back through the field",
+    "story": "A rear-wing technical infringement removed Hamilton’s qualifying result, sending him to the back for the Sprint. He recovered to fifth, then an engine penalty left him tenth on the Grand Prix grid. On Sunday he fought through to win, passing title rival Max Verstappen. The weekend combined a setback, recovery and decisive on-track racing.",
+    "url": "https://www.formula1.com/en/latest/article/hamilton-takes-victory-in-brazil-after-stunning-drive-from-p10-and-pass-on.6svQJahOZ1FjwZHX0Zm3Bx"
+  },
+  "racing-bulls": {
+    "era": "2006 · Toro Rosso / Racing Bulls lineage",
+    "history": "The Faenza team traces its roots to Minardi, which entered F1 in 1985. Red Bull’s purchase led to Toro Rosso, followed by AlphaTauri and later Racing Bulls identities. The operation has long helped young drivers establish themselves, while occasionally taking victories of its own under its earlier names.",
+    "year": "2020 · Monza",
+    "kind": "AlphaTauri heritage",
+    "title": "Gasly rebuilds his career with a victory",
+    "story": "Pierre Gasly’s return to Red Bull’s sister team after losing his senior-team seat became a new beginning. At Monza in 2020, a disrupted race and well-timed pit stop put AlphaTauri in contention. Gasly held off Carlos Sainz to win. It was an AlphaTauri victory and a powerful recovery in the career of a driver who had faced a public setback.",
+    "url": "https://www.formula1.com/en/latest/article/gasly-takes-maiden-win-in-monza-thriller-from-sainz-as-penalty-leaves.2wjQyiSgOy8ggwcJlWHhsi"
+  },
+  "red-bull-racing": {
+    "era": "2005 · Red Bull Racing debut",
+    "history": "Red Bull Racing entered F1 in 2005 after buying Jaguar’s team, whose earlier roots lay with Stewart. The Milton Keynes operation developed from a midfield entrant into a championship winner. Sebastian Vettel led its first title-winning era, with Max Verstappen later becoming another defining champion.",
+    "year": "2012 · Brazil",
+    "kind": "Title-deciding recovery",
+    "title": "Vettel survives the first-lap spin",
+    "story": "Contact on the opening lap at Interlagos spun Vettel around and damaged his car. With Fernando Alonso still fighting for the championship, Vettel had to recover in changing conditions. He brought the Red Bull home sixth, enough to secure his third consecutive drivers’ title. The decisive result came from salvaging a difficult race rather than winning it.",
+    "url": "https://api.fia.com/news/button-wins-vettel-world-champion"
+  },
+  "williams": {
+    "era": "1977 · Williams Grand Prix Engineering",
+    "history": "Frank Williams and Patrick Head founded Williams Grand Prix Engineering in 1977. Its first Grand Prix win came in 1979, followed by championship eras featuring drivers such as Alan Jones, Nigel Mansell and Alain Prost. Later seasons brought a long decline and an ownership change, making its recovery an important part of the story.",
+    "year": "2021 · Hungary",
+    "kind": "Team recovery",
+    "title": "Double points after a season without any",
+    "story": "Williams scored no points in 2020. At the chaotic 2021 Hungarian Grand Prix, Nicholas Latifi and George Russell converted an opportunity into a double-points finish. After the final classification was corrected, they were seventh and eighth. It was an emotional milestone for a team working its way back from the bottom of the standings.",
+    "url": "https://www.formula1.com/en/latest/article/russell-says-he-shed-a-tear-after-sealing-his-first-ever-points-for-williams.4UWCveALLJIEVbEGaXP8wr"
+  }
+}

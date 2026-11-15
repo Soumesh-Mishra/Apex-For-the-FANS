@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import vm from 'node:vm';
+const core=vm.runInNewContext(await readFile('duel-core.js','utf8')+';DriverDuel');
+assert.equal(core.milliseconds('1:29.407'),89407);assert.equal(core.milliseconds('1:02:03.004'),3723004);for(const bad of ['',null,'DNF','1:61.000','-1:00','NaN'])assert.equal(core.milliseconds(bad),null);
+assert.equal(core.time(89999.9),'1:30.000');assert.equal(core.median([5,1,3,2]),2.5);assert.equal(core.median([]),null);
+const rows=Array.from({length:10},(_,i)=>({lap:i+1,ms:i===8?150000:90000+i*100,position:2}));const pace=core.representative(rows,[{lap:'4'}]);assert(!pace.rows.some(r=>[1,4,5,9].includes(r.lap)));assert.equal(pace.count,6);assert.equal(pace.median,90550);
+assert.equal(core.representative(rows.slice(0,4),[]).median,null);
+const fakeA={qualifying:{Q1:'1:32.000',Q2:'1:31.000',Q3:'1:30.000'}},fakeB={qualifying:{Q1:'1:33.000',Q2:'1:31.500'}};assert.equal(core.commonQualifying(fakeA,fakeB).phase,'Q2');assert.equal(core.commonQualifying(fakeA,fakeB).gap,500);assert.equal(core.commonQualifying(fakeA,{qualifying:null}).gap,null);
+const snapshot=JSON.parse(await readFile('data/duel-bahrain-2024.json','utf8')),a=core.metrics(snapshot.event,'leclerc',snapshot.laps.leclerc),b=core.metrics(snapshot.event,'sainz',snapshot.laps.sainz);
+assert.equal(a.position,4);assert.equal(b.position,3);assert.equal(a.gained,-2);assert.equal(b.gained,1);assert.equal(a.stopCount,2);assert.equal(b.stopCount,2);assert.equal(core.commonQualifying(a,b).gap,100);assert.equal(core.pairedPace(a,b).count,49);assert.equal(core.pairedPace(a,b).left,96760);assert.equal(core.pairedPace(a,b).right,96088);
+assert.equal(core.metrics({...snapshot.event,pits:null},'leclerc',[]).stopCount,null);assert.equal(core.metrics({...snapshot.event,race:{Results:[{...a.result,grid:'0'}]}},'leclerc',[]).gained,null);
+assert.equal(core.stints(snapshot.tyres.rows,16).length,3);assert.equal(core.stints([{driver_number:16,lap_start:3,lap_end:2}],16).length,0);
+const source=await readFile('dist/server/index.js','utf8'),worker=(await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'))).default,realFetch=globalThis.fetch;let calls=0;
+const request=(query,method='GET')=>worker.fetch(new Request('https://apex.test/api/driver-duel?'+query,{method}));
+try{
+ globalThis.fetch=async()=>{calls++;throw Error('Offline test');};
+ for(const query of ['season=1949&round=1','season=2024&round=0','season=2024&round=1&part=laps&driver=../private','season=2024&round=1&part=unknown','season=2024&round=1&part=stints&date=2024-02-31'])assert.equal((await request(query)).status,400,query);
+ assert.equal((await request('season=2024&round=1','POST')).status,405);assert.equal(calls,0);
+ const saved=await(await request('season=2024&round=1')).json();assert.equal(saved.source,'bundled');assert.equal(saved.race.Results.length,20);
+ const savedLaps=await(await request('season=2024&round=1&part=laps&driver=leclerc')).json();assert.equal(savedLaps.rows.length,57);assert.equal(savedLaps.source,'bundled');
+ const savedTyres=await(await request('season=2024&round=1&part=stints&date=2024-03-02')).json();assert.equal(savedTyres.available,true);assert.equal(savedTyres.rows.length,63);
+ assert.equal((await request('season=2023&round=1')).status,502);const before=calls;assert.equal((await(await request('season=2022&round=1&part=stints&date=2022-03-20')).json()).available,false);assert.equal(calls,before);
+ globalThis.fetch=async url=>{const u=new URL(url);if(u.pathname.includes('/results.'))return Response.json({MRData:{total:'20',RaceTable:{Races:[snapshot.event.race]}}});throw Error('Partial archive');};
+ const partial=await(await request('season=2024&round=1')).json();assert.equal(partial.source,'jolpica');assert.equal(partial.qualifying,null);assert.equal(partial.pits,null);assert.equal(partial.warnings.length,2);
+ calls=0;globalThis.fetch=async url=>{calls++;const offset=Number(new URL(url).searchParams.get('offset')),count=offset?1:100;return Response.json({MRData:{total:'101',RaceTable:{Races:[{Laps:Array.from({length:count},(_,i)=>({number:String(offset+i+1),Timings:[{driverId:'test',time:'1:30.000',position:'1'}]}))}]}}});};
+ const paged=await(await request('season=2000&round=1&part=laps&driver=test')).json();assert.equal(paged.rows.length,101);assert.equal(calls,2);
+ globalThis.fetch=async url=>url.includes('/sessions?')?Response.json([{session_name:'Race',session_key:123,date_start:'2023-03-05T15:00:00Z',is_cancelled:false},{session_name:'Sprint',session_key:555,date_start:'2023-03-05T12:00:00Z'}]):Response.json([{driver_number:44,lap_start:1,lap_end:20,compound:'MEDIUM'}]);
+ const tyres=await(await request('season=2023&round=1&part=stints&date=2023-03-05')).json();assert.equal(tyres.session,123);assert.equal(tyres.rows.length,1);
+ const html=await(await worker.fetch(new Request('https://apex.test/index.html'))).text();assert(!/__[A-Z_]+__/.test(html));assert(html.includes('data-timing-mode="duel"'));assert(html.includes('Driver Duel includes historical classifications'));
+ for(const match of html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(match[1]);
+ console.log('Passed Driver Duel timing, shared qualifying, representative pace, DNF/grid handling, tyre filtering, input validation, partial data, pagination, source fallback and page syntax checks.');
+}finally{globalThis.fetch=realFetch;}

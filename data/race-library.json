@@ -1,0 +1,74 @@
+[
+  {
+    "season": "2024",
+    "round": "1",
+    "raceName": "Bahrain Grand Prix",
+    "date": "2024-03-02",
+    "Circuit": {
+      "circuitName": "Bahrain International Circuit"
+    }
+  },
+  {
+    "season": "2024",
+    "round": "8",
+    "raceName": "Monaco Grand Prix",
+    "date": "2024-05-26",
+    "Circuit": {
+      "circuitName": "Circuit de Monaco"
+    }
+  },
+  {
+    "season": "2021",
+    "round": "19",
+    "raceName": "São Paulo Grand Prix",
+    "date": "2021-11-14",
+    "Circuit": {
+      "circuitName": "Autódromo José Carlos Pace"
+    }
+  },
+  {
+    "season": "2021",
+    "round": "11",
+    "raceName": "Hungarian Grand Prix",
+    "date": "2021-08-01",
+    "Circuit": {
+      "circuitName": "Hungaroring"
+    }
+  },
+  {
+    "season": "2020",
+    "round": "16",
+    "raceName": "Sakhir Grand Prix",
+    "date": "2020-12-06",
+    "Circuit": {
+      "circuitName": "Bahrain International Circuit"
+    }
+  },
+  {
+    "season": "2020",
+    "round": "8",
+    "raceName": "Italian Grand Prix",
+    "date": "2020-09-06",
+    "Circuit": {
+      "circuitName": "Autodromo Nazionale di Monza"
+    }
+  },
+  {
+    "season": "2012",
+    "round": "20",
+    "raceName": "Brazilian Grand Prix",
+    "date": "2012-11-25",
+    "Circuit": {
+      "circuitName": "Autódromo José Carlos Pace"
+    }
+  },
+  {
+    "season": "2008",
+    "round": "18",
+    "raceName": "Brazilian Grand Prix",
+    "date": "2008-11-02",
+    "Circuit": {
+      "circuitName": "Autódromo José Carlos Pace"
+    }
+  }
+]

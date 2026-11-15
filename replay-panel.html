@@ -1,0 +1,15 @@
+<div id="historical-panel" class="hidden"><div data-spoiler-content>
+  <div class="replay-toolbar"><div><label class="small" for="replay-session">CHOOSE A RECORDED SESSION</label><select id="replay-session"><option value="bahrain-2024">Bahrain Grand Prix · 2024</option><option value="monaco-2024">Monaco Grand Prix · 2024</option></select></div><span class="status" id="replay-state">LOADING RECORDING</span></div>
+  <p class="disclaimer" id="replay-provenance">Fetching archived OpenF1 data…</p>
+  <div id="replay-error" class="live-explainer hidden" role="alert"></div>
+  <div class="replay-layout">
+    <div class="panel"><div class="panel-bar"><h3 id="replay-title">RECORDED SESSION</h3><span class="status">HISTORICAL · NOT LIVE</span></div>
+      <div class="replay-map-wrap"><svg class="replay-map" data-replay-map viewBox="0 0 520 270" role="img" aria-label="Recorded car locations from OpenF1"></svg></div>
+      <div class="replay-controls"><div class="replay-buttons"><button class="primary" id="replay-play" disabled>▶ Play</button><button class="refresh" id="replay-restart" disabled>↺ Restart</button><label for="replay-speed" class="small">SPEED</label><select id="replay-speed" aria-label="Replay speed"><option value="1">1×</option><option value="2">2×</option><option value="5" selected>5×</option><option value="10">10×</option></select><output id="replay-elapsed">00:00 / 05:00</output></div><input id="replay-seek" type="range" min="0" max="300" value="0" step="0.1" disabled aria-label="Replay position in seconds"><div class="replay-time"><span id="replay-clock">—</span><span>5-minute excerpt · starts on lap 3</span></div></div>
+      <div class="replay-focus"><label for="replay-driver" class="small">FOLLOW DRIVER</label><select id="replay-driver" aria-label="Follow driver"></select><span id="replay-driver-detail">Select a driver for timing details.</span></div>
+      <p class="timing-note">Dots use recorded, approximate car coordinates, sampled at 1-second intervals. Missing locations are hidden. The circuit outline is traced from one recorded lap.</p>
+    </div>
+    <div class="panel replay-table-panel"><div class="panel-bar"><h3>AT THIS MOMENT</h3><span class="small" id="replay-lap">—</span></div><div class="replay-table-scroll"><table class="data-table" id="replay-table"><thead><tr><th>POS</th><th>DRIVER</th><th>GAP</th><th>LAST LAP</th><th>TYRE</th></tr></thead><tbody><tr><td colspan="5">Loading recorded timing…</td></tr></tbody></table></div></div>
+  </div>
+  <div class="panel" style="margin-top:18px"><div class="panel-bar"><h3>RACE CONTROL</h3><span class="small">MESSAGES UP TO THE PLAYHEAD</span></div><div id="replay-race-control" class="replay-messages">Loading archived messages…</div></div>
+</div></div>

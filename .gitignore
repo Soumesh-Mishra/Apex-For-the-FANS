@@ -1,0 +1,13 @@
+dist/
+site.tar.gz
+vendor/*.tgz
+vendor/package/examples/
+node_modules/
+.env
+.env.*
+!.env.example
+.dev.vars*
+.wrangler/
+*.log
+coverage/
+public-release/

@@ -1,0 +1,10 @@
+<section id="driver-duel-panel" class="hidden" aria-labelledby="duel-title">
+ <div class="duel-intro"><div><span class="eyebrow">TWO DRIVERS. ONE RACE.</span><h2 id="duel-title">Driver Duel.</h2><p>Compare qualifying, race results and every recorded lap from the same Grand Prix.</p></div><span class="tag">HISTORICAL DATA</span></div>
+ <div class="duel-toolbar panel"><label>Season<select id="duel-season" aria-label="Driver Duel season"></select></label><label class="duel-race-field">Grand Prix<select id="duel-race" aria-label="Driver Duel race"></select></label><button class="refresh" id="duel-load">Load race ↗</button></div>
+ <p class="duel-status" id="duel-status" role="status" aria-live="polite"></p><button class="text-btn" id="duel-example">Try bundled Bahrain 2024 ↗</button>
+ <div class="duel-pickers"><label><span class="duel-series-a">DRIVER A · SOLID LINE</span><select id="duel-a" aria-label="Driver A"></select></label><button id="duel-swap" class="refresh" aria-label="Swap compared drivers">⇄</button><label><span class="duel-series-b">DRIVER B · DASHED LINE</span><select id="duel-b" aria-label="Driver B"></select></label><button id="duel-compare" class="primary">Compare drivers ↗</button></div>
+ <div data-spoiler-content data-spoiler-message="Driver Duel includes historical classifications, qualifying times and race outcomes.">
+  <div id="duel-content" aria-busy="false"><div class="empty">Choose a race and two drivers to start a duel.</div></div>
+ </div>
+ <p class="duel-method">Historical comparisons, not live timing. Classification, qualifying and lap history: <a href="https://api.jolpi.ca/ergast/" target="_blank" rel="noopener">Jolpica F1 ↗</a>. Tyre history from 2023 onward: <a href="https://openf1.org/" target="_blank" rel="noopener">OpenF1 ↗</a>. Availability varies by race and year.</p>
+</section>

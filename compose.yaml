@@ -1,0 +1,10 @@
+services:
+  apex:
+    build: .
+    ports:
+      - "127.0.0.1:4173:4173"
+    environment:
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://localhost:4173}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      APEX_SESSION_SECRET: ${APEX_SESSION_SECRET:-}
+    restart: unless-stopped
