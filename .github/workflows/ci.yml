@@ -24,6 +24,9 @@ jobs:
       - run: docker build -t apex-f1 .
       - run: |
           docker run -d --name apex-smoke -p 4173:4173 apex-f1
-          curl --retry 12 --retry-connrefused --retry-delay 1 --fail http://localhost:4173/healthz
+          curl --retry 12 --retry-all-errors --retry-delay 1 --max-time 5 --fail http://localhost:4173/healthz
           curl --fail http://localhost:4173/manifest.webmanifest
-          docker stop apex-smoke
+      - if: failure()
+        run: docker logs apex-smoke
+      - if: always()
+        run: docker rm -f apex-smoke
