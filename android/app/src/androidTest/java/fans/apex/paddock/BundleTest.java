@@ -97,9 +97,14 @@ public class BundleTest {
         js("window.__paddockMode='pending';fetch('/api/paddock').then(r=>r.json()).then(d=>window.__paddockMode=d.mode).catch(()=>window.__paddockMode='error');");
         for(int i=0;i<40;i++){if("\"device\"".equals(js("window.__paddockMode")))break;Thread.sleep(100);}
         assertEquals("\"device\"",js("window.__paddockMode"));
+        // reload() can return while the old document is still executing scripts.
+        // Wait for a new document and its controls before testing persisted state.
+        js("window.__paddockReloadMarker=true");
         ui(()->activity.getActivity().web.reload());
-        for(int i=0;i<60;i++){if("true".equals(js("!!window.PersonalPaddock")))break;Thread.sleep(100);}
-        assertEquals("true",js("!!window.PersonalPaddock&&PersonalPaddock.profile().team==='ferrari'&&PersonalPaddock.profile().favouriteDrivers.includes('leclerc')&&PersonalPaddock.hasRace('2024-8')"));
+        String reloaded="window.__paddockReloadMarker===undefined&&!!window.PersonalPaddock&&!!document.querySelector('[data-view=paddock]')";
+        for(int i=0;i<150;i++){if("true".equals(js(reloaded)))break;Thread.sleep(100);}
+        assertEquals("Reloaded paddock did not become ready", "true",js(reloaded));
+        assertEquals("Preferences must survive a new document", "true",js("PersonalPaddock.profile().team==='ferrari'&&PersonalPaddock.profile().favouriteDrivers.includes('leclerc')&&PersonalPaddock.hasRace('2024-8')"));
         assertEquals("true",js("!!document.querySelector('[data-view=paddock]')"));
     }
     @Test public void strategyLabRunsWithoutBackend() throws Exception {
