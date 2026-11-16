@@ -1,0 +1,46 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import vm from 'node:vm';
+const source=await readFile('worker/live-timing.js','utf8');
+let now=Date.parse('2026-11-15T18:30:00Z'),key=123,mode='ok',calls=[];
+class Clock extends Date{constructor(...args){super(...(args.length?args:[now]))}static now(){return now}}
+const iso=offset=>new Date(now+offset).toISOString();
+const context=vm.createContext({Date:Clock,URL,Response,Request,AbortSignal,setTimeout:fn=>fn(),fetch:async(url,init)=>{
+ const u=new URL(url),endpoint=u.pathname.split('/').pop();calls.push({endpoint,auth:init.headers.Authorization});
+ if(mode==='offline')throw Error('Network failure');
+ if(mode==='denied')return new Response('',{status:401});
+ if(mode==='limited')return new Response('',{status:429,headers:{'Retry-After':'120'}});
+ if(endpoint==='sessions')return Response.json([{session_key:key,date_start:iso(mode==='scheduled'?60000:-1800000),date_end:iso(mode==='ended'?-1000:1800000),session_name:'Race',circuit_short_name:'Test',year:2026}]);
+ if(endpoint==='drivers')return Response.json([1,2,3].map(n=>({driver_number:n,full_name:n===1?'<script>driver</script>':'Driver '+n,team_name:'Test Team',team_colour:'FF302E'})));
+ if(endpoint==='position')return Response.json(mode==='empty'?[]:[{session_key:key,driver_number:1,position:2,date:iso(-1000)},{session_key:key,driver_number:2,position:1,date:iso(-1000)},{session_key:key,driver_number:1,position:1,date:iso(-60000)},{session_key:9999,driver_number:3,position:1,date:iso(0)}]);
+ if(endpoint==='laps')return Response.json(mode==='empty'?[]:[{session_key:key,driver_number:1,lap_number:8,lap_duration:91.123,date_start:iso(-92000)},{session_key:key,driver_number:1,lap_number:9,lap_duration:null,date_start:iso(-1000)},{session_key:key,driver_number:1,lap_number:7,lap_duration:92,date_start:iso(-185000)}]);
+ throw Error('Unexpected endpoint '+endpoint);
+}});
+vm.runInContext(source+';globalThis.api=LiveTimingAPI',context);
+const request=new Request('https://apex.test/api/live-timing');
+const get=async(token='secret')=>(await context.api.handle(request,{OPENF1_ACCESS_TOKEN:token})).json();
+let result=await get('');assert.equal(result.state,'auth_required');assert.equal(calls.length,1,'No protected timing requests without credentials');
+result=await get();assert.equal(result.state,'live');assert.equal(result.rows[0].number,2);assert.equal(result.rows.find(r=>r.number===1).lap,8);assert.equal(result.rows.find(r=>r.number===1).lapTime,91.123);assert.equal(result.rows[2].position,null);assert(!JSON.stringify(result).includes('secret'));
+assert(calls.filter(c=>c.endpoint!=='sessions').every(c=>c.auth==='Bearer secret'));
+let count=calls.length;await Promise.all([get(),get(),get()]);assert.equal(calls.length,count,'Shared cache prevents per-client upstream fan-out');
+now+=21000;await Promise.all([get(),get()]);assert.equal(calls.length,count+2,'Concurrent refreshes share a single request');
+mode='offline';now+=21000;result=await get();assert.equal(result.state,'stale');assert.equal(result.rows.length,3);const previousData=result.dataAt;
+mode='denied';now+=31000;result=await get();assert.equal(result.state,'auth_required');assert.equal(result.dataAt,previousData);
+mode='limited';now+=31000;result=await get();assert.equal(result.retryAfter,120);assert.equal(result.state,'stale');
+mode='ok';now+=121000;result=await get();assert.equal(result.state,'live','Feed recovers');
+mode='empty';now+=121000;result=await get();assert.equal(result.state,'stale','A reachable feed with no new timing must not stay live');
+key=124;mode='empty';now+=61000;result=await get();assert.equal(result.state,'waiting');assert(result.rows.every(r=>r.position===null&&r.lap===null),'Session rollover clears old positions and laps');
+mode='ended';now+=61000;result=await get('');assert.equal(result.state,'ended');assert.equal(result.rows.length,3,'Ended sessions use free historical data');
+key=125;mode='scheduled';now+=61000;result=await get('');assert.equal(result.state,'scheduled');assert.equal(result.rows.length,0);
+assert.equal((await context.api.handle(new Request(request,{method:'POST'}))).status,405);
+
+// Browser adapter: escaping, polling, single-flight, visibility and loss of connection.
+const nodes=new Map(),listeners={},timers=new Map();let timerId=0,fetches=0,fail=false;
+const node=s=>{if(!nodes.has(s))nodes.set(s,{innerHTML:'',textContent:'',classList:{toggle(){}}});return nodes.get(s)};
+const browser=vm.createContext({Date,Number,String,Math,esc:s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'),$:node,document:{hidden:false,addEventListener:(event,fn)=>listeners[event]=fn},setTimeout:(fn,ms)=>{timers.set(++timerId,{fn,ms});return timerId},clearTimeout:id=>timers.delete(id),api:async()=>{fetches++;if(fail)throw Error('Offline');return {...result,state:'live',rows:[{name:'<script>driver</script>',number:1,position:1,lap:8,lapTime:91.123,colour:'bad"',team:'Test'}],retryAfter:20}}});
+vm.runInContext(await readFile('live-timing-ui.js','utf8'),browser);
+await vm.runInContext('Promise.all([loadSession(),loadSession()])',browser);assert.equal(fetches,1);assert.equal(timers.size,1);assert.equal([...timers.values()][0].ms,20000);assert(node('#latest-session').innerHTML.includes('1:31.123'));assert(!node('#latest-session').innerHTML.includes('<script>driver'));
+browser.document.hidden=true;listeners.visibilitychange();assert.equal(timers.size,0);
+fail=true;browser.document.hidden=false;listeners.visibilitychange();await vm.runInContext('timingRequest',browser);assert.equal(node('#latest-session-state').textContent,'TIMING DELAYED');assert(node('#latest-session').innerHTML.includes('1:31.123'),'Network failure retains last timing');assert.equal(timers.size,1);
+const html=await readFile('index.html','utf8');assert(html.includes('data-spoiler-content id="latest-session"'));assert(!html.includes('Live lap times and positions are not connected'));
+console.log('Passed live timing: ordering, completed laps, credentials, caching/single-flight, rollover, ended/empty/scheduled feeds, outages, 401, 429, recovery, browser polling/visibility, escaping and spoiler protection.');

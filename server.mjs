@@ -13,7 +13,7 @@ const server=http.createServer(async(req,res)=>{
   const chunks=[];let length=0;
   for await(const chunk of req){length+=chunk.length;if(length>22000){res.writeHead(413);res.end('Request too large');return;}chunks.push(chunk);}
   const request=new Request(new URL(req.url,origin),{method:req.method,headers,body:['GET','HEAD'].includes(req.method)?undefined:Buffer.concat(chunks),duplex:'half'});
-  const out=await worker.fetch(request,{GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,APEX_SESSION_SECRET:process.env.APEX_SESSION_SECRET});
+  const out=await worker.fetch(request,{GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,APEX_SESSION_SECRET:process.env.APEX_SESSION_SECRET,OPENF1_ACCESS_TOKEN:process.env.OPENF1_ACCESS_TOKEN});
   const responseHeaders=Object.fromEntries(out.headers);const cookies=out.headers.getSetCookie();if(cookies.length)responseHeaders['set-cookie']=cookies;
   res.writeHead(out.status,responseHeaders);res.end(req.method==='HEAD'?undefined:Buffer.from(await out.arrayBuffer()));
  }catch{if(!res.headersSent)res.writeHead(500);res.end('APEX encountered an error.');}

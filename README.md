@@ -12,7 +12,7 @@ An independent Formula 1 fan dashboard. Pick your team, follow the season and co
 - Team-aware login/loading screens and optional Google sign-in.
 - Installable web app for Android, iOS, Windows and macOS.
 
-**Timing is historical or the latest published data. An authenticated real-time race feed is not connected.** Provider availability and rate limits apply. Snapshots carry their own dates and are not current live results.
+**Race Center includes an OpenF1 session leaderboard.** Active-session timing requires a server-only OpenF1 access token; see [live timing setup](docs/LIVE_TIMING.md). Without live access, the panel clearly shows that state and free ended-session timing remains available. Provider availability and rate limits apply. Snapshots carry their own dates and are not current live results.
 
 ## Run locally
 
@@ -66,7 +66,7 @@ node build.mjs --standalone
 node scripts/test-all.mjs
 ```
 
-Checks cover countdown recovery, palettes and contrast, recorded timing, authentication, entry screens, Driver Duel and installation routes/offline isolation. GitHub Actions runs these on Windows, macOS and Linux and smoke-tests Docker on Linux. Tests use fixtures; no Google account or paid feed is needed. Physical iOS/Android and browser installation are manual checks: see [verification](docs/INSTALLATION.md#verification).
+Checks cover OpenF1 timing, polling and failure recovery, countdown recovery, palettes and contrast, recorded timing, authentication, entry screens, Driver Duel and installation routes/offline isolation. GitHub Actions runs these on Windows, macOS and Linux and smoke-tests Docker on Linux. Tests use fixtures; no Google account or paid feed is needed. Physical iOS/Android and browser installation are manual checks: see [verification](docs/INSTALLATION.md#verification).
 
 ## Project map
 

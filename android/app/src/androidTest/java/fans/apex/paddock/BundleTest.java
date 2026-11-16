@@ -6,6 +6,10 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.Assert.*;
+import android.content.pm.ActivityInfo;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 @RunWith(AndroidJUnit4.class)
 public class BundleTest {
@@ -14,6 +18,63 @@ public class BundleTest {
         CountDownLatch latch=new CountDownLatch(1);AtomicReference<String> result=new AtomicReference<>();
         activity.getActivity().runOnUiThread(()->activity.getActivity().web.evaluateJavascript(code,value->{result.set(value);latch.countDown();}));
         assertTrue("WebView script timed out",latch.await(10,TimeUnit.SECONDS));return result.get();
+    }
+    private void ready() throws Exception {
+        long deadline=System.currentTimeMillis()+45000;
+        while(System.currentTimeMillis()<deadline){
+            if("true".equals(js("!!document.querySelector('#team') && typeof selectTeamTheme === 'function'")))return;
+            Thread.sleep(250);
+        }
+        fail("Dashboard did not become ready");
+    }
+    private void ui(Runnable action) throws Exception {
+        androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().runOnMainSync(action);
+        androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+    }
+    private void assertActions() throws Exception {
+        // Every action's centre must be visible, hit-testable and inside its header.
+        assertEquals("true",js("(()=>{const h=document.querySelector('header').getBoundingClientRect();return ['team-picker-link','spoiler-toggle','refresh','account-link'].every(id=>{const e=document.getElementById(id),r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return r.width>=29&&r.height>=29&&r.left>=0&&r.right<=innerWidth+1&&r.top>=h.top&&r.bottom<=h.bottom+1&&!!hit&&e.contains(hit);});})()"));
+    }
+    @Test public void headerFitsWithTeamLogoInBothOrientations() throws Exception {
+        ready();
+        js("selectTeamTheme('red-bull-racing',true)");
+        MainActivity a=activity.getActivity();
+        for(int orientation:new int[]{ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE,ActivityInfo.SCREEN_ORIENTATION_PORTRAIT}){
+            ui(()->a.setRequestedOrientation(orientation));
+            boolean landscape=orientation==ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+            for(int i=0;i<60;i++){if(Boolean.toString(landscape).equals(js("innerWidth>innerHeight")))break;Thread.sleep(100);}
+            assertEquals(Boolean.toString(landscape),js("innerWidth>innerHeight"));
+            assertActions();
+            ui(()->{
+                WindowInsetsCompat window=ViewCompat.getRootWindowInsets(a.content);
+                assertNotNull(window);
+                Insets safe=window.getInsets(WindowInsetsCompat.Type.systemBars()|WindowInsetsCompat.Type.displayCutout());
+                int[] location=new int[2];a.web.getLocationInWindow(location);
+                assertTrue("WebView must start below status bar/cutout",location[1]>=safe.top);
+                assertTrue("WebView must start beyond landscape cutout",location[0]>=safe.left);
+                assertEquals("Do not pad the WebView itself",0,a.web.getPaddingTop());
+            });
+        }
+    }
+    @Test public void cutoutInsetsResizeContainerWithoutAccumulating() throws Exception {
+        ready();MainActivity a=activity.getActivity();
+        int types=WindowInsetsCompat.Type.systemBars()|WindowInsetsCompat.Type.displayCutout();
+        ui(()->{
+            WindowInsetsCompat initial=ViewCompat.getRootWindowInsets(a.content);
+            assertNotNull(initial);
+            WindowInsetsCompat cutout=new WindowInsetsCompat.Builder(initial).setInsets(types,Insets.of(60,100,50,70)).build();
+            for(int i=0;i<2;i++){
+                WindowInsetsCompat forwarded=ViewCompat.dispatchApplyWindowInsets(a.content,cutout);
+                assertEquals(100,a.content.getPaddingTop());assertEquals(60,a.content.getPaddingLeft());
+                assertEquals(50,a.content.getPaddingRight());assertEquals(70,a.content.getPaddingBottom());
+                assertEquals(Insets.NONE,forwarded.getInsets(types));
+            }
+            WindowInsetsCompat cleared=new WindowInsetsCompat.Builder(initial).setInsets(types,Insets.NONE).build();
+            ViewCompat.dispatchApplyWindowInsets(a.content,cleared);
+            assertEquals(0,a.content.getPaddingTop());assertEquals(0,a.content.getPaddingLeft());
+            ViewCompat.dispatchApplyWindowInsets(a.content,initial);
+        });
+        assertActions();
     }
     @Test public void bundledDashboardAndOfflineHistory() throws Exception {
         long deadline=System.currentTimeMillis()+45000;

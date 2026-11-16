@@ -38,6 +38,7 @@ export default {
       const body=request.method==='HEAD'?null:Uint8Array.from(atob(car.dataUrl.split(',')[1]),c=>c.charCodeAt(0));
       return new Response(body,{headers});
     }
+    if(url.pathname==='/api/live-timing')return LiveTimingAPI.handle(request,env);
     if(url.pathname==='/api/driver-duel')return DuelAPI.handle(request);
     if(url.pathname==='/api/race-library'){
       const season=url.searchParams.get('season'),round=url.searchParams.get('round');

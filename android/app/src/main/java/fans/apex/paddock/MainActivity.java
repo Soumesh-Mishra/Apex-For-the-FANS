@@ -6,7 +6,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.webkit.*;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.webkit.WebViewAssetLoader;
 import java.io.*;
 import java.net.*;
@@ -16,19 +21,31 @@ import java.util.*;
 public class MainActivity extends Activity {
     static final String HOST = "appassets.androidplatform.net";
     WebView web;
+    FrameLayout content;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(Color.rgb(16,16,18));
         getWindow().setNavigationBarColor(Color.rgb(16,16,18));
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).setAppearanceLightStatusBars(false);
+        WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).setAppearanceLightNavigationBars(false);
+        content = new FrameLayout(this);
+        content.setBackgroundColor(Color.rgb(16,16,18));
         web = new WebView(this);
         web.setBackgroundColor(Color.rgb(16,16,18));
-        web.setFitsSystemWindows(true);
-        setContentView(web);
-        // Keep content out of display cutouts/system bars on edge-to-edge Android.
-        web.setOnApplyWindowInsetsListener((view,insets)->{
-            view.setPadding(insets.getSystemWindowInsetLeft(),insets.getSystemWindowInsetTop(),insets.getSystemWindowInsetRight(),insets.getSystemWindowInsetBottom());
-            return insets;
+        content.addView(web, new FrameLayout.LayoutParams(-1, -1));
+        // Resize the WebView's bounds, including its fixed HTML header/navigation.
+        // Padding the WebView itself does not protect its layout viewport reliably.
+        ViewCompat.setOnApplyWindowInsetsListener(content, (view, insets) -> {
+            int handled = WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout();
+            Insets safe = insets.getInsets(handled);
+            view.setPadding(safe.left, safe.top, safe.right, safe.bottom);
+            // Forward zeroed safe areas so newer WebViews do not pad twice.
+            // Keep IME insets available for WebView's keyboard handling.
+            return new WindowInsetsCompat.Builder(insets).setInsets(handled, Insets.NONE).build();
         });
+        setContentView(content);
+        ViewCompat.requestApplyInsets(content);
         WebSettings settings = web.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);

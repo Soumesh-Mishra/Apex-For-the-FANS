@@ -58,6 +58,7 @@ HTTPS is required for device installation/service workers and Secure Google cook
 | --- | --- |
 | `PORT` | Listener port, default 4173 |
 | `PUBLIC_ORIGIN` | Exact external origin; defaults to the local development address |
+| `OPENF1_ACCESS_TOKEN` | Optional server-only OpenF1 Sponsor bearer token for active timing; [setup](LIVE_TIMING.md) |
 | `GOOGLE_CLIENT_ID` | Optional OAuth Web client ID |
 | `APEX_SESSION_SECRET` | Optional cryptographically random secret, at least 32 characters |
 

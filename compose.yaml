@@ -7,4 +7,5 @@ services:
       PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://localhost:4173}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       APEX_SESSION_SECRET: ${APEX_SESSION_SECRET:-}
+      OPENF1_ACCESS_TOKEN: ${OPENF1_ACCESS_TOKEN:-}
     restart: unless-stopped
