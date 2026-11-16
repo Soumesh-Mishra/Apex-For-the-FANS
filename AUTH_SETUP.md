@@ -1,5 +1,7 @@
 # Optional Google sign-in
 
+For a guided Google Cloud + Render setup using this repository, follow [Activate Google login](docs/GOOGLE_LOGIN_SETUP.md). The included Render Blueprint generates the server session secret automatically. Native Android Google sign-in is a separate integration; the current APK does not yet support it.
+
 APEX runs without Google login. To enable it on your own HTTPS deployment:
 
 1. Open [Google Auth Platform](https://console.cloud.google.com/auth/overview) and create/select a project.

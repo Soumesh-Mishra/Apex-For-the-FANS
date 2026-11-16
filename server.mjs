@@ -6,7 +6,7 @@ if(!Number.isInteger(port)||port<1||port>65535)throw Error('PORT must be between
 const server=http.createServer(async(req,res)=>{
  try{
   if(req.url==='/healthz'){res.writeHead(200,{'Content-Type':'text/plain','X-APEX-Server':'apex-f1'});res.end('ok');return;}
-  const origin=process.env.PUBLIC_ORIGIN||'http://localhost:'+port;
+  const origin=process.env.PUBLIC_ORIGIN||process.env.RENDER_EXTERNAL_URL||'http://localhost:'+port;
   const headers=new Headers();for(const [key,value] of Object.entries(req.headers))if(value!==undefined)headers.set(key,Array.isArray(value)?value.join(', '):value);
   // A standalone server must not trust a client-supplied Sites identity header.
   headers.delete('oai-authenticated-user-id');

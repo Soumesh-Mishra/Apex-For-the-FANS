@@ -1,0 +1,19 @@
+# Public backend for the existing Google Identity Services web sign-in flow.
+services:
+  - type: web
+    name: apex-for-the-fans
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: node build.mjs --standalone
+    startCommand: node server.mjs
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: NODE_ENV
+        value: production
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: APEX_SESSION_SECRET
+        generateValue: true

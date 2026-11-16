@@ -57,6 +57,8 @@ Use the built-in Node server or the included [Dockerfile](Dockerfile) and [Compo
 
 **GitHub hosts this source repository. GitHub Pages alone cannot run the API proxy or Google token verification.** Publishing this repository does not change access to any separately hosted private APEX instance.
 
+For Google Cloud setup and a Render backend with an automatically generated session secret, follow [Activate Google login](docs/GOOGLE_LOGIN_SETUP.md).
+
 Copy `.env.example` to `.env` only if needed. Never commit credentials or runtime session secrets. See [Google setup](AUTH_SETUP.md) to enable Google sign-in on your own domain.
 
 ## Checks
