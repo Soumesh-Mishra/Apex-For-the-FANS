@@ -19,3 +19,7 @@ The native container reserves status-bar, navigation-bar and display-cutout spac
 ## Personal Paddock (1.1.0-test)
 
 The bundled My Paddock page saves favourite drivers, team/spoiler preferences and bookmarked races on this device without Google login. Device preferences survive WebView reloads. Account sync still requires native Google authentication and a connected persistent backend; this APK uses local mode explicitly. A new emulator test verifies local preferences and bookmarks after reload. Clearing app data or uninstalling removes local preferences.
+
+## Race Strategy Lab (1.2.0-test)
+
+Open Race Center → Strategy Lab to compare manual race strategies offline. Scenario settings are saved on this device. Native simulation controls and the pit-lap search are covered by emulator tests. CSV download is available in the browser edition; the APK labels that export control as browser-only.

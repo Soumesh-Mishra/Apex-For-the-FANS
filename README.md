@@ -8,6 +8,7 @@ An independent Formula 1 fan dashboard. Pick your team, follow the season and co
 - Published standings, news, weekend information and favourite drivers.
 - Team themes, logos, cars, histories and illustrated driver tributes.
 - Race Center: historical library, recorded Bahrain/Monaco replays and Driver Duel with lap charts, qualifying, pit stops and tyre stints.
+- Race Strategy Lab: adjustable tyre stints, pit-lap search, safety-car what-ifs, lap inspection and browser CSV export. [Model and assumptions](docs/STRATEGY_LAB.md).
 - Championship calculator, circuit exploration and spoiler-free mode.
 - Personal Paddock: favourite drivers, saved races, team/spoiler preferences, offline device storage and Google-account sync. [Personal Paddock details](docs/PERSONAL_PADDOCK.md).
 - Private prediction leagues: invite codes, pole/podium/fastest-lap picks, qualifying deadlines and automatic season standings. [League hosting and scoring](docs/PREDICTION_LEAGUES.md).

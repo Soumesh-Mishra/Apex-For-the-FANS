@@ -40,7 +40,9 @@ export async function loadSite(){
  const paddockCore=await readFile('paddock-core.js','utf8');
  const paddockCss=await readFile('paddock.css','utf8');
  const paddockUi=(await readFile('paddock-ui.js','utf8')).replace('__PADDOCK_ROSTER__',()=>safeJson(JSON.parse(calculatorSnapshot)));
+ const strategyPanel=await readFile('strategy.html','utf8'),strategyCore=await readFile('strategy-core.js','utf8'),strategyCss=await readFile('strategy.css','utf8'),strategyUi=await readFile('strategy-ui.js','utf8');
  const pwa=await installable();
- const paddockPage=page.replace('__PADDOCK_PANEL__',()=>paddockPanel).replace('__PADDOCK_CORE__',()=>paddockCore).replace('__PADDOCK_CSS__',()=>paddockCss).replace('__PADDOCK_UI__',()=>paddockUi);
+ const strategyPage=page.replace('__STRATEGY_PANEL__',()=>strategyPanel).replace('__STRATEGY_CORE__',()=>strategyCore).replace('__STRATEGY_CSS__',()=>strategyCss).replace('__STRATEGY_UI__',()=>strategyUi);
+ const paddockPage=strategyPage.replace('__PADDOCK_PANEL__',()=>paddockPanel).replace('__PADDOCK_CORE__',()=>paddockCore).replace('__PADDOCK_CSS__',()=>paddockCss).replace('__PADDOCK_UI__',()=>paddockUi);
  return {predictionRoster:JSON.parse(calculatorSnapshot),page:pwa.enhance(paddockPage),landingPage:pwa.enhance(landingPage),calendarSnapshot,history,loginPage:pwa.enhance(loginPage),privacyPage,teamCars,legendAssets,threeAssets,creditsPage,entryReviewPage,duelSnapshot,pwaAssets:pwa.assets};
 }

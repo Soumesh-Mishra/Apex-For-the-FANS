@@ -102,6 +102,16 @@ public class BundleTest {
         assertEquals("true",js("!!window.PersonalPaddock&&PersonalPaddock.profile().team==='ferrari'&&PersonalPaddock.profile().favouriteDrivers.includes('leclerc')&&PersonalPaddock.hasRace('2024-8')"));
         assertEquals("true",js("!!document.querySelector('[data-view=paddock]')"));
     }
+    @Test public void strategyLabRunsWithoutBackend() throws Exception {
+        ready();
+        for(int i=0;i<60;i++){if("true".equals(js("typeof StrategyCore!=='undefined'&&!!document.getElementById('strategy-optimise')")))break;Thread.sleep(100);}
+        assertEquals("true",js("typeof StrategyCore!=='undefined'&&!!document.getElementById('strategy-optimise')"));
+        js("document.querySelector('[data-go=strategy]').click();document.getElementById('strategy-B-count').value='1';document.getElementById('strategy-B-count').dispatchEvent(new Event('change',{bubbles:true}));document.getElementById('strategy-optimise').click();");
+        assertEquals("true",js("!document.getElementById('strategy-output').hidden&&document.getElementById('strategy-status').textContent.includes('Best B pit laps')&&!!document.querySelector('#strategy-chart svg')"));
+        js("document.getElementById('strategy-sc').checked=true;document.getElementById('strategy-sc').dispatchEvent(new Event('change',{bubbles:true}));");
+        assertEquals("true",js("!document.getElementById('strategy-output').hidden&&!document.getElementById('strategy-sc-fields').hidden"));
+        assertEquals("true",js("document.getElementById('strategy-export').disabled"));
+    }
     @Test public void proxyAllowlist() throws Exception {
         assertTrue(MainActivity.allowed(new java.net.URL("https://api.jolpi.ca/ergast/f1/current.json")));
         assertFalse(MainActivity.allowed(new java.net.URL("http://api.jolpi.ca/ergast/f1/current.json")));

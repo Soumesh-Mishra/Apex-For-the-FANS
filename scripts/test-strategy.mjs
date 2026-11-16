@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import {readFile} from 'node:fs/promises';
+const context=vm.createContext({});vm.runInContext((await readFile('strategy-core.js','utf8'))+';globalThis.core=StrategyCore;',context);const core=context.core;
+const config={laps:10,base:90,pitLoss:20,fuelGain:0,tyres:Object.fromEntries(['SOFT','MEDIUM','HARD'].map(c=>[c,{offset:0,degradation:.1}])),safety:{enabled:false,from:5,to:6,pitFactor:.5,wearFactor:.5,slowdown:20}};
+const a={compounds:['MEDIUM','HARD'],stops:[5]},none={compounds:['MEDIUM'],stops:[]},two={compounds:['SOFT','MEDIUM','HARD'],stops:[2,8]};
+const near=(a,b)=>assert(Math.abs(a-b)<1e-8,`${a} != ${b}`);
+let result=core.simulate(config,a);near(result.total,922);assert.equal(result.trace[4].age,4);assert.equal(result.trace[5].age,0);assert.equal(result.trace.filter(r=>r.pit).length,1);near(result.trace[4].pitLoss,20);
+near(core.simulate(config,none).total,904.5);near(core.simulate({...config,fuelGain:.1},a).total,917.5,'Fuel gain applies to completed race laps');
+near(core.compare(config,a,a).gap,0);near(core.compare(config,none,a).gap,17.5);
+const sc=core.simulate({...config,safety:{...config.safety,enabled:true}},a);near(sc.trace[4].pitLoss,10);assert(sc.trace[4].underSC);assert(sc.trace[5].underSC);assert(!sc.trace[6].underSC);near(sc.trace[6].age,.5);
+const zeroWear={...config,tyres:Object.fromEntries(['SOFT','MEDIUM','HARD'].map(c=>[c,{offset:0,degradation:0}]))};near(core.simulate({...zeroWear,safety:{...config.safety,enabled:true}},a).total,950,'Two SC laps add 40s and discount one pit by 10s');
+const best=core.optimise(config,{...a,stops:[2]});assert.equal(best.plan.stops[0],5);near(best.total,922);
+const bestTwo=core.optimise(config,two);let expected=Infinity;
+for(let first=1;first<9;first++)for(let second=first+1;second<10;second++){const lengths=[first,second-first,10-second],analytical=900+40+.1*lengths.reduce((sum,n)=>sum+n*(n-1)/2,0);expected=Math.min(expected,analytical);}
+near(bestTwo.total,expected,'Exhaustive two-stop search matches independent closed-form result');
+assert.equal(core.optimise(config,none).plan.stops.length,0);
+for(const stops of [[0],[10],[2.5],[6,4],[4,4],[1,2,3]])assert.throws(()=>core.simulate(config,{stops,compounds:Array(stops.length+1).fill('MEDIUM')}));
+assert.throws(()=>core.simulate({...config,laps:Infinity},a));assert.throws(()=>core.simulate({...config,base:NaN},a));assert.throws(()=>core.simulate({...config,safety:{...config.safety,enabled:true,from:7,to:6}},a));assert.throws(()=>core.simulate(config,{stops:[],compounds:['INTERMEDIATE']}));
+const csv=core.csv(core.compare(config,a,two)),rows=csv.split('\n');assert.equal(rows.length,11);assert(rows.every(r=>r.split(',').length===11));assert(rows[0].includes('B minus A'));
+console.log('Passed Strategy Lab: analytical race times, tyre reset, fuel gain, pit accounting, safety-car boundaries/wear/loss, gap direction, one/two-stop optimisation, invalid inputs and CSV consistency.');
