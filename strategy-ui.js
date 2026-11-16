@@ -19,9 +19,9 @@
  function controls(){for(const id of ['A','B']){const count=number('#strategy-'+id+'-count');[0,1,2].forEach(i=>{$('[data-strategy-stint="'+id+'-'+i+'"]').hidden=i>count;if(i<2)$('[data-strategy-pit-field="'+id+'-'+i+'"]').hidden=i>=count;});}$('#strategy-sc-fields').hidden=!$('#strategy-sc').checked;}
  function strip(id,plan,laps){let start=0;$('#strategy-'+id+'-strip').innerHTML=plan.compounds.map((compound,i)=>{const end=plan.stops[i]||laps,length=end-start;start=end;return '<span style="width:'+length/laps*100+'%;background:'+colours[compound]+'" title="'+compound+' · '+length+' laps"></span>';}).join('');$('#strategy-'+id+'-description').textContent=plan.compounds.map((compound,i)=>compound+' '+((plan.stops[i]||laps)-(plan.stops[i-1]||0))+' laps').join(' → ');}
  function chart(){
-  if(!result)return;const points=result.A.trace.map((a,i)=>({lap:a.lap,gap:result.B.trace[i].cumulative-a.cumulative})),values=points.map(p=>p.gap),min=Math.min(0,...values)-3,max=Math.max(0,...values)+3,W=830,H=230,left=58,top=24,x=lap=>left+(lap-1)/(points.length-1)*W,y=value=>top+(max-value)/(max-min)*H;
+  if(!result)return;const points=result.A.trace.map((a,i)=>({lap:a.lap,gap:result.B.trace[i].cumulative-a.cumulative})),values=points.map(p=>p.gap),min=Math.min(0,...values)-3,max=Math.max(0,...values)+3,shell=Math.max(280,Math.min(930,$('#strategy-chart').clientWidth||930)),W=shell-100,H=230,left=58,top=24,x=lap=>left+(lap-1)/(points.length-1)*W,y=value=>top+(max-value)/(max-min)*H;
   const selected=Math.min(points.length,Math.max(1,number('#strategy-inspect')||1)),at=points[selected-1];
-  let svg='<svg viewBox="0 0 930 310" role="img" aria-label="Simulated cumulative gap of Strategy B relative to A. Positive means B is behind.">';
+  let svg='<svg viewBox="0 0 '+shell+' 310" role="img" aria-label="Simulated cumulative gap of Strategy B relative to A. Positive means B is behind.">';
   for(let i=0;i<5;i++){const value=min+(max-min)*i/4;svg+='<line x1="'+left+'" x2="'+(left+W)+'" y1="'+y(value)+'" y2="'+y(value)+'" stroke="var(--line)"/><text x="48" y="'+(y(value)+4)+'" text-anchor="end" fill="var(--muted)" font-size="11">'+value.toFixed(1)+'s</text>';}
   svg+='<line x1="'+left+'" x2="'+(left+W)+'" y1="'+y(0)+'" y2="'+y(0)+'" stroke="var(--accent-ink,var(--red))" stroke-width="2"/><path d="'+points.map((p,i)=>(i?'L':'M')+x(p.lap).toFixed(2)+' '+y(p.gap).toFixed(2)).join(' ')+'" fill="none" stroke="#73e1f4" stroke-width="3"/>';
   for(const lap of [1,Math.round(points.length/2),points.length])svg+='<text x="'+x(lap)+'" y="283" text-anchor="middle" fill="var(--muted)" font-size="11">Lap '+lap+'</text>';
@@ -44,6 +44,7 @@
  $('#strategy-reset').onclick=()=>{const value=defaults();fill(value);contextOptions('bahrain-2024');$('#strategy-status').textContent='Illustrative Bahrain example restored.';compute();};
  $('#strategy-optimise').onclick=()=>{try{const c=config(),p=plans(),before=StrategyCore.simulate(c,p.B).total,best=StrategyCore.optimise(c,p.B);best.plan.stops.forEach((lap,i)=>$('#strategy-B-pit-'+i).value=lap);compute();$('#strategy-status').textContent='Best B pit laps in this model: '+best.plan.stops.join(' / ')+'. '+(before-best.total).toFixed(2)+'s saved versus the previous B setup. Compounds and stop count were held fixed.';}catch(error){$('#strategy-error').textContent=error.message;}};
  $('#strategy-export').onclick=()=>{if(!compute())return;const blob=new Blob([StrategyCore.csv(result)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='apex-strategy-simulation.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
- window.addEventListener('hashchange',()=>{if(location.hash==='#strategy')contextOptions();});
+ window.addEventListener('resize',()=>{if(result&&location.hash==='#strategy')chart();});
+ window.addEventListener('hashchange',()=>{if(location.hash==='#strategy'){contextOptions();if(result)chart();}});
 })();
 /* STRATEGY_UI_END */
