@@ -38,7 +38,7 @@ function selectTeamTheme(value,persist=false){
  updateTeamLegend(team);
  $$('[data-theme]').forEach(button=>{const selected=button.dataset.theme===team.id;button.setAttribute('aria-pressed',String(selected));button.querySelector('.team-choice-action').textContent=selected?'Selected ✓':'Use colours ↗'});
  const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',team.base);
- if(persist){try{localStorage.setItem('apex-team',team.id)}catch{}toast(team.id==='apex'?'APEX original colours restored.':team.name+' colours applied.');}
+ if(persist){window.PersonalPaddock?.setTeam(team.id);try{localStorage.setItem('apex-team',team.id)}catch{}toast(team.id==='apex'?'APEX original colours restored.':team.name+' colours applied.');}
  return team;
 }
 function renderTeamAbout(team){

@@ -88,6 +88,20 @@ public class BundleTest {
         js("document.querySelector('[data-go=timing]').click();document.querySelector('[data-timing-mode=duel]')?.click();");
         assertEquals("true",js("document.body.textContent.includes('Driver Duel')"));
     }
+    @Test public void personalPaddockSurvivesReloadWithoutAccount() throws Exception {
+        ready();
+        for(int i=0;i<60;i++){if("true".equals(js("!!window.PersonalPaddock")))break;Thread.sleep(100);}
+        assertEquals("true",js("!!window.PersonalPaddock"));
+        js("PersonalPaddock.setTeam('ferrari');if(!PersonalPaddock.profile().favouriteDrivers.includes('leclerc'))PersonalPaddock.toggleDriver('leclerc');if(!PersonalPaddock.hasRace('2024-8'))PersonalPaddock.toggleRace({season:2024,round:8,raceName:'Monaco Grand Prix',date:'2024-05-26',Circuit:{circuitName:'Circuit de Monaco'}});");
+        assertEquals("true",js("PersonalPaddock.profile().team==='ferrari'&&PersonalPaddock.profile().favouriteDrivers.includes('leclerc')&&PersonalPaddock.hasRace('2024-8')"));
+        js("window.__paddockMode='pending';fetch('/api/paddock').then(r=>r.json()).then(d=>window.__paddockMode=d.mode).catch(()=>window.__paddockMode='error');");
+        for(int i=0;i<40;i++){if("\"device\"".equals(js("window.__paddockMode")))break;Thread.sleep(100);}
+        assertEquals("\"device\"",js("window.__paddockMode"));
+        ui(()->activity.getActivity().web.reload());
+        for(int i=0;i<60;i++){if("true".equals(js("!!window.PersonalPaddock")))break;Thread.sleep(100);}
+        assertEquals("true",js("!!window.PersonalPaddock&&PersonalPaddock.profile().team==='ferrari'&&PersonalPaddock.profile().favouriteDrivers.includes('leclerc')&&PersonalPaddock.hasRace('2024-8')"));
+        assertEquals("true",js("!!document.querySelector('[data-view=paddock]')"));
+    }
     @Test public void proxyAllowlist() throws Exception {
         assertTrue(MainActivity.allowed(new java.net.URL("https://api.jolpi.ca/ergast/f1/current.json")));
         assertFalse(MainActivity.allowed(new java.net.URL("http://api.jolpi.ca/ergast/f1/current.json")));

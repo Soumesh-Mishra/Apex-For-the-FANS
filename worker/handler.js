@@ -40,6 +40,7 @@ export default {
       return new Response(body,{headers});
     }
     if(url.pathname==='/api/predictions'||url.pathname.startsWith('/api/predictions/'))return PredictionAPI.handle(request,env);
+    if(url.pathname==='/api/paddock')return PaddockAPI.handle(request,env);
     if(url.pathname==='/api/live-timing')return LiveTimingAPI.handle(request,env);
     if(url.pathname==='/api/driver-duel')return DuelAPI.handle(request);
     if(url.pathname==='/api/race-library'){

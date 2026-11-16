@@ -9,6 +9,7 @@ An independent Formula 1 fan dashboard. Pick your team, follow the season and co
 - Team themes, logos, cars, histories and illustrated driver tributes.
 - Race Center: historical library, recorded Bahrain/Monaco replays and Driver Duel with lap charts, qualifying, pit stops and tyre stints.
 - Championship calculator, circuit exploration and spoiler-free mode.
+- Personal Paddock: favourite drivers, saved races, team/spoiler preferences, offline device storage and Google-account sync. [Personal Paddock details](docs/PERSONAL_PADDOCK.md).
 - Private prediction leagues: invite codes, pole/podium/fastest-lap picks, qualifying deadlines and automatic season standings. [League hosting and scoring](docs/PREDICTION_LEAGUES.md).
 - Team-aware login/loading screens and optional Google sign-in.
 - Installable web app for Android, iOS, Windows and macOS.

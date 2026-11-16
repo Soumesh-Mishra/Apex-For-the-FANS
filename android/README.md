@@ -15,3 +15,7 @@ Transfer the APK to Android and open it. Android may ask you to allow installati
 ## Header and system-bar layout (1.0.1-test)
 
 The native container reserves status-bar, navigation-bar and display-cutout space before laying out the WebView. Insets are zeroed before forwarding them to web content, preventing duplicate padding on newer WebViews. The header wraps its actions on narrow screens and uses 44px minimum touch targets on phones. Emulator tests cover team-logo header hit targets in portrait/landscape and repeated cutout inset changes.
+
+## Personal Paddock (1.1.0-test)
+
+The bundled My Paddock page saves favourite drivers, team/spoiler preferences and bookmarked races on this device without Google login. Device preferences survive WebView reloads. Account sync still requires native Google authentication and a connected persistent backend; this APK uses local mode explicitly. A new emulator test verifies local preferences and bookmarks after reload. Clearing app data or uninstalling removes local preferences.

@@ -8,7 +8,7 @@ function updateSpoilerControls(){
  $('#spoiler-banner').hidden=!enabled;
 }
 function setSpoilerMode(enabled){
- SpoilerMode.apply(enabled);let persisted=true;try{localStorage.setItem(SpoilerMode.key,String(enabled))}catch{persisted=false}
+ SpoilerMode.apply(enabled);window.PersonalPaddock?.setSpoilers(enabled);let persisted=true;try{localStorage.setItem(SpoilerMode.key,String(enabled))}catch{persisted=false}
  updateSpoilerControls();toast((enabled?'Spoiler-free mode on.':'Spoilers are now visible.')+(persisted?'':' This preference could not be saved in this browser.'));
 }
 $$('[data-spoiler-content]').forEach(content=>{

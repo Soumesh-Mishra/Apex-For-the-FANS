@@ -36,6 +36,11 @@ export async function loadSite(){
  threeAssets['apex-carbon-hero.webp']=(await readFile('assets/entry/apex-carbon-hero.webp')).toString('base64');
  const loginPage=loginTemplate.replace('__TEAM_THEME_CORE__',()=>compiledThemeCore).replace('__ENTRY_CSS__',()=>entryCss).replace('__ENTRY_UI__',()=>entryUi).replace('__LOGIN_AUTH__',()=>loginAuth).replace('__LOADING_UI__',()=>loadingUi);
  const landingPage=(await readFile('landing.html','utf8')).replace('__TEAM_THEME_CORE__',()=>compiledThemeCore).replace('__ENTRY_CSS__',()=>entryCss).replace('__ENTRY_UI__',()=>entryUi).replace('__LOADING_UI__',()=>loadingUi);
+ const paddockPanel=await readFile('paddock.html','utf8');
+ const paddockCore=await readFile('paddock-core.js','utf8');
+ const paddockCss=await readFile('paddock.css','utf8');
+ const paddockUi=(await readFile('paddock-ui.js','utf8')).replace('__PADDOCK_ROSTER__',()=>safeJson(JSON.parse(calculatorSnapshot)));
  const pwa=await installable();
- return {predictionRoster:JSON.parse(calculatorSnapshot),page:pwa.enhance(page),landingPage:pwa.enhance(landingPage),calendarSnapshot,history,loginPage:pwa.enhance(loginPage),privacyPage,teamCars,legendAssets,threeAssets,creditsPage,entryReviewPage,duelSnapshot,pwaAssets:pwa.assets};
+ const paddockPage=page.replace('__PADDOCK_PANEL__',()=>paddockPanel).replace('__PADDOCK_CORE__',()=>paddockCore).replace('__PADDOCK_CSS__',()=>paddockCss).replace('__PADDOCK_UI__',()=>paddockUi);
+ return {predictionRoster:JSON.parse(calculatorSnapshot),page:pwa.enhance(paddockPage),landingPage:pwa.enhance(landingPage),calendarSnapshot,history,loginPage:pwa.enhance(loginPage),privacyPage,teamCars,legendAssets,threeAssets,creditsPage,entryReviewPage,duelSnapshot,pwaAssets:pwa.assets};
 }
