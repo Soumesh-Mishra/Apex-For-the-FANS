@@ -17,3 +17,8 @@ android/app/src/main/assets/
 android/local.properties
 *.jks
 *.keystore
+
+.apex-data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm

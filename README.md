@@ -9,6 +9,7 @@ An independent Formula 1 fan dashboard. Pick your team, follow the season and co
 - Team themes, logos, cars, histories and illustrated driver tributes.
 - Race Center: historical library, recorded Bahrain/Monaco replays and Driver Duel with lap charts, qualifying, pit stops and tyre stints.
 - Championship calculator, circuit exploration and spoiler-free mode.
+- Private prediction leagues: invite codes, pole/podium/fastest-lap picks, qualifying deadlines and automatic season standings. [League hosting and scoring](docs/PREDICTION_LEAGUES.md).
 - Team-aware login/loading screens and optional Google sign-in.
 - Installable web app for Android, iOS, Windows and macOS.
 
@@ -24,7 +25,7 @@ cd Apex-For-the-FANS
 node dev.mjs
 ```
 
-Open **http://localhost:4173**. There are no npm packages to install; required browser libraries are vendored with notices. Development mode reloads source on requests. Stop with Ctrl+C.
+Open **http://localhost:4173**. There are no npm packages to install; prediction leagues use Node’s built-in SQLite and save to `.apex-data` by default; required browser libraries are vendored with notices. Development mode reloads source on requests. Stop with Ctrl+C.
 
 For a production build:
 

@@ -16,7 +16,7 @@ APEX runs without Google login. To enable it on your own HTTPS deployment:
 
 Secure cookies require HTTPS in production. Localhost is suitable for development, but actual Google-account sign-in remains an integration test that requires your configured client. The `/privacy` page describes the data used; review it and Google's current production branding/domain-verification requirements before a public OAuth launch.
 
-The backend checks Google's signature, issuer, audience, expiry and nonce, and binds the sign-in flow to an HttpOnly cookie, CSRF token and request origin. Profiles are not stored in a database. Google login identifies the current session; it is not a dashboard access restriction.
+The backend checks Google's signature, issuer, audience, expiry and nonce, and binds the sign-in flow to an HttpOnly cookie, CSRF token and request origin. The authentication session is stored in a signed cookie. Prediction leagues separately persist a display name, account identifier, memberships and picks; they do not store the Google email address. Google login identifies the current session; it is not a dashboard access restriction.
 
 If deploying through Sites, configure the two Google runtime values through that platform. Its private ChatGPT hosting gate is separate and remains unchanged. Self-hosting does not include that gate; the standalone server strips client-supplied hosting identity headers.
 

@@ -7,3 +7,8 @@ dist
 *.tar.gz
 public-release
 *.log
+
+.apex-data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm

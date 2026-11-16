@@ -8,4 +8,10 @@ services:
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       APEX_SESSION_SECRET: ${APEX_SESSION_SECRET:-}
       OPENF1_ACCESS_TOKEN: ${OPENF1_ACCESS_TOKEN:-}
+      APEX_DATA_DIR: /app/.apex-data
+    volumes:
+      - apex-data:/app/.apex-data
     restart: unless-stopped
+
+volumes:
+  apex-data:

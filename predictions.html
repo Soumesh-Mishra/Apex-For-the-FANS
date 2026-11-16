@@ -1,0 +1,24 @@
+<section id="leagues-view" class="view hidden">
+ <div class="view-header"><div class="eyebrow"><span class="red-line"></span>BACK YOUR INSTINCT</div><h1>Prediction leagues.</h1><p>Call the podium. Challenge your friends. Own the bragging rights.</p></div>
+ <div class="prediction-hero"><div><div class="eyebrow">YOUR FRIENDS. YOUR GRID.</div><h2>Make your call.<br><span>Before lights out.</span></h2><p>Private leagues. Five picks. Twenty points to play for.<br>All predictions lock at the scheduled Grand Prix qualifying start.</p></div><div class="prediction-number" aria-hidden="true">20<span>POINTS / WEEKEND</span></div></div>
+ <p id="prediction-message" class="prediction-message" role="status" aria-live="polite"></p>
+ <div class="prediction-toolbar"><span id="prediction-account" class="small">Connecting to your paddock…</span><button class="refresh" id="prediction-refresh">Refresh leagues ↻</button></div>
+ <div id="prediction-access" class="panel prediction-access" hidden></div>
+ <div id="prediction-home" hidden>
+  <div class="prediction-management">
+   <form id="prediction-create" class="panel prediction-card"><label for="prediction-league-name">START YOUR OWN LEAGUE</label><p>Bring your race-day group together.</p><div class="prediction-input-row"><input id="prediction-league-name" name="name" placeholder="Sunday pit wall" minlength="3" maxlength="40" required autocomplete="off"><button class="primary" type="submit">Create league ↗</button></div></form>
+   <form id="prediction-join" class="panel prediction-card"><label for="prediction-code">GOT AN INVITE?</label><p>Enter your friend's 8-character code.</p><div class="prediction-input-row"><input id="prediction-code" name="code" placeholder="Invite code" maxlength="8" minlength="8" required autocomplete="off" spellcheck="false"><button class="refresh" type="submit">Join league ↗</button></div></form>
+  </div>
+  <div id="prediction-empty" class="panel prediction-empty" hidden><h2>Your grid starts with you.</h2><p>Create a league, share its code and get your first predictions in.</p></div>
+  <div id="prediction-league-content" hidden>
+   <div class="prediction-selectors"><label>YOUR LEAGUE<select id="prediction-league-select"></select></label><label>RACE WEEKEND<select id="prediction-race-select"></select></label></div>
+   <div class="prediction-league-bar"><div><h2 id="prediction-league-title"></h2><p id="prediction-members" class="small"></p></div><button id="prediction-copy" class="refresh">Copy invite code</button></div>
+   <div class="prediction-grid">
+    <div class="panel prediction-card"><div class="prediction-card-heading"><h2>Your race calls.</h2><span id="prediction-lock" class="status"></span></div><p id="prediction-deadline" class="prediction-deadline"></p><p id="prediction-feed" class="small"></p><form id="prediction-picks"><div id="prediction-fields" class="prediction-fields"></div><div class="prediction-save"><button type="submit" class="primary" id="prediction-save">Save predictions ↗</button><span id="prediction-saved" class="small"></span></div></form></div>
+    <div class="panel"><div class="panel-bar"><h3>THE LEAGUE TABLE</h3><span class="status">SEASON POINTS</span></div><div id="prediction-standings" data-spoiler-content><p class="empty">No scores yet.</p></div><div class="prediction-table-note">Tied totals share a rank. Race points remain provisional while results are incomplete.</div></div>
+   </div>
+   <div class="panel prediction-card prediction-round"><div class="prediction-card-heading"><h2>The weekend breakdown.</h2><span class="source">JOLPICA F1</span></div><div id="prediction-round" data-spoiler-content></div></div>
+  </div>
+ </div>
+ <details class="panel prediction-rules" open><summary>How the scoring works</summary><div class="prediction-rule-grid"><div><b>3</b><span>Pole · qualifying P1</span></div><div><b>5</b><span>Each exact podium place</span></div><div><b>2</b><span>Podium driver, wrong place</span></div><div><b>2</b><span>Fastest race lap</span></div></div><p>A maximum of 20 points per Grand Prix. Podium points use either the exact-place or wrong-place score for each pick. Sprint sessions do not count. Picks stay private until the qualifying deadline; missing results stay pending. No entry fees or cash prizes.</p></details>
+</section>

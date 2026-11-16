@@ -10,8 +10,11 @@ const networkFetch=window.fetch.bind(window);
 const fetch=(input,init)=>networkFetch('/native-proxy?url='+encodeURIComponent(typeof input==='string'?input:input.url),init);
 if(!AbortSignal.timeout)AbortSignal.timeout=ms=>{const controller=new AbortController();setTimeout(()=>controller.abort(),ms);return controller.signal;};
 if(!Response.json)Response.json=(data,init={})=>new Response(JSON.stringify(data),{...init,headers:{'Content-Type':'application/json',...init.headers}});
+const predictionRoster=${JSON.stringify(site.predictionRoster)};
 const pwaAssets={},duelSnapshot=${JSON.stringify(site.duelSnapshot)},calendarSnapshot=${JSON.stringify(site.calendarSnapshot)},historicalRecordings=${JSON.stringify(site.history)};
 const ApexAuth={handle:async request=>{const path=new URL(request.url).pathname;return Response.json(path==='/api/auth/me'?{user:null,googleEnabled:false}:path==='/api/auth/config'?{enabled:false}:path==='/api/auth/signout'?{ok:true}:{error:'Google sign-in is not configured in this Android build.'},{status:path==='/api/auth/google'?503:200});}};
+${await readFile('prediction-rules.js','utf8')}
+${await readFile('worker/predictions.js','utf8')}
 ${await readFile('worker/duel.js','utf8')}
 ${await readFile('worker/live-timing.js','utf8')}
 ${(await readFile('worker/handler.js','utf8')).replace('export default','const backend =')}

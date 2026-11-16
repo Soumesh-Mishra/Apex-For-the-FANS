@@ -56,6 +56,7 @@ HTTPS is required for device installation/service workers and Secure Google cook
 
 | Name | Purpose |
 | --- | --- |
+| `APEX_DATA_DIR` | Persistent prediction-league directory; default `.apex-data`. Required with a mounted persistent disk on Render. See [league hosting](PREDICTION_LEAGUES.md). |
 | `PORT` | Listener port, default 4173 |
 | `PUBLIC_ORIGIN` | Exact external origin; defaults to Render's `RENDER_EXTERNAL_URL` when present, then the local development address |
 | `OPENF1_ACCESS_TOKEN` | Optional server-only OpenF1 Sponsor bearer token for active timing; [setup](LIVE_TIMING.md) |
