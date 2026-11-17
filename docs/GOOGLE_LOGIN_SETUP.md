@@ -2,6 +2,18 @@
 
 The website already implements Google Identity Services, server verification of Google ID tokens and signed HttpOnly session cookies. These steps activate it on a public HTTPS backend. This guide does not claim that the current Android APK supports Google login: that still needs a native sign-in integration and Android OAuth registration.
 
+## Current Vercel website
+
+APEX is deployed at **https://apex-for-the-fans.vercel.app**. Use this exact value in Google Auth Platform → Clients → APEX Web → **Authorized JavaScript origins**. No redirect URI or client secret is used by the current Google Identity Services flow.
+
+For this deployment, skip the Render instructions below. In Vercel → `apex-for-the-fans` → Environment Variables, add these values for **Production**:
+
+- `GOOGLE_CLIENT_ID`: your Web application's public client ID ending in `.apps.googleusercontent.com`.
+- `APEX_SESSION_SECRET`: a cryptographically random value of at least 32 characters, stored as sensitive. Keep it out of chat and Git.
+- `CRON_SECRET`: a separate random secret of at least 32 characters, stored as sensitive, for scheduled league settlement.
+
+Redeploy Production after saving environment variables. Verify `/api/auth/config` reports `enabled: true`, complete an actual Google sign-in, and confirm `/api/auth/me` before testing account sync. Neon PostgreSQL stores shared leagues and paddock profiles; connecting a database does not enable Google authentication by itself. See [Vercel deployment](VERCEL.md) for storage and scheduling details.
+
 ## 1. Create the Google project and web client
 
 1. Open [Google Cloud Console](https://console.cloud.google.com/) and create a project named **APEX For the Fans**.
