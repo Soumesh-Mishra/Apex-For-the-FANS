@@ -1,4 +1,6 @@
 dist/
+vercel-public/
+.vercel/
 site.tar.gz
 vendor/*.tgz
 vendor/package/examples/

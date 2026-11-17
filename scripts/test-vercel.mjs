@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import api from '../api/index.js';
+import {snapshotStore,createPostgresStore} from '../postgres-store.mjs';
+import {configuredPredictionStore} from '../prediction-store.mjs';
+const request=(path,options)=>api.fetch(new Request('https://apex.test'+path,options));
+const before={users:{},leagues:{},picks:{},results:{},deadlines:{}};
+const memory=snapshotStore(before);
+memory.transaction(state=>{state.users.fan={name:'Fan'};});
+assert.deepEqual(before.users,{},'Do not mutate an input snapshot');
+const detached=memory.read(state=>state);detached.users.fan.name='Changed';
+assert.equal(memory.read(state=>state.users.fan.name),'Fan','Reads cannot mutate store');
+assert.throws(()=>memory.transaction(state=>{state.users.fan.name='Lost';throw Error('Rollback');}));
+assert.equal(memory.read(state=>state.users.fan.name),'Fan','Failed operations roll back');
+assert.throws(()=>memory.transaction(async state=>{state.users.fan.name='Invalid';}));
+assert.equal(memory.read(state=>state.users.fan.name),'Fan');
+assert.equal(configuredPredictionStore({VERCEL:'1',APEX_DATA_DIR:'/tmp/apex'}),null,'Never use temporary SQLite on Vercel');
+assert.equal((await request('/api/auth/config')).status,200);
+assert.equal((await(await request('/api/paddock')).json()).mode,'device');
+assert.equal((await request('/api/predictions')).status,503,'Disable shared storage explicitly when absent');
+assert.equal((await request('/api/cron/settle')).status,401,'Protect scheduled settlement');
+assert.equal((await request('/api/auth/signout',{method:'POST',headers:{Origin:'https://evil.test'}})).status,403);
+assert.equal((await request('/api/auth/signout',{method:'POST',headers:{Origin:'https://apex.test'}})).status,200);
+assert.equal((await request('/api/auth/google',{method:'POST',body:'x'.repeat(22001)})).status,413);
+const html=await readFile('vercel-public/index.html','utf8');assert(!/__[A-Z_]+__/.test(html));
+for(const name of ['strategy-view','paddock-view','timing-view','calendar-view','leagues-view'])assert(html.includes('id="'+name+'"'),name);
+assert.equal(JSON.parse(await readFile('vercel-public/manifest.webmanifest','utf8')).display,'standalone');
+console.log('Passed Vercel build, shared routes, safe disabled-storage mode, origin checks, request limits, protected cron, snapshot isolation and rollback.');
+if(process.env.TEST_DATABASE_URL){
+ const a=createPostgresStore(process.env.TEST_DATABASE_URL),b=createPostgresStore(process.env.TEST_DATABASE_URL),key='test-'+crypto.randomUUID();
+ try{
+  await a.run(store=>store.transaction(state=>{state.users[key]={count:0};}));
+  await Promise.all(Array.from({length:4},(_,i)=>(i%2?a:b).run(async store=>{const value=store.read(state=>state.users[key].count);await new Promise(resolve=>setTimeout(resolve,20));store.transaction(state=>{state.users[key].count=value+1;});})));
+  assert.equal(await b.run(store=>store.read(state=>state.users[key].count)),4,'Separate instances must not lose concurrent updates');
+  await assert.rejects(a.run(store=>{store.transaction(state=>{state.users[key].count=99;});throw Error('Rollback');}));
+  assert.equal(await b.run(store=>store.read(state=>state.users[key].count)),4);
+  await a.run(store=>{store.transaction(state=>{state.users[key].count=99;});return new Response(null,{status:503});});
+  assert.equal(await b.run(store=>store.read(state=>state.users[key].count)),4);
+  console.log('Passed real Postgres concurrency, persistence, thrown-error rollback and HTTP failure rollback.');
+ }finally{await a.run(store=>store.transaction(state=>{delete state.users[key];}));await Promise.all([a.close(),b.close()]);}
+}else console.log('Real Postgres integration not run: TEST_DATABASE_URL is not configured.');

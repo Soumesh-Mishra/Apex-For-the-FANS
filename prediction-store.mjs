@@ -20,6 +20,7 @@ export function createPredictionStore(file){
 }
 
 export function configuredPredictionStore(env=process.env){
+ if(env.VERCEL)return null; // Vercel uses the separate managed Postgres adapter.
  // Render Free has ephemeral storage. Require an explicitly mounted data path.
  if(env.RENDER_EXTERNAL_URL&&!env.APEX_DATA_DIR)return null;
  return createPredictionStore(path.join(env.APEX_DATA_DIR||'.apex-data','predictions.sqlite'));
