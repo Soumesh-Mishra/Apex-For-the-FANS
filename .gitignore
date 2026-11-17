@@ -1,6 +1,8 @@
 dist/
 vercel-public/
 .vercel/
+brag-output/
+brag-output-*/
 site.tar.gz
 vendor/*.tgz
 vendor/package/examples/

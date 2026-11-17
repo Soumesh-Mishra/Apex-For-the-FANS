@@ -90,6 +90,8 @@ See [Driver Duel methodology](DRIVER_DUEL.md), [team palettes](THEME_PALETTES.md
 
 For the responsive website on Vercel, see [Vercel deployment and persistent storage](docs/VERCEL.md). Run `npm ci`, `npm run build:vercel`, then `npm run test:vercel`. Shared leagues need a managed Postgres connection; account sync additionally needs configured sign-in.
 
+See [web layouts and navigation](docs/WEB.md) for the desktop pit wall, overview toolkit and mobile More menu.
+
 [Jolpica F1](https://api.jolpi.ca/) supplies calendars, standings and historical classifications; [OpenF1](https://openf1.org/) supplies recorded sessions/stints; [Autosport](https://www.autosport.com/f1/) supplies RSS news. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and `/credits` for visual/library credits.
 
 APEX is unaffiliated with Formula 1, the FIA or any racing team. Third-party trademarks, photographs, models and likenesses retain their respective rights. Public visibility does not grant a licence to them. No open-source licence grant for original application code has been selected yet; public visibility permits inspection, not unrestricted reuse. Choose a code licence before inviting licensed redistribution.
