@@ -1,8 +1,6 @@
 import {readFile} from 'node:fs/promises';
 import {installable} from './pwa/build.mjs';
 export async function loadSite(){
- const [cinematicCss,cinematicUi]=await Promise.all(['cinematic.css','cinematic.js'].map(file=>readFile(file,'utf8')));
- const cinema=html=>html.replace('</head>','<style data-cinematic-style>'+cinematicCss+'</style></head>').replace('</body>','<script data-apex-cinematic>'+cinematicUi+'</script></body>');
  const [loginTemplate,privacyPage,authUi,carData]=await Promise.all(['login.html','privacy.html','auth-ui.js','data/team-cars.json'].map(path=>readFile(path,'utf8')));
  const teamCars=JSON.parse(carData).cars;
  const histories=JSON.parse(await readFile('data/team-history.json','utf8'));
@@ -30,7 +28,7 @@ export async function loadSite(){
  const timingUi=await readFile('live-timing-ui.js','utf8'),timingCss=await readFile('live-timing.css','utf8');
  const predictionPanel=await readFile('predictions.html','utf8'),predictionUi=await readFile('predictions-ui.js','utf8'),predictionCss=await readFile('predictions.css','utf8');
  const page=template.replace('__PREDICTIONS_PANEL__',()=>predictionPanel).replace('__PREDICTIONS_UI__',()=>predictionUi).replace('__PREDICTIONS_CSS__',()=>predictionCss).replace('__LIVE_TIMING_UI__',()=>timingUi).replace('__LIVE_TIMING_CSS__',()=>timingCss).replace('__DUEL_CORE__',()=>duelCore).replace('__DUEL_UI__',()=>duelUi).replace('__DUEL_CSS__',()=>duelCss).replace('__DUEL_PANEL__',()=>duelPanel).replace('__CALCULATOR_CORE__',()=>calculatorCore).replace('__CALCULATOR_UI__',()=>calculatorUi).replace('__CALCULATOR_PANEL__',()=>calculatorPanel).replace('__CALCULATOR_CSS__',()=>calculatorCss).replace('__LIBRARY_UI__',()=>libraryUi).replace('__LIBRARY_PANEL__',()=>libraryPanel).replace('__LIBRARY_CSS__',()=>libraryCss).replace('__SPOILER_CORE__',()=>spoilerCore).replace('__SPOILER_UI__',()=>spoilerUi).replace('__SPOILER_CSS__',()=>spoilerCss).replace('__MONTH_CALENDAR_UI__',()=>monthUi).replace('__MONTH_CALENDAR_CSS__',()=>monthCss).replace('__CALENDAR_SNAPSHOT__',()=>safeJson(calendarSnapshot)).replace('__REPLAY_CSS__',()=>css).replace('__REPLAY_CORE__',()=>core).replace('__REPLAY_UI__',()=>ui).replace('__REPLAY_PANEL__',()=>panel).replace('__TEAM_CSS__',()=>themeCss).replace('__TEAM_THEME_CORE__',()=>compiledThemeCore).replace('__TEAM_PICKER_UI__',()=>themeUi).replace('__TEAM_PANEL__',()=>themePanel).replace('__CURRENT_TEAM_COLORS__',()=>safeJson(currentColors)).replace('__APP_AUTH_UI__',()=>authUi);
- const threeAssets=Object.fromEntries(await Promise.all(['three.core.js','three.module.js','GLTFLoader.js','BufferGeometryUtils.js','SkeletonUtils.js','meshopt_decoder.module.js','RoomEnvironment.js'].map(async name=>[name,(await readFile('vendor/package/build/'+name,'utf8')).replace(/from\s+(['"])three\1/g,"from './three.module.js'")])));
+ const threeAssets=Object.fromEntries(await Promise.all(['three.core.js','three.module.js','GLTFLoader.js','BufferGeometryUtils.js','SkeletonUtils.js','meshopt_decoder.module.js','RoomEnvironment.js'].map(async name=>[name,await readFile('vendor/package/build/'+name,'utf8')])));
  threeAssets['formula-f226.glb']=(await readFile('data/models/formula-f226.glb')).toString('base64');
  const creditsPage=await readFile('credits.html','utf8'),entryReviewPage=await readFile('entry-review.html','utf8');
  const entryCss=await readFile('paddock-entry.css','utf8'),entryUi=await readFile('paddock-entry.js','utf8');
@@ -47,5 +45,5 @@ export async function loadSite(){
  const pwa=await installable();
  const strategyPage=page.replace('__STRATEGY_PANEL__',()=>strategyPanel).replace('__STRATEGY_CORE__',()=>strategyCore).replace('__STRATEGY_CSS__',()=>strategyCss).replace('__STRATEGY_UI__',()=>strategyUi);
  const paddockPage=strategyPage.replace('__PADDOCK_PANEL__',()=>paddockPanel).replace('__PADDOCK_CORE__',()=>paddockCore).replace('__PADDOCK_CSS__',()=>paddockCss).replace('__PADDOCK_UI__',()=>paddockUi);
- return {predictionRoster:JSON.parse(calculatorSnapshot),page:pwa.enhance(cinema(paddockPage.replace('__WEB_SHELL_CSS__',()=>webCss).replace('__WEB_SHELL_UI__',()=>webUi).replace('__WEB_MENU__',()=>webMenu))),landingPage:pwa.enhance(cinema(landingPage)),calendarSnapshot,history,loginPage:pwa.enhance(cinema(loginPage)),privacyPage,teamCars,legendAssets,threeAssets,creditsPage,entryReviewPage,duelSnapshot,pwaAssets:pwa.assets};
+ return {predictionRoster:JSON.parse(calculatorSnapshot),page:pwa.enhance(paddockPage.replace('__WEB_SHELL_CSS__',()=>webCss).replace('__WEB_SHELL_UI__',()=>webUi).replace('__WEB_MENU__',()=>webMenu)),landingPage:pwa.enhance(landingPage),calendarSnapshot,history,loginPage:pwa.enhance(loginPage),privacyPage,teamCars,legendAssets,threeAssets,creditsPage,entryReviewPage,duelSnapshot,pwaAssets:pwa.assets};
 }
