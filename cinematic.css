@@ -1,44 +1,59 @@
-/* One continuous rightward pass: approach, sustained slide, countersteer, exit. */
-.drift-scene.cinematic{--shot-duration:8s;background:radial-gradient(ellipse at 60% 80%,#ffffff09,transparent 60%)}
-.cinematic .drift-camera{position:absolute;inset:0;transform-origin:58% 65%;animation:drift-camera var(--shot-duration) linear infinite;overflow:hidden}
-.drift-scene.cinematic .drift-car{width:87%;left:0;top:43%;transform-origin:68% 78%;animation:cinematic-pass var(--shot-duration) linear infinite;will-change:transform,filter,opacity}
-.drift-scene.cinematic.login-drift-stage .drift-car{width:88%;top:12%;left:0}
-.drift-scene.cinematic .drift-car>img{filter:contrast(1.07) saturate(.92) drop-shadow(0 13px 7px #000c)}
-.cinematic .drift-car:after{content:'';position:absolute;inset:65% 5% 7%;background:var(--accent-glow);filter:blur(13px);opacity:.7;z-index:-1}
-.drift-scene.cinematic .drift-smoke{inset:0;z-index:1;opacity:0;animation:smoke-envelope var(--shot-duration) linear infinite;pointer-events:none}
-.drift-scene.cinematic .drift-smoke i{left:15%;bottom:13%;width:100px;height:80px;border-radius:48%;background:radial-gradient(ellipse,#d5dce096,#89929e40 34%,#7d879622 53%,transparent 71%);filter:blur(7px);animation:rear-tyre-plume 1.25s ease-out infinite;animation-delay:calc(var(--i)*-.21s);mix-blend-mode:screen}
-.drift-scene.cinematic .drift-smoke i:nth-child(even){bottom:9%;width:135px;height:95px;filter:blur(12px)}
-.drift-scene.cinematic .skid-marks{stroke-width:5;stroke:#020304;stroke-dasharray:1500;stroke-dashoffset:1500;animation:lay-rubber var(--shot-duration) linear infinite;opacity:0}
-.drift-scene.cinematic .scene-grid{background:repeating-linear-gradient(102deg,#ffffff06 0 1px,transparent 1px 33px),repeating-linear-gradient(0deg,#0005 0 2px,transparent 2px 18px);animation:asphalt-rush .65s linear infinite}
-.cinematic .speed-streaks{position:absolute;inset:8% -20% 10%;background:repeating-linear-gradient(0deg,transparent 0 37px,#e5efff28 38px,transparent 39px 67px);mask-image:linear-gradient(90deg,transparent,#000 25%,transparent 90%);transform:rotate(-8deg);animation:speed-envelope var(--shot-duration) linear infinite;opacity:0;pointer-events:none}
-.drift-scene.cinematic:after{content:'';position:absolute;inset:0;box-shadow:inset 0 18px 22px #0008,inset 0 -18px 22px #000a;background:linear-gradient(100deg,#0004,transparent 35%,transparent 75%,#0006);pointer-events:none;z-index:3}
-.cinematic .drift-caption{z-index:4}
-@keyframes cinematic-pass{
-0%{transform:translate(-100%,12%) rotate(-7deg) rotateY(-12deg) scale(.76);opacity:0;filter:blur(3px)}
-12%{transform:translate(-52%,6%) rotate(-5deg) rotateY(-14deg) scale(.85);opacity:1;filter:blur(1.5px)}
-28%{transform:translate(-14%,0) rotate(5deg) rotateY(-24deg) scale(.97);opacity:1;filter:blur(0)}
-42%{transform:translate(0,7%) rotate(10deg) rotateY(-28deg) scale(1.02);opacity:1;filter:blur(0)}
-58%{transform:translate(12%,11%) rotate(7deg) rotateY(-22deg) scale(1.04);opacity:1;filter:blur(0)}
-70%{transform:translate(27%,3%) rotate(-3deg) rotateY(-10deg) scale(1.02);opacity:1;filter:blur(.4px)}
-84%{transform:translate(80%,-6%) rotate(-5deg) rotateY(0) scale(.98);opacity:1;filter:blur(2px)}
-94%,100%{transform:translate(150%,-12%) rotate(-5deg) scale(.94);opacity:0;filter:blur(4px)}
-}
-@keyframes drift-camera{0%,18%{transform:scale(1)}35%{transform:scale(1.06) translateX(-1%)}42%{transform:scale(1.09) translate(-1%,-1px)}43%{transform:scale(1.09) translate(-1.2%,1px)}44%{transform:scale(1.09) translate(-.9%,-1px)}45%,58%{transform:scale(1.09) translate(-1%,0)}80%,100%{transform:scale(1)}}
-@keyframes smoke-envelope{0%,17%{opacity:0}27%{opacity:.5}39%,60%{opacity:1}74%{opacity:.65}86%,100%{opacity:0}}
-@keyframes rear-tyre-plume{0%{transform:translate(0,0) scale(.35);opacity:0}15%{opacity:.85}45%{opacity:.6}100%{transform:translate(-230px,-45px) scale(2.5);opacity:0}}
-@keyframes lay-rubber{0%,20%{stroke-dashoffset:1500;opacity:0}28%{opacity:.6}70%{stroke-dashoffset:0;opacity:.8}88%,100%{stroke-dashoffset:0;opacity:0}}
-@keyframes speed-envelope{0%,10%{opacity:0;translate:0}20%{opacity:.3}35%,64%{opacity:.06}80%{opacity:.5}94%,100%{opacity:0;translate:-25%}}
-@keyframes asphalt-rush{to{background-position:-132px 72px}}
-body[data-motion-paused="true"] .drift-scene.cinematic .animated,body[data-motion-paused="true"] .cinematic .drift-smoke{animation-play-state:paused}
-body[data-motion-paused="true"] .drift-scene.cinematic .drift-car{animation:none;transform:translate(6%,0) rotate(-3deg);opacity:1;filter:none}
-body[data-motion-paused="true"] .cinematic .drift-smoke,body[data-motion-paused="true"] .cinematic .speed-streaks{opacity:0}
-@media(max-width:650px){.drift-scene.cinematic .drift-car{top:45%}.drift-scene.cinematic.login-drift-stage .drift-car{top:22%}.drift-scene.cinematic .drift-smoke i{width:75px;height:65px}.drift-scene.cinematic .drift-smoke i:nth-child(even){width:95px;height:75px}}
-@media(prefers-reduced-motion:reduce){.cinematic .animated,.cinematic .drift-smoke{animation:none!important}.cinematic .drift-smoke,.cinematic .speed-streaks{display:none}.cinematic .drift-camera{transform:none}.drift-scene.cinematic .drift-car{transform:translate(6%,0) rotate(-3deg)!important;opacity:1!important;filter:none}}
-
-/* Real WebGL replaces every flat scene layer only after initialization succeeds. */
-.drift-webgl{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
-.drift-scene[data-render-mode="webgl"]{mask-image:none;-webkit-mask-image:none;background:#101012;perspective:none}
-.drift-scene[data-render-mode="webgl"]>.drift-camera{display:none}
-.drift-scene[data-render-mode="webgl"]:after{box-shadow:inset 0 15px 25px #10101288,inset 0 -15px 25px #10101288}
-.login-drift-stage[data-render-mode="webgl"]{flex-basis:300px}
-@media(max-width:650px){.login-drift-stage[data-render-mode="webgl"]{flex-basis:240px}}
+/* APEX / after dark. Racing motion, real geometry, and team-owned colour. */
+:root{--cinema-accent:var(--accent,var(--red,#ff302e))}
+html[data-motion-state=paused] *,html[data-motion-state=paused] *:before,html[data-motion-state=paused] *:after{animation-play-state:paused!important}
+html{scroll-behavior:smooth}.hero-grid{grid-template-columns:1fr!important;gap:14px!important}
+.hero.apex-cinema{min-height:520px;background:#08090d;border:1px solid #ffffff16;border-radius:12px;isolation:isolate;box-shadow:0 22px 90px #0004}
+.apex-cinema:before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#08090df5 0%,#08090dca 25%,#08090d00 63%),linear-gradient(0deg,#08090de8,transparent 25%)}
+.apex-cinema:after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,#ffffff02 4px);opacity:.5}
+.apex-cinema>.hero-copy{z-index:3;padding:49px 42px 84px;max-width:490px;pointer-events:none}
+.apex-cinema .hero-copy button,.apex-cinema .hero-copy a{pointer-events:auto}
+.apex-cinema h2{font-size:clamp(64px,6.5vw,100px);letter-spacing:-2px;line-height:.88;margin:27px 0 23px}
+.apex-cinema .hero-copy p{font-size:13px;line-height:1.8;max-width:260px}
+.apex-cinema .tag.red{background:transparent;border:1px solid color-mix(in srgb,var(--red) 50%,transparent);color:var(--accent-ink,var(--red));font-size:8px;letter-spacing:2px;padding:8px 11px;backdrop-filter:blur(10px)}
+.apex-cinema .tag.red:before{content:'';width:5px;height:5px;background:var(--red);box-shadow:0 0 14px var(--red);border-radius:50%;animation:cinema-pulse 2.5s ease-in-out infinite}
+.apex-cinema>.hero-credit{display:none}
+.apex-cinema>img{opacity:.35;transition:opacity .8s}.apex-cinema[data-render=ready]>img{opacity:0;visibility:hidden}
+.apex-stage{position:absolute;inset:0 0 0 22%;z-index:0;overflow:hidden;background:radial-gradient(ellipse at 65% 53%,color-mix(in srgb,var(--red) 17%,transparent),transparent 64%);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 92%,transparent)}
+.apex-stage canvas{display:block;width:100%;height:100%;outline-offset:-5px!important;cursor:grab;touch-action:pan-y}
+.apex-stage canvas:active{cursor:grabbing}
+.apex-stage{opacity:0;transition:opacity 1s ease}[data-render=ready]>.apex-stage{opacity:1}
+.apex-cinema .hero-copy>*{animation:cinema-arrival .8s cubic-bezier(.2,.7,.3,1) both}.apex-cinema .hero-copy>:nth-child(2){animation-delay:.1s}.apex-cinema .hero-copy>:nth-child(3){animation-delay:.2s}.apex-cinema .hero-copy>:nth-child(4){animation-delay:.3s}
+.splash-stage.apex-entry-cinema[data-render=ready]>.splash-hero{visibility:hidden}
+.cinema-word{position:absolute;left:34%;bottom:28px;font:italic 900 clamp(130px,20vw,300px)/.8 var(--display,'Barlow Condensed',Impact,sans-serif);letter-spacing:-13px;color:#ffffff03;-webkit-text-stroke:1px #ffffff10;pointer-events:none;user-select:none;z-index:0}
+.cinema-topline{position:absolute;right:25px;top:24px;z-index:3;display:flex;gap:8px;align-items:center;font:9px var(--mono,'IBM Plex Mono',monospace);letter-spacing:1.5px;color:#b0b2c0}
+.cinema-topline i{width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red)}
+.cinema-bottom{position:absolute;bottom:22px;left:42px;right:23px;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:14px;border-top:1px solid #ffffff12;padding-top:17px}
+.cinema-caption{font:8px var(--mono,'IBM Plex Mono',monospace);letter-spacing:1.8px;color:#9698a4;display:flex;align-items:center;gap:12px}
+.cinema-caption b{color:var(--accent-ink,var(--red));font-weight:500}
+.cinema-controls{display:flex;gap:7px}.cinema-controls button{display:flex;align-items:center;gap:7px;min-height:34px;background:#111219b8;border:1px solid #ffffff24;border-radius:5px;color:#e0e0e8;padding:8px 12px;font:9px var(--mono,'IBM Plex Mono',monospace);backdrop-filter:blur(12px);transition:border-color .2s,background .2s}
+.cinema-controls button:hover{border-color:var(--red);background:color-mix(in srgb,var(--red) 14%,#111219)}
+.cinema-controls button:disabled{opacity:.5;cursor:default}
+.cinema-rails{position:absolute;bottom:0;left:0;right:0;height:3px;display:flex;gap:3px;z-index:3}.cinema-rails i{height:100%;flex:1;background:var(--red);opacity:calc(.12 + var(--rail)*.05);transform-origin:left;animation:cinema-rail 3.5s cubic-bezier(.25,.6,.3,1) infinite;animation-delay:calc(var(--rail)*.065s)}
+.hero-grid>.next-race{display:grid;grid-template-columns:1.05fr 1.35fr 1.5fr;align-items:center;background:linear-gradient(120deg,var(--panel),var(--bg));border-radius:9px}
+.hero-grid .race-top{padding:18px 23px;display:block}.hero-grid .race-top>.tag{display:table;margin-top:9px}.hero-grid .race-title{padding:15px 22px;border-left:1px solid var(--line)}
+.hero-grid .race-title h2{font-size:26px}.hero-grid .countdown{padding:15px 22px}.hero-grid .race-bottom{grid-column:1/-1;padding:11px 22px}
+.web-tool,.calendar-card,.team-option,.news-card{transform-style:preserve-3d;transition:transform .3s cubic-bezier(.2,.7,.3,1),box-shadow .3s,border-color .3s}
+.web-tool{overflow:hidden}.web-tool:after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(260px circle at var(--shine-x,50%) var(--shine-y,0%),color-mix(in srgb,var(--red) 13%,transparent),transparent 70%);opacity:0;transition:opacity .25s}
+.web-tool:hover:after{opacity:1}.web-tool:hover{box-shadow:0 15px 35px #0004}.web-tool .tool-arrow{transition:transform .25s}.web-tool:hover .tool-arrow{transform:translate(3px,-3px)}
+.primary,.entry-primary{position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s!important}.primary:hover,.entry-primary:hover{transform:translateY(-2px);box-shadow:0 9px 30px color-mix(in srgb,var(--red) 27%,transparent)}
+.primary:after,.entry-primary:after{content:'';position:absolute;inset:-100% auto -100% -70%;width:40%;transform:rotate(22deg);background:linear-gradient(90deg,transparent,#ffffff30,transparent);animation:cinema-shimmer 7s ease-in-out infinite;pointer-events:none}
+.cinema-reveal{opacity:0;transform:translate3d(0,24px,0);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.3,1);transition-delay:var(--reveal-delay,0ms)}
+.cinema-reveal.is-visible{opacity:1;transform:translateZ(0)}
+.cinema-view-enter{animation:cinema-view .48s cubic-bezier(.2,.7,.3,1) both}
+.entry-editorial.apex-entry-cinema{isolation:isolate;overflow:hidden}.apex-entry-cinema .apex-stage{inset:23% -15% 3% -15%;z-index:1}
+.apex-entry-cinema .editorial-copy{position:relative;z-index:3;pointer-events:none}.apex-entry-cinema .editorial-ghost{z-index:0;opacity:.5}.apex-entry-cinema[data-render=ready]>.editorial-photo{opacity:0;visibility:hidden}
+.apex-entry-cinema .editorial-photo-shade{z-index:2;pointer-events:none;background:linear-gradient(0deg,#08090c 0%,transparent 22%,transparent 60%,#08090c 96%)}
+.apex-entry-cinema .editorial-meta{z-index:3}.apex-entry-cinema .entry-visual-note{z-index:3;bottom:25px}
+.apex-entry-cinema .cinema-topline{top:42%;right:28px;font-size:8px}.apex-entry-cinema .cinema-bottom{left:28px;right:28px;bottom:62px;border:0;padding:0}.apex-entry-cinema .cinema-caption{display:none}
+.login-card{transform-style:preserve-3d;box-shadow:0 22px 90px #0008,0 0 70px color-mix(in srgb,var(--accent) 7%,transparent)!important}
+.entry-shell{background-image:radial-gradient(ellipse at 30% 65%,color-mix(in srgb,var(--accent) 7%,transparent),transparent 52%)}
+.splash-stage.apex-entry-cinema{isolation:isolate}.splash-stage.apex-entry-cinema>.apex-stage{inset:13% 22% 0 -10%;z-index:-1}.splash-stage.apex-entry-cinema>.cinema-topline{right:auto;left:5vw;top:auto;bottom:80px}.splash-stage.apex-entry-cinema>.cinema-bottom{left:5vw;right:auto;bottom:40px;border:0}.splash-stage.apex-entry-cinema .cinema-caption{display:none}.splash-stage.apex-entry-cinema[data-render=ready]>.splash-hero{opacity:0}.splash-stage.apex-entry-cinema>.cinema-word{left:8%;bottom:10%;font-size:25vw}
+@keyframes cinema-pulse{50%{box-shadow:0 0 20px var(--red);opacity:.45}}
+@keyframes cinema-rail{0%,100%{transform:scaleX(.3)}40%,60%{transform:scaleX(1)}}
+@keyframes cinema-shimmer{0%,72%{left:-70%}100%{left:170%}}
+@keyframes cinema-view{from{opacity:.4;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cinema-arrival{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@media(min-width:1650px){.hero.apex-cinema{min-height:590px}.apex-cinema>.hero-copy{padding:62px 48px 100px}.apex-cinema h2{font-size:112px}}
+@media(max-width:1050px){.hero.apex-cinema{min-height:500px}.hero-grid>.next-race{grid-template-columns:1fr 1.5fr}.hero-grid .race-top{grid-column:1/-1;display:flex}.hero-grid .race-top>.tag{margin:0}.hero-grid .race-title{border-left:0}.apex-cinema h2{font-size:78px}}
+@media(max-width:650px){.hero.apex-cinema{min-height:590px;border-radius:8px}.apex-cinema>.hero-copy{padding:26px 23px 0;max-width:none}.apex-cinema h2{font-size:70px;margin:20px 0 17px;max-width:310px}.apex-cinema .hero-copy p{font-size:11px;max-width:225px}.apex-cinema .hero-copy .primary{min-height:40px}.apex-cinema:before{background:linear-gradient(180deg,#08090d 0%,#08090dc0 29%,transparent 65%,#08090db0 100%)}.apex-cinema>.apex-stage{inset:33% -30% 0 -30%}.cinema-word{left:0;bottom:90px;font-size:180px;letter-spacing:-8px}.cinema-topline{font-size:7px;top:auto;bottom:100px;right:18px;letter-spacing:1px}.cinema-bottom{left:18px;right:18px;bottom:16px;align-items:end;gap:8px}.cinema-caption{max-width:100px;line-height:1.8;font-size:7px;display:block}.cinema-caption b{display:block}.cinema-controls button{font-size:8px;padding:8px 9px;min-height:36px}.hero-grid>.next-race{grid-template-columns:1fr}.hero-grid .race-top,.hero-grid .race-title,.hero-grid .countdown,.hero-grid .race-bottom{grid-column:1}.hero-grid .race-top{padding:17px 19px}.hero-grid .race-title{padding:7px 19px}.hero-grid .countdown{padding:14px 19px}.hero-grid .race-title h2{font-size:29px}.hero-grid .race-bottom{padding:12px 19px}.apex-entry-cinema .apex-stage{inset:12% -25% -10% -25%}.apex-entry-cinema .cinema-bottom{bottom:36px}.apex-entry-cinema .cinema-topline{display:none}.splash-stage.apex-entry-cinema>.apex-stage{inset:5% -35% 30% -35%}.splash-stage.apex-entry-cinema>.cinema-bottom,.splash-stage.apex-entry-cinema>.cinema-topline{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.cinema-reveal{opacity:1;transform:none}.cinema-view-enter{animation:none}.web-tool{transform:none!important}}
