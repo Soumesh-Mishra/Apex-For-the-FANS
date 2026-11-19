@@ -1,0 +1,14 @@
+<section id="community-view" class="view hidden">
+ <div class="view-header"><div class="eyebrow"><span class="red-line"></span>Fan community</div><h1>The grandstand.</h1><p>React to the race in chat, or start a discussion other fans can return to.</p></div>
+ <div data-spoiler-content data-spoiler-message="Fan conversations may contain race results.">
+ <div class="panel community-panel">
+ <div class="panel-bar"><div class="tabs"><button type="button" id="community-chat" aria-pressed="true" class="selected">Race chat</button><button type="button" id="community-topics" aria-pressed="false">Discussions</button></div></div>
+ <div class="community-body">
+ <form id="community-join" hidden><label>Public fan name<input class="search" required minlength="2" maxlength="30" name="name" autocomplete="nickname"></label><button class="refresh">Join conversation</button></form>
+ <p id="community-viewer" class="source"></p>
+ <button type="button" class="text-btn" id="community-back" hidden>← All discussions</button>
+ <h2 class="section-heading" id="community-heading">Race chat</h2>
+ <p id="community-status" role="status"></p>
+ <form id="community-compose" hidden><label id="community-title-label" hidden>Discussion title<input class="search" maxlength="100" name="title"></label><label><span id="community-label">Message</span><textarea required maxlength="500" name="message" rows="2"></textarea></label><button class="primary" id="community-send">Post message</button></form>
+ <div id="community-feed"></div>
+ </div></div></div></section>

@@ -22,7 +22,7 @@ export default {
     await db.run(PREDICTIONS_STORE=>worker.scheduled({}, {...env,PREDICTIONS_STORE}));
     return Response.json({ok:true},{headers:{'Cache-Control':'no-store'}});
    }
-   const durable=url.pathname==='/api/paddock'||url.pathname==='/api/predictions'||url.pathname.startsWith('/api/predictions/');
+   const durable=url.pathname==='/api/community'||url.pathname==='/api/paddock'||url.pathname==='/api/predictions'||url.pathname.startsWith('/api/predictions/');
    const db=durable?store():null;
    const response=db?await db.run(PREDICTIONS_STORE=>worker.fetch(trusted,{...env,PREDICTIONS_STORE})):await worker.fetch(trusted,env);
    if(request.method==='HEAD')return new Response(null,{status:response.status,headers:response.headers});

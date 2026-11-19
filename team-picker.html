@@ -1,7 +1,12 @@
 <section id="teams-view" class="view hidden">
- <div class="view-header"><div class="eyebrow"><span class="red-line"></span>YOUR TEAM. YOUR COLOURS.</div><h1>Every team has a story.</h1><p>Explore their colours, legends, history and moments of resilience.</p></div>
+ <div class="view-header"><div class="eyebrow"><span class="red-line"></span>YOUR TEAM. YOUR COLOURS.</div><h1>Teams</h1><p>Explore their colours, legends, history and moments of resilience.</p></div>
  <div class="tabs team-page-tabs" aria-label="Team section"><button class="selected" data-team-page="colours" aria-pressed="true">Colours</button><button data-team-page="about" aria-pressed="false">About the teams</button></div>
  <div id="team-colours-panel"><div class="team-selection-summary"><div class="selection-identity"><span class="selection-stripe"></span><div><span class="small">YOUR CURRENT COLOURS</span><h2 id="current-team-name">APEX Original</h2><p id="current-team-palette">Red · white · black</p></div></div><button class="refresh" id="reset-theme">↺ APEX original</button></div>
+ <section id="team-garage" class="team-garage" aria-labelledby="garage-title" hidden>
+  <div class="garage-head"><h3 id="garage-title">Car finish</h3><div class="tabs" aria-label="Car finish"><button type="button" id="garage-original" aria-pressed="false">Original</button><button type="button" id="garage-textured" class="selected" aria-pressed="true">Textured</button></div></div>
+  <div class="garage-stage"><img id="garage-car" alt=""><canvas id="garage-canvas" role="img" hidden></canvas></div>
+  <div class="garage-foot"><label for="garage-light">Studio light</label><input id="garage-light" type="range" min="0" max="100" value="55" disabled><span id="garage-status" role="status"></span></div>
+ </section>
  <div class="section-head"><div class="section-title"><h2 class="section-heading">Choose your team</h2><span class="status">2026 GRID · 11 TEAMS</span></div><span class="source">SAVED ON THIS DEVICE</span></div>
  <div class="team-grid" id="teams-grid" aria-label="2026 Formula 1 teams"></div>
  <p class="theme-source-note">Primary accents follow <a href="https://www.formula1.com/en/teams" target="_blank" rel="noopener">F1’s 2026 team colours ↗</a>. Supporting shades interpret each team’s regular livery. Text shades adapt for readability. Special race liveries are not separate themes.</p>

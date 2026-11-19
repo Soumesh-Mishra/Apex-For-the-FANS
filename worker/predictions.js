@@ -115,5 +115,5 @@ const PredictionAPI=(()=>{
    return reply({error:'Not found'},404);
   }catch(error){return reply({error:error.status?error.message:'Prediction leagues are temporarily unavailable. Please retry.'},error.status||503);}
  }
- return {handle,refresh};
+ return {handle,refresh,identity};
 })();
