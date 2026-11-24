@@ -6,8 +6,10 @@ function updateSpoilerControls(){
  $('#spoiler-toggle').title=enabled?'Spoiler-free mode on. Show spoilers':'Enable spoiler-free mode';
  $('#spoiler-toggle-label').textContent=enabled?'Spoilers hidden':'Hide spoilers';
  $('#spoiler-banner').hidden=!enabled;
+ renderRaceAction();
 }
 function setSpoilerMode(enabled){
+ $("[data-results-revealed]")?.removeAttribute("data-results-revealed");
  SpoilerMode.apply(enabled);window.PersonalPaddock?.setSpoilers(enabled);let persisted=true;try{localStorage.setItem(SpoilerMode.key,String(enabled))}catch{persisted=false}
  updateSpoilerControls();toast((enabled?'Spoiler-free mode on.':'Spoilers are now visible.')+(persisted?'':' This preference could not be saved in this browser.'));
 }

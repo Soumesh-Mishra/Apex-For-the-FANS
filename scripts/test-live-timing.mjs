@@ -52,11 +52,19 @@ assert(!JSON.stringify(result).includes('issued-'),'Credentials are never in the
 
 // Browser adapter: escaping, polling, single-flight, visibility and loss of connection.
 const nodes=new Map(),listeners={},timers=new Map();let timerId=0,fetches=0,fail=false;
-const node=s=>{if(!nodes.has(s))nodes.set(s,{innerHTML:'',textContent:'',prepend(child){this.firstElementChild=child;},classList:{toggle(){}}});return nodes.get(s)};
-const browser=vm.createContext({Date,Number,String,Math,esc:s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'),$:node,document:{hidden:false,addEventListener:(event,fn)=>listeners[event]=fn},setTimeout:(fn,ms)=>{timers.set(++timerId,{fn,ms});return timerId},clearTimeout:id=>timers.delete(id),api:async()=>{fetches++;if(fail)throw Error('Offline');return {...result,state:'live',rows:[{name:'<script>driver</script>',number:1,position:1,lap:8,lapTime:91.123,colour:'bad"',team:'Test'}],retryAfter:20}}});
+const node=s=>{if(!nodes.has(s))nodes.set(s,{dataset:{},innerHTML:'',textContent:'',prepend(child){this.firstElementChild=child;},classList:{toggle(){}}});return nodes.get(s)};
+const browser=vm.createContext({Date,Number,String,Math,esc:s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'),$:node,state:{races:[]},dateOf:r=>new Date(r.date+'T'+r.time),document:{documentElement:{dataset:{}},hidden:false,addEventListener:(event,fn)=>listeners[event]=fn},setTimeout:(fn,ms)=>{timers.set(++timerId,{fn,ms});return timerId},clearTimeout:id=>timers.delete(id),api:async()=>{fetches++;if(fail)throw Error('Offline');return {...result,state:'live',rows:[{name:'<script>driver</script>',number:1,position:1,lap:8,lapTime:91.123,colour:'bad"',team:'Test'}],retryAfter:20}}});
 vm.runInContext(await readFile('live-timing-ui.js','utf8'),browser);
 await vm.runInContext('Promise.all([loadSession(),loadSession()])',browser);assert.equal(fetches,1);assert.equal(node('#timing-sections').firstElementChild,node('#live-timing-section'));assert.equal(timers.size,1);assert.equal([...timers.values()][0].ms,20000);assert(node('#latest-session').innerHTML.includes('1:31.123'));assert(!node('#latest-session').innerHTML.includes('<script>driver'));
 browser.document.hidden=true;listeners.visibilitychange();assert.equal(timers.size,0);
 fail=true;browser.document.hidden=false;listeners.visibilitychange();await vm.runInContext('timingRequest',browser);assert.equal(node('#latest-session-state').textContent,'TIMING DELAYED');assert.equal(node('#timing-sections').firstElementChild,node('#published-results-section'));assert(node('#latest-session').innerHTML.includes('1:31.123'),'Network failure retains last timing');assert.equal(timers.size,1);
+const choose=vm.runInContext('raceAction',browser);
+const published={date:'2026-11-22',time:'04:00:00Z'};
+const next={date:'2026-11-29',time:'18:00:00Z',FirstPractice:{date:'2026-11-27',time:'13:30:00Z'}};
+const active={state:'live',session:{date_start:'2026-11-27T13:30:00Z',date_end:'2026-11-27T14:30:00Z'}};
+assert.equal(choose(null,published,[next],Date.parse('2026-11-24T00:00:00Z')),'results');
+assert.equal(choose(null,published,[next],Date.parse('2026-11-27T12:00:00Z')),'schedule');
+assert.equal(choose(active,published,[next],Date.parse('2026-11-27T14:00:00Z')),'live');
+assert.equal(choose(active,published,[next],Date.parse('2026-11-27T15:00:00Z')),'schedule');
 const html=await readFile('index.html','utf8');assert(html.includes('data-spoiler-content id="latest-session"'));assert(!html.includes('Live lap times and positions are not connected'));
 console.log('Passed live timing: ordering, completed laps, credentials, caching/single-flight, rollover, ended/empty/scheduled feeds, outages, 401, 429, recovery, browser polling/visibility, escaping and spoiler protection.');

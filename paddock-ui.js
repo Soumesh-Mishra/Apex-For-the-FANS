@@ -91,7 +91,7 @@
  }
  const toggleDriver=id=>mutate({type:entry().profile.favouriteDrivers.includes(id)?'driver-remove':'driver-add',value:id});
  const toggleRace=value=>{try{const race=PaddockRules.race(value);const saved=entry().profile.savedRaces.some(r=>r.key===race.key),ok=mutate({type:saved?'race-remove':'race-save',value:saved?race.key:race});if(ok&&typeof toast==='function')toast(saved?'Race removed from your paddock.':'Race saved to your paddock.');return ok;}catch(error){message(error.message,true);if(typeof toast==='function')toast(error.message);return false;}};
- window.PersonalPaddock={profile:()=>structuredClone(entry().profile),setTeam:value=>mutate({type:'team',value}),setSpoilers:value=>mutate({type:'spoilers',value}),toggleDriver,toggleRace,hasRace:key=>entry().profile.savedRaces.some(r=>r.key===key),sync};
+ window.PersonalPaddock={favouriteRoster:()=>roster.drivers.filter(driver=>entry().profile.favouriteDrivers.includes(driver.id)),profile:()=>structuredClone(entry().profile),setTeam:value=>mutate({type:'team',value}),setSpoilers:value=>mutate({type:'spoilers',value}),toggleDriver,toggleRace,hasRace:key=>entry().profile.savedRaces.some(r=>r.key===key),sync};
  $('#paddock-team').onchange=event=>mutate({type:'team',value:event.target.value});$('#paddock-spoilers').onchange=event=>{SpoilerMode.apply(event.target.checked);mutate({type:'spoilers',value:event.target.checked});};
  $('#paddock-driver-search').oninput=render;$('#paddock-favourites-only').onchange=render;$('#paddock-sync').onclick=sync;
  $('#paddock-import-button').onclick=()=>{try{const operations=PaddockRules.seed(cache.entries.device.profile),profile=PaddockRules.apply(entry().profile,operations);for(const operation of operations)enqueue(entry(),operation);entry().profile=profile;cache.entries.device.importedFor=cache.scope;cache.entries.device.hasImported=true;persist();changed();sync();}catch(error){review=error.message;render();message(error.message,true);}};
@@ -115,4 +115,5 @@
  window.addEventListener('apex:paddock-change',()=>{if(typeof renderRaceLibrary==='function')renderRaceLibrary();if(state.races.length)renderCalendar();decorateStandings();});
  persist();changed();sync();
 })();
+initRaceCenterShortcuts();
 /* PADDOCK_UI_END */

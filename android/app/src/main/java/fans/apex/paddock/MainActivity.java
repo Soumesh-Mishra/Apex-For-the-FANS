@@ -85,6 +85,7 @@ public class MainActivity extends Activity {
         String host=url.getHost(),path=url.getPath();
         return (host.equals("api.jolpi.ca")&&path.startsWith("/ergast/f1/")) ||
                (host.equals("api.openf1.org")&&path.startsWith("/v1/")) ||
+               (host.equals("apex-for-the-fans.vercel.app")&&path.equals("/api/live-timing")&&url.getQuery()==null) ||
                (host.equals("www.autosport.com")&&path.equals("/rss/feed/f1"));
     }
     static WebResourceResponse text(int status,String message){

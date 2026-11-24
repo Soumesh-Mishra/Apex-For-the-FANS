@@ -73,6 +73,3 @@
  .more-menu .web-menu-grid span{display:none}
  .more-menu .web-menu-top{margin-bottom:8px}
 }
-.race-action-live{display:none}
-:root:not([data-spoiler-free=true]) .has-live-timing .race-action-live{display:inline}
-:root:not([data-spoiler-free=true]) .has-live-timing .race-action-results{display:none}

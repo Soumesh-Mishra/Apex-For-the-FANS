@@ -14,6 +14,11 @@ on:
       - 'pwa/**'
       - 'source.mjs'
   workflow_dispatch:
+    inputs:
+      signed_release:
+        description: Build a stable-key APK from main
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -64,4 +69,32 @@ jobs:
             APEX-For-the-FANS.apk.sha256
             android/app/build/reports/androidTests/
             android/app/build/outputs/androidTest-results/
+          retention-days: 14
+      - name: Build and verify the signed release APK
+        if: github.event_name == 'workflow_dispatch' && inputs.signed_release && github.ref == 'refs/heads/main'
+        env:
+          APEX_ANDROID_SIGNING_STORE: ${{ secrets.APEX_ANDROID_SIGNING_STORE }}
+          APEX_ANDROID_SIGNING_PASSWORD: ${{ secrets.APEX_ANDROID_SIGNING_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          : "${APEX_ANDROID_SIGNING_STORE:?Signing keystore secret is missing}"
+          : "${APEX_ANDROID_SIGNING_PASSWORD:?Signing password secret is missing}"
+          export APEX_ANDROID_KEYSTORE="$(mktemp --suffix=.p12)"
+          trap 'rm -f "$APEX_ANDROID_KEYSTORE"' EXIT
+          printf '%s' "$APEX_ANDROID_SIGNING_STORE" | base64 --decode > "$APEX_ANDROID_KEYSTORE"
+          unset APEX_ANDROID_SIGNING_STORE
+          gradle -p android --no-daemon assembleRelease
+          signer=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -1)
+          "$signer" verify --verbose --print-certs android/app/build/outputs/apk/release/app-release.apk
+          cp android/app/build/outputs/apk/release/app-release.apk APEX-For-the-FANS-release.apk
+          sha256sum APEX-For-the-FANS-release.apk > APEX-For-the-FANS-release.apk.sha256
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch' && inputs.signed_release && github.ref == 'refs/heads/main'
+        with:
+          name: APEX-Android-signed-release
+          path: |
+            APEX-For-the-FANS-release.apk
+            APEX-For-the-FANS-release.apk.sha256
+          if-no-files-found: error
           retention-days: 14

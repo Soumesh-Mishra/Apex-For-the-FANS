@@ -1,1 +1,10 @@
 .timing-layout{grid-template-columns:minmax(0,1fr) minmax(390px,1.1fr)}.timing-layout>*,.live-timing{min-width:0}.timing-intro{padding:20px 20px 14px}.timing-intro h3{font:600 27px var(--display);margin:9px 0;color:var(--text)}.timing-intro p{font-size:12px;line-height:1.7;color:var(--muted);margin:8px 0}.timing-scroll{overflow-x:auto;max-height:580px;overflow-y:auto}.timing-table{width:100%;min-width:365px}.timing-table th{position:sticky;top:0;background:var(--panel2);z-index:1;white-space:nowrap}.timing-table td{font:11px var(--mono);padding:12px 14px}.timing-table .timing-position{font-weight:700;color:var(--red);font-size:15px}.timing-driver{border-left:3px solid var(--driver-colour);padding-left:10px;min-width:135px}.timing-driver b{display:block;font:600 13px var(--sans);color:var(--text)}.timing-driver small{display:block;font:10px var(--sans);margin-top:4px;color:var(--muted)}.timing-lap{white-space:nowrap}.timing-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:14px 20px}.timing-empty{padding:12px 20px 24px;color:var(--muted);font-size:12px;line-height:1.7}.timing-caption{text-align:left;padding:10px 20px;font:10px var(--mono);color:var(--muted)}.timing-scroll:focus-visible{outline:2px solid var(--red);outline-offset:-2px}@media(max-width:1100px){.timing-layout{grid-template-columns:minmax(0,1fr)}.timing-layout>div:last-child{order:-1}}
+.timing-pins{padding:12px 16px;border-bottom:1px solid var(--line);display:grid;gap:8px}
+.timing-pins h3,.timing-pins ul{margin:0}
+.timing-pins ul{padding:0;list-style:none}
+.timing-pins li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.timing-pins small{color:var(--muted);margin-inline-start:6px}
+.timing-pins label{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.timing-pins select{max-width:100%;background:var(--panel);color:inherit;border:1px solid var(--line);padding:8px;border-radius:5px}
+.timing-pins button{justify-self:start;min-height:36px}
+:root[data-spoiler-free=true] [data-pin-timing]{display:none}

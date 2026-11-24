@@ -1,12 +1,16 @@
 # Android APK
 
-This build bundles the APEX dashboard, team visuals and historical recordings inside a native Android WebView app. It does not connect to the Windows local server or depend on the private hosted site. Native HTTPS requests are restricted to the existing Jolpica, OpenF1 and Autosport feed endpoints. Google login is disabled in this test build; no credentials are bundled.
+This build bundles the APEX dashboard, team visuals and historical recordings inside a native Android WebView app. It does not connect to the Windows local server or depend on the private hosted site. Native HTTPS requests are restricted to the Jolpica, OpenF1, Autosport and APEX production live-timing endpoints. The app falls back to direct OpenF1 timing if the production endpoint is unreachable. Google login is disabled in this test build; no credentials are bundled.
 
 Requires Android 8.0+ and an updated Android System WebView/Chrome. Internet access is needed for external feeds; bundled calendar and sample recorded races/comparison remain available when feeds fail.
 
 The GitHub Android workflow uses Java 17, Gradle 8.11.1, Android Gradle Plugin 8.9.2 and SDK 35. It runs `node scripts/build-android-assets.mjs`, `gradle -p android assembleDebug assembleDebugAndroidTest`, verifies the APK signature, and tests the installed app on an Android emulator. The downloadable APK is a **test/debug-signed build**, intended for direct sharing and testing, not a Play Store release. Different workflow runs may use different test signing keys, requiring uninstall/reinstall rather than an in-place update. Uninstalling clears local preferences.
 
-For a stable public release, configure a private release keystore and increment `versionCode`. Never commit a keystore or signing passwords. No Google/Play account is needed to build or directly install the test APK.
+## Signed APKs for direct distribution
+
+Run the **Android APK** workflow on `main` with **Build a stable-key APK from main** enabled. It uses `APEX_ANDROID_SIGNING_STORE` (a base64-encoded PKCS#12 keystore with the alias `apex`) and `APEX_ANDROID_SIGNING_PASSWORD` from GitHub Actions secrets. Download the `APEX-Android-signed-release` artifact. For a local signed build, set `APEX_ANDROID_KEYSTORE` to the private PKCS#12 file path, provide `APEX_ANDROID_SIGNING_PASSWORD`, and run `gradle -p android assembleRelease` after bundling the assets.
+
+Back up the key and password privately. Future release APKs must use this key and a higher `versionCode` to install in place. Moving from a debug-signed build to the stable-key release requires uninstalling the debug build first. Android removes that installation's local preferences. Never commit the keystore or signing password.
 
 To build locally, install Java 17, Android SDK 35/build-tools and Gradle 8.11.1. Set `ANDROID_HOME`, then run the two commands above from the repository root. APK output: `android/app/build/outputs/apk/debug/app-debug.apk`. Device/emulator tests: `gradle -p android connectedDebugAndroidTest`.
 

@@ -21,9 +21,20 @@ ${await readFile('worker/predictions.js','utf8')}
 ${await readFile('worker/duel.js','utf8')}
 ${await readFile('worker/live-timing.js','utf8')}
 ${(await readFile('worker/handler.js','utf8')).replace('export default','const backend =')}
+async function getLiveTiming(request){
+ try{
+  const response=await fetch('https://apex-for-the-fans.vercel.app/api/live-timing',{signal:request.signal});
+  if(response.ok)return response;
+ }catch(error){if(request.signal.aborted)throw error;}
+ return backend.fetch(request,{});
+}
 window.fetch=(input,init)=>{
  const url=new URL(typeof input==='string'?input:input.url,location.href);
- if(url.origin===location.origin&&url.pathname.startsWith('/api/'))return backend.fetch(new Request(url,input instanceof Request?input:init),{});
+ if(url.origin===location.origin&&url.pathname.startsWith('/api/')){
+  const request=new Request(url,input instanceof Request?input:init);
+  if(url.pathname==='/api/live-timing'&&request.method==='GET')return getLiveTiming(request);
+  return backend.fetch(request,{});
+ }
  return networkFetch(input,init);
 };
 })();`;

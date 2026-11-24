@@ -1,14 +1,35 @@
 plugins { id 'com.android.application' }
 
+def releaseStore = System.getenv('APEX_ANDROID_KEYSTORE')
+def releasePassword = System.getenv('APEX_ANDROID_SIGNING_PASSWORD')
+
 android {
+    signingConfigs {
+        if (releaseStore && releasePassword) {
+            stableRelease {
+                storeFile file(releaseStore)
+                storeType 'PKCS12'
+                storePassword releasePassword
+                keyAlias 'apex'
+                keyPassword releasePassword
+            }
+        }
+    }
+    buildTypes {
+        release {
+            if (releaseStore && releasePassword) {
+                signingConfig signingConfigs.stableRelease
+            }
+        }
+    }
     namespace 'fans.apex.paddock'
     compileSdk 35
     defaultConfig {
         applicationId 'fans.apex.paddock'
         minSdk 26
         targetSdk 35
-        versionCode 6
-        versionName '1.3.1-test'
+        versionCode 7
+        versionName '1.4.0'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
