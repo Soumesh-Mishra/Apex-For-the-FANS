@@ -1,6 +1,6 @@
 /* STRATEGY_UI_START */
 (()=>{
- const root=$('#strategy-view');if(!root)return;const KEY='apex-strategy-lab-v1',colours={SOFT:'#ff6b6b',MEDIUM:'#f5d95c',HARD:'#ededf3'};const canExport=location.hostname!=='appassets.androidplatform.net';let result=null,debounce;
+ const root=$('#strategy-view');if(!root)return;const KEY='apex-strategy-lab-v1',colours={SOFT:'#ff6b6b',MEDIUM:'#f5d95c',HARD:'#ededf3'};const canExport=location.hostname!=='appassets.androidplatform.net';let result=null,debounce,previousTrace;
  const defaults=()=>({config:{laps:57,base:92,pitLoss:23,fuelGain:.04,tyres:{SOFT:{offset:-.6,degradation:.14},MEDIUM:{offset:0,degradation:.08},HARD:{offset:.5,degradation:.045}},safety:{enabled:false,from:18,to:22,pitFactor:.6,wearFactor:.5,slowdown:20}},A:{stops:[22],compounds:['MEDIUM','HARD']},B:{stops:[16,36],compounds:['SOFT','MEDIUM','HARD']},context:'bahrain-2024'});
  const number=id=>{const value=$(id).value;return value.trim()===''?NaN:Number(value);};
  const duration=seconds=>{const ms=Math.round(seconds*1000),h=Math.floor(ms/3600000),m=Math.floor(ms%3600000/60000),s=(ms%60000/1000).toFixed(3).padStart(6,'0');return h+':'+String(m).padStart(2,'0')+':'+s;};
@@ -18,12 +18,12 @@
  function contextNote(){$('#strategy-context').textContent=$('#strategy-race').value==='bahrain-2024'?'Example seeded with the 57-lap distance from the bundled Bahrain 2024 classification. Pace, degradation and pit losses are illustrative assumptions, not fitted historical telemetry.':'Race label selected from the calendar. Set the distance and all assumptions for this circuit; changing the race label does not load measured performance data.';}
  function controls(){for(const id of ['A','B']){const count=number('#strategy-'+id+'-count');[0,1,2].forEach(i=>{$('[data-strategy-stint="'+id+'-'+i+'"]').hidden=i>count;if(i<2)$('[data-strategy-pit-field="'+id+'-'+i+'"]').hidden=i>=count;});}$('#strategy-sc-fields').hidden=!$('#strategy-sc').checked;}
  function strip(id,plan,laps){let start=0;$('#strategy-'+id+'-strip').innerHTML=plan.compounds.map((compound,i)=>{const end=plan.stops[i]||laps,length=end-start;start=end;return '<span style="width:'+length/laps*100+'%;background:'+colours[compound]+'" title="'+compound+' · '+length+' laps"></span>';}).join('');$('#strategy-'+id+'-description').textContent=plan.compounds.map((compound,i)=>compound+' '+((plan.stops[i]||laps)-(plan.stops[i-1]||0))+' laps').join(' → ');}
- function chart(){
+ function chart(animate=false){
   if(!result)return;const points=result.A.trace.map((a,i)=>({lap:a.lap,gap:result.B.trace[i].cumulative-a.cumulative})),values=points.map(p=>p.gap),min=Math.min(0,...values)-3,max=Math.max(0,...values)+3,shell=Math.max(280,Math.min(930,$('#strategy-chart').clientWidth||930)),W=shell-100,H=230,left=58,top=24,x=lap=>left+(lap-1)/(points.length-1)*W,y=value=>top+(max-value)/(max-min)*H;
   const selected=Math.min(points.length,Math.max(1,number('#strategy-inspect')||1)),at=points[selected-1];
   let svg='<svg viewBox="0 0 '+shell+' 310" role="img" aria-label="Simulated cumulative gap of Strategy B relative to A. Positive means B is behind.">';
   for(let i=0;i<5;i++){const value=min+(max-min)*i/4;svg+='<line x1="'+left+'" x2="'+(left+W)+'" y1="'+y(value)+'" y2="'+y(value)+'" stroke="var(--line)"/><text x="48" y="'+(y(value)+4)+'" text-anchor="end" fill="var(--muted)" font-size="11">'+value.toFixed(1)+'s</text>';}
-  svg+='<line x1="'+left+'" x2="'+(left+W)+'" y1="'+y(0)+'" y2="'+y(0)+'" stroke="var(--accent-ink,var(--red))" stroke-width="2"/><path d="'+points.map((p,i)=>(i?'L':'M')+x(p.lap).toFixed(2)+' '+y(p.gap).toFixed(2)).join(' ')+'" fill="none" stroke="#73e1f4" stroke-width="3"/>';
+  svg+='<line x1="'+left+'" x2="'+(left+W)+'" y1="'+y(0)+'" y2="'+y(0)+'" stroke="var(--accent-ink,var(--red))" stroke-width="2"/><path class="strategy-gap-trace'+(animate?' strategy-gap-trace-updated':'')+'" d="'+points.map((p,i)=>(i?'L':'M')+x(p.lap).toFixed(2)+' '+y(p.gap).toFixed(2)).join(' ')+'" fill="none" stroke="#73e1f4" stroke-width="3"/>';
   for(const lap of [1,Math.round(points.length/2),points.length])svg+='<text x="'+x(lap)+'" y="283" text-anchor="middle" fill="var(--muted)" font-size="11">Lap '+lap+'</text>';
   svg+='<line x1="'+x(at.lap)+'" x2="'+x(at.lap)+'" y1="'+top+'" y2="'+(top+H)+'" stroke="var(--muted)" stroke-dasharray="4 5"/><circle cx="'+x(at.lap)+'" cy="'+y(at.gap)+'" r="5" fill="#73e1f4"/></svg>';$('#strategy-chart').innerHTML=svg;inspect();
  }
@@ -31,10 +31,16 @@
  function compute(){
   controls();try{const c=config(),p=plans();result=StrategyCore.compare(c,p.A,p.B);$('#strategy-error').textContent='';$('#strategy-output').hidden=false;$('#strategy-export').disabled=!canExport;$('#strategy-optimise').disabled=p.B.stops.length===0;
    for(const id of ['A','B']){$('#strategy-total-'+id.toLowerCase()).textContent=duration(result[id].total);$('#strategy-stops-'+id.toLowerCase()).textContent=result[id].stops+' pit '+(result[id].stops===1?'stop':'stops');strip(id,p[id],c.laps);}
-   $('#strategy-gap').textContent=Math.abs(result.gap)<.05?'Nearly level':(result.gap>0?'A':'B')+' quicker by '+Math.abs(result.gap).toFixed(2)+'s';$('#strategy-inspect').max=c.laps;if(number('#strategy-inspect')>c.laps)$('#strategy-inspect').value=c.laps;chart();
+   const gap=Math.abs(result.gap)<.05?'Nearly level':'Strategy '+(result.gap>0?'A':'B')+' quicker by '+Math.abs(result.gap).toFixed(2)+'s';
+   const gapLabel=$('#strategy-gap');
+   if(gapLabel.textContent!==gap)gapLabel.textContent=gap;
+   const trace=result.B.trace.map((lap,i)=>(lap.cumulative-result.A.trace[i].cumulative).toFixed(3)).join(',');
+   const animate=previousTrace!==undefined&&previousTrace!==trace;
+   previousTrace=trace;
+$('#strategy-inspect').max=c.laps;if(number('#strategy-inspect')>c.laps)$('#strategy-inspect').value=c.laps;chart(animate);
    try{const select=$('#strategy-race');localStorage.setItem(KEY,JSON.stringify({config:c,...p,context:select.value,contextName:select.selectedOptions[0]?.textContent}));}catch{$('#strategy-status').textContent='This browser could not save the scenario. The comparison still works while this page stays open.';}
    return true;
-  }catch(error){result=null;$('#strategy-error').textContent=error.message;$('#strategy-output').hidden=true;$('#strategy-export').disabled=true;$('#strategy-optimise').disabled=true;return false;}
+  }catch(error){result=null;$('#strategy-gap').textContent='Check the setup';$('#strategy-error').textContent=error.message;$('#strategy-output').hidden=true;$('#strategy-export').disabled=true;$('#strategy-optimise').disabled=true;return false;}
  }
  if(!canExport){$('#strategy-export').textContent='CSV export · browser only';$('#strategy-status').textContent='Simulation works offline. CSV export is available in the browser version.';}
  buildPlans();let saved=defaults();try{const parsed=JSON.parse(localStorage.getItem(KEY));if(parsed){StrategyCore.validate(parsed.config,parsed.A);StrategyCore.validate(parsed.config,parsed.B);saved=parsed;}}catch{}

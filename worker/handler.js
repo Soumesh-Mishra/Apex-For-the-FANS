@@ -91,6 +91,6 @@ export default {
       } catch(e) {return Response.json({error:e.message},{status:502});}
     }
     if(url.pathname!=='/'&&url.pathname!=='/loading'&&url.pathname!=='/index.html') return new Response('Not found',{status:404});
-    return new Response(url.pathname==='/index.html'?page:landingPage,{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}});
+    return new Response(url.pathname==='/loading'?landingPage:page,{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}});
   }
 };

@@ -2,11 +2,18 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
 const source=await readFile('worker/live-timing.js','utf8');
-let now=Date.parse('2026-11-15T18:30:00Z'),key=123,mode='ok',calls=[];
+let now=Date.parse('2026-11-15T18:30:00Z'),key=123,mode='ok',calls=[],tokenCount=0,expiredToken;
 class Clock extends Date{constructor(...args){super(...(args.length?args:[now]))}static now(){return now}}
 const iso=offset=>new Date(now+offset).toISOString();
-const context=vm.createContext({Date:Clock,URL,Response,Request,AbortSignal,setTimeout:fn=>fn(),fetch:async(url,init)=>{
- const u=new URL(url),endpoint=u.pathname.split('/').pop();calls.push({endpoint,auth:init.headers.Authorization});
+const context=vm.createContext({Date:Clock,URL,URLSearchParams,Response,Request,AbortSignal,setTimeout:fn=>fn(),fetch:async(url,init)=>{
+ const u=new URL(url),endpoint=u.pathname.split('/').pop();calls.push({endpoint,auth:init.headers.Authorization,query:u.searchParams});
+ if(endpoint==='token'){
+  assert.equal(init.method,'POST');
+  assert.equal(init.body.get('username'),'test-user');
+  assert.equal(init.body.get('password'),'test-password');
+  return Response.json({access_token:'issued-'+(++tokenCount),expires_in:120});
+ }
+ if(expiredToken&&init.headers.Authorization===expiredToken)return new Response('',{status:401});
  if(mode==='offline')throw Error('Network failure');
  if(mode==='denied')return new Response('',{status:401});
  if(mode==='limited')return new Response('',{status:429,headers:{'Retry-After':'120'}});
@@ -20,10 +27,11 @@ vm.runInContext(source+';globalThis.api=LiveTimingAPI',context);
 const request=new Request('https://apex.test/api/live-timing');
 const get=async(token='secret')=>(await context.api.handle(request,{OPENF1_ACCESS_TOKEN:token})).json();
 let result=await get('');assert.equal(result.state,'auth_required');assert.equal(calls.length,1,'No protected timing requests without credentials');
-result=await get();assert.equal(result.state,'live');assert.equal(result.rows[0].number,2);assert.equal(result.rows.find(r=>r.number===1).lap,8);assert.equal(result.rows.find(r=>r.number===1).lapTime,91.123);assert.equal(result.rows[2].position,null);assert(!JSON.stringify(result).includes('secret'));
+result=await get();assert.equal(result.state,'live');assert.equal(result.retryAfter,5);assert.equal(result.rows[0].number,2);assert.equal(result.rows.find(r=>r.number===1).lap,8);assert.equal(result.rows.find(r=>r.number===1).lapTime,91.123);assert.equal(result.rows[2].position,null);assert(!JSON.stringify(result).includes('secret'));
 assert(calls.filter(c=>c.endpoint!=='sessions').every(c=>c.auth==='Bearer secret'));
 let count=calls.length;await Promise.all([get(),get(),get()]);assert.equal(calls.length,count,'Shared cache prevents per-client upstream fan-out');
-now+=21000;await Promise.all([get(),get()]);assert.equal(calls.length,count+2,'Concurrent refreshes share a single request');
+now+=5000;await Promise.all([get(),get()]);assert.equal(calls.length,count+2,'Concurrent refreshes share a single request');
+assert(calls.at(-1).query.has('date_start>'),'Active refresh uses a lap cursor');
 mode='offline';now+=21000;result=await get();assert.equal(result.state,'stale');assert.equal(result.rows.length,3);const previousData=result.dataAt;
 mode='denied';now+=31000;result=await get();assert.equal(result.state,'auth_required');assert.equal(result.dataAt,previousData);
 mode='limited';now+=31000;result=await get();assert.equal(result.retryAfter,120);assert.equal(result.state,'stale');
@@ -33,14 +41,22 @@ key=124;mode='empty';now+=61000;result=await get();assert.equal(result.state,'wa
 mode='ended';now+=61000;result=await get('');assert.equal(result.state,'ended');assert.equal(result.rows.length,3,'Ended sessions use free historical data');
 key=125;mode='scheduled';now+=61000;result=await get('');assert.equal(result.state,'scheduled');assert.equal(result.rows.length,0);
 assert.equal((await context.api.handle(new Request(request,{method:'POST'}))).status,405);
+mode='ok';key=126;
+const account=async()=>(await context.api.handle(request,{OPENF1_USERNAME:'test-user',OPENF1_PASSWORD:'test-password'})).json();
+result=await account();assert.equal(result.state,'live');assert.equal(tokenCount,1);
+now+=5000;await Promise.all([account(),account()]);assert.equal(tokenCount,1,'Fresh token is reused');
+expiredToken='Bearer issued-1';
+now+=5000;result=await account();assert.equal(result.state,'live');assert.equal(tokenCount,2,'Rejected token is renewed once');
+now+=61000;result=await account();assert.equal(result.state,'live');assert.equal(tokenCount,3,'Token is renewed before expiry');
+assert(!JSON.stringify(result).includes('issued-'),'Credentials are never in the public payload');
 
 // Browser adapter: escaping, polling, single-flight, visibility and loss of connection.
 const nodes=new Map(),listeners={},timers=new Map();let timerId=0,fetches=0,fail=false;
-const node=s=>{if(!nodes.has(s))nodes.set(s,{innerHTML:'',textContent:'',classList:{toggle(){}}});return nodes.get(s)};
+const node=s=>{if(!nodes.has(s))nodes.set(s,{innerHTML:'',textContent:'',prepend(child){this.firstElementChild=child;},classList:{toggle(){}}});return nodes.get(s)};
 const browser=vm.createContext({Date,Number,String,Math,esc:s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'),$:node,document:{hidden:false,addEventListener:(event,fn)=>listeners[event]=fn},setTimeout:(fn,ms)=>{timers.set(++timerId,{fn,ms});return timerId},clearTimeout:id=>timers.delete(id),api:async()=>{fetches++;if(fail)throw Error('Offline');return {...result,state:'live',rows:[{name:'<script>driver</script>',number:1,position:1,lap:8,lapTime:91.123,colour:'bad"',team:'Test'}],retryAfter:20}}});
 vm.runInContext(await readFile('live-timing-ui.js','utf8'),browser);
-await vm.runInContext('Promise.all([loadSession(),loadSession()])',browser);assert.equal(fetches,1);assert.equal(timers.size,1);assert.equal([...timers.values()][0].ms,20000);assert(node('#latest-session').innerHTML.includes('1:31.123'));assert(!node('#latest-session').innerHTML.includes('<script>driver'));
+await vm.runInContext('Promise.all([loadSession(),loadSession()])',browser);assert.equal(fetches,1);assert.equal(node('#timing-sections').firstElementChild,node('#live-timing-section'));assert.equal(timers.size,1);assert.equal([...timers.values()][0].ms,20000);assert(node('#latest-session').innerHTML.includes('1:31.123'));assert(!node('#latest-session').innerHTML.includes('<script>driver'));
 browser.document.hidden=true;listeners.visibilitychange();assert.equal(timers.size,0);
-fail=true;browser.document.hidden=false;listeners.visibilitychange();await vm.runInContext('timingRequest',browser);assert.equal(node('#latest-session-state').textContent,'TIMING DELAYED');assert(node('#latest-session').innerHTML.includes('1:31.123'),'Network failure retains last timing');assert.equal(timers.size,1);
+fail=true;browser.document.hidden=false;listeners.visibilitychange();await vm.runInContext('timingRequest',browser);assert.equal(node('#latest-session-state').textContent,'TIMING DELAYED');assert.equal(node('#timing-sections').firstElementChild,node('#published-results-section'));assert(node('#latest-session').innerHTML.includes('1:31.123'),'Network failure retains last timing');assert.equal(timers.size,1);
 const html=await readFile('index.html','utf8');assert(html.includes('data-spoiler-content id="latest-session"'));assert(!html.includes('Live lap times and positions are not connected'));
 console.log('Passed live timing: ordering, completed laps, credentials, caching/single-flight, rollover, ended/empty/scheduled feeds, outages, 401, 429, recovery, browser polling/visibility, escaping and spoiler protection.');

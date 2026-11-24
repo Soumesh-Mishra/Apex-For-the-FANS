@@ -53,3 +53,26 @@
 .menu-section{border-bottom:1px solid var(--line);padding:4px 0}
 .menu-section[open]>.web-menu-grid{padding:2px 0 12px}
 .more-menu .menu-primary{display:none}
+
+.race-center-nav{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.race-center-nav .replay-tabs{margin:0}
+.race-center-nav .replay-tabs button{min-height:44px;font-size:13px}
+.race-center-strategy{display:inline-flex;align-items:center;min-height:44px}
+#timing-sections{align-items:start;grid-template-columns:repeat(2,minmax(0,1fr))}
+#timing-sections .panel-bar h2{font-family:var(--display);font-size:21px;margin:0}
+.timing-session-summary,.published-race-name{margin:14px 18px 0}
+#results-table{overflow-x:auto}
+@media(max-width:900px){#timing-sections{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:650px){
+ .race-center-nav .replay-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+ .more-menu .menu-section{padding:0}
+ .more-menu .menu-section>summary{padding:7px 4px}
+ .more-menu .web-menu-grid{gap:2px;padding:0 0 5px}
+ .more-menu .menu-section .web-menu-grid button{min-height:44px;padding:5px 9px}
+ .more-menu .web-menu-grid strong{font:600 17px var(--display);margin:0}
+ .more-menu .web-menu-grid span{display:none}
+ .more-menu .web-menu-top{margin-bottom:8px}
+}
+.race-action-live{display:none}
+:root:not([data-spoiler-free=true]) .has-live-timing .race-action-live{display:inline}
+:root:not([data-spoiler-free=true]) .has-live-timing .race-action-results{display:none}

@@ -2,7 +2,7 @@ import http from 'node:http';
 import {configuredPredictionStore} from './prediction-store.mjs';
 const predictionsStore=configuredPredictionStore();
 let activeWorker;
-const runtimeEnv={GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,APEX_SESSION_SECRET:process.env.APEX_SESSION_SECRET,OPENF1_ACCESS_TOKEN:process.env.OPENF1_ACCESS_TOKEN,PREDICTIONS_STORE:predictionsStore};
+const runtimeEnv={GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,APEX_SESSION_SECRET:process.env.APEX_SESSION_SECRET,OPENF1_ACCESS_TOKEN:process.env.OPENF1_ACCESS_TOKEN,OPENF1_USERNAME:process.env.OPENF1_USERNAME,OPENF1_PASSWORD:process.env.OPENF1_PASSWORD,PREDICTIONS_STORE:predictionsStore};
 setInterval(()=>activeWorker?.scheduled?.({},runtimeEnv).catch(()=>{}),120000).unref();
 import {readFile,stat} from 'node:fs/promises';
 const server=http.createServer(async(req,res)=>{

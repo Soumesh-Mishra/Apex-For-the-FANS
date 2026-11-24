@@ -2,7 +2,7 @@
 import http from 'node:http';
 import {configuredPredictionStore} from './prediction-store.mjs';
 const predictionsStore=configuredPredictionStore();
-const runtimeEnv={GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,APEX_SESSION_SECRET:process.env.APEX_SESSION_SECRET,OPENF1_ACCESS_TOKEN:process.env.OPENF1_ACCESS_TOKEN,PREDICTIONS_STORE:predictionsStore};
+const runtimeEnv={GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,APEX_SESSION_SECRET:process.env.APEX_SESSION_SECRET,OPENF1_ACCESS_TOKEN:process.env.OPENF1_ACCESS_TOKEN,OPENF1_USERNAME:process.env.OPENF1_USERNAME,OPENF1_PASSWORD:process.env.OPENF1_PASSWORD,PREDICTIONS_STORE:predictionsStore};
 import worker from './dist/server/index.js';
 const port=Number(process.env.PORT||4173);
 if(!Number.isInteger(port)||port<1||port>65535)throw Error('PORT must be between 1 and 65535');

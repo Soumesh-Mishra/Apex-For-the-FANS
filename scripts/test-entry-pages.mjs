@@ -6,9 +6,14 @@ const origin='https://apex.test';
 for(const path of ['/','/login?preview=1','/loading?mode=welcome&preview=1','/loading?mode=transition&preview=1']){
  const response=await worker.fetch(new Request(origin+path));assert.equal(response.status,200);assert.equal(response.headers.get('Cache-Control'),'no-store');
  const html=await response.text();assert(!/__[A-Z_]+__/.test(html),'All entry template markers must be compiled: '+path);
+ if(path==='/'){
+  assert(html.includes('id="paddock-view"'));
+  assert(!html.includes('grid-intro'));
+  continue;
+ }
  assert(!html.includes('drift-webgl'));assert(!html.includes('type="module"'));assert(html.includes('Choose your team'));
  for(const match of html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(match[1]);
- if(path.startsWith('/loading')){assert(html.includes('data-loading-continue'));assert(html.includes('OPTION A'));assert(html.includes('OPTION B'));}
+ if(path.startsWith('/loading')){assert(html.includes('data-loading-continue'));assert(html.includes('APEX loading screen'));assert(html.includes('OPTION B'));}
 }
 const image=await worker.fetch(new Request(origin+'/assets/entry/apex-carbon-hero.webp'));assert.equal(image.headers.get('Content-Type'),'image/webp');const bytes=new Uint8Array(await image.arrayBuffer());assert.equal(new TextDecoder().decode(bytes.slice(0,4)),'RIFF');assert.equal(new TextDecoder().decode(bytes.slice(8,12)),'WEBP');
 const head=await worker.fetch(new Request(origin+'/assets/entry/apex-carbon-hero.webp',{method:'HEAD'}));assert.equal(await head.text(),'');

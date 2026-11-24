@@ -14,7 +14,7 @@ export default {
    const body=['GET','HEAD'].includes(request.method)?undefined:await request.arrayBuffer();
    if(body&&body.byteLength>22000)return Response.json({error:'Request too large'},{status:413});
    const trusted=new Request(new URL(url.pathname+url.search,origin),{method:request.method,headers,body});
-   const env={GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,APEX_SESSION_SECRET:process.env.APEX_SESSION_SECRET,OPENF1_ACCESS_TOKEN:process.env.OPENF1_ACCESS_TOKEN};
+   const env={GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,APEX_SESSION_SECRET:process.env.APEX_SESSION_SECRET,OPENF1_ACCESS_TOKEN:process.env.OPENF1_ACCESS_TOKEN,OPENF1_USERNAME:process.env.OPENF1_USERNAME,OPENF1_PASSWORD:process.env.OPENF1_PASSWORD};
    if(url.pathname==='/api/cron/settle'){
     if(request.method!=='GET')return Response.json({error:'Method not allowed'},{status:405});
     if(!process.env.CRON_SECRET||headers.get('Authorization')!=='Bearer '+process.env.CRON_SECRET)return Response.json({error:'Unauthorized'},{status:401});

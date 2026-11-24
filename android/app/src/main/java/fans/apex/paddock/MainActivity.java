@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
                 if(HOST.equals(uri.getHost())){
                     String route=uri.getPath();
                     if("/".equals(route))uri=uri.buildUpon().path("/index.html").build();
-                    else if(Arrays.asList("/login","/privacy","/credits","/install").contains(route))uri=uri.buildUpon().path(route+".html").build();
+                    else if(Arrays.asList("/login","/loading","/privacy","/credits","/install").contains(route))uri=uri.buildUpon().path(route+".html").build();
                 }
                 return loader.shouldInterceptRequest(uri);
             }

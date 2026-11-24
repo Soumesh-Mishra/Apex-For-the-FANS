@@ -4,7 +4,7 @@ export const sections = [
   {id:'overview',label:'Overview',icon:'grid',primary:true,description:'The next race and your weekend at a glance.'},
   {id:'timing',label:'Race Center',icon:'activity',primary:true,description:'Live timing, race library, recorded replays and Driver Duel.'},
   {id:'calendar',label:'Calendar',icon:'calendar',primary:true,description:'Race dates, session times and calendar layouts.'},
-  {id:'strategy',label:'Strategy Lab',icon:'activity',description:'Compare tyres, pit stops and safety-car scenarios.'},
+  {id:'strategy',label:'Strategy Lab',icon:'scenarioChart',description:'Compare tyres, pit stops and safety-car scenarios.'},
   {id:'news',label:'Latest News',icon:'news',description:'Formula 1 headlines and race coverage.'}
  ]},
  {group:'The grid', pages:[
@@ -21,6 +21,6 @@ export const sections = [
 export function navigationMarkup(){
  const destinations=Object.fromEntries(sections.flatMap(({group,pages})=>pages.map(({id,label,primary})=>[id,{group,label,primary:!!primary}])));
  const sidebar=sections.map(({group,pages})=>`<div class="nav-group" role="group" aria-label="${group}"><span class="nav-group-title" aria-hidden="true">${group}</span>${pages.map(({id,label,icon,primary})=>`<button type="button" data-view="${id}" class="${primary?'nav-primary':'nav-secondary'}" title="${label}"><i data-icon="${icon}"></i><span class="nav-label">${label}</span></button>`).join('')}</div>`).join('');
- const menu=sections.map(({group,pages})=>`<details class="menu-section" name="apex-sections" data-group="${group}"><summary>${group}</summary><div class="web-menu-grid">${pages.map(({id,label,description,icon,primary})=>`<button type="button" class="${primary?'menu-primary':'menu-secondary'}" data-go="${id}"><strong>${(id==='leagues'||id==='community')?`<i data-icon="${icon}" aria-hidden="true"></i> `:''}${label}</strong><span>${description}</span></button>`).join('')}</div></details>`).join('');
+ const menu=sections.map(({group,pages})=>`<details class="menu-section" name="apex-sections" data-group="${group}"><summary>${group}</summary><div class="web-menu-grid">${pages.map(({id,label,description,icon,primary})=>`<button type="button" class="${primary?'menu-primary':'menu-secondary'}" data-go="${id}"><strong>${(['strategy','leagues','community'].includes(id))?`<i data-icon="${icon}" aria-hidden="true"></i> `:''}${label}</strong><span>${description}</span></button>`).join('')}</div></details>`).join('');
  return {destinations,sidebar,menu};
 }

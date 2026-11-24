@@ -23,6 +23,7 @@ $('#replay-seek').addEventListener('input',e=>{replay.time=Number(e.target.value
 $('#replay-driver').addEventListener('change',e=>{replay.selected=Number(e.target.value);drawReplay()});
 function setTimingMode(mode){if(!['library','history','results','duel'].includes(mode))mode='library';$('#race-library-panel').classList.toggle('hidden',mode!=='library');$('#historical-panel').classList.toggle('hidden',mode!=='history');$('#published-panel').classList.toggle('hidden',mode!=='results');$('#driver-duel-panel').classList.toggle('hidden',mode!=='duel');$$('[data-timing-mode]').forEach(b=>{b.classList.toggle('selected',b.dataset.timingMode===mode);b.setAttribute('aria-pressed',String(b.dataset.timingMode===mode))});if(mode!=='history')setReplayPlaying(false)}
 $$('[data-timing-mode]').forEach(b=>b.addEventListener('click',()=>setTimingMode(b.dataset.timingMode)));
+$('#overview-race-action').addEventListener('click',()=>setTimingMode('results'));
 $('.replay-preview [data-go="timing"]').addEventListener('click',()=>setTimingMode('history'));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)setReplayPlaying(false)});
 window.addEventListener('hashchange',()=>{if(location.hash!=='#timing'&&location.hash!=='#overview')setReplayPlaying(false)});

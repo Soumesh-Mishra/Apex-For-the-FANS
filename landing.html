@@ -1,1 +1,50 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08090c"><meta name="robots" content="noindex"><title>Lights out — APEX</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="preload" as="image" href="/assets/entry/apex-carbon-hero.webp"><style>__ENTRY_CSS__</style><script data-team-bootstrap>__TEAM_THEME_CORE__</script></head><body data-entry-loading><div class="entry-shell"><nav class="preview-toolbar" aria-label="Entry design previews" data-preview-toolbar hidden><strong>APEX / ENTRY DESIGN REVIEW</strong><a href="/login?preview=1" data-preview-page="login">Login</a><a href="/loading?mode=transition&amp;preview=1" data-preview-page="transition">A · Transition</a><a href="/loading?mode=welcome&amp;preview=1" data-preview-page="welcome">B · Welcome</a></nav><header class="entry-header"><a class="entry-brand" href="/" aria-label="APEX home"><span class="entry-mark" aria-hidden="true"></span>APEX<span class="entry-team-logo" data-entry-logo hidden><img alt=""></span></a><div class="splash-topline"><label class="entry-picker"><span>YOUR TEAM</span><select data-entry-team aria-label="Choose your team"></select></label><a class="entry-back" href="/login">Sign in <span>↗</span></a></div></header><main class="splash-stage"><img class="splash-hero" src="/assets/entry/apex-carbon-hero.webp" alt="Black carbon Formula-style concept car on a dark pit lane" decoding="async" fetchpriority="high"><section class="splash-copy"><div class="entry-eyebrow"><i class="status-dot"></i><span data-loading-eyebrow>YOUR PLACE ON THE GRID</span></div><h1>Ready for<br><em>lights out.</em></h1><p>Race weekends, paddock stories and every twist in the championship. All in one place.</p><div class="start-lights" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div></section><section class="splash-panel" aria-labelledby="loading-title"><div class="card-running-head"><span data-mode-label>YOUR PADDOCK</span><span class="card-index">APEX / 01</span></div><div class="entry-eyebrow"><i class="status-dot"></i><span data-entry-team-name>APEX Original</span></div><h2 id="loading-title">The grid is waiting.</h2><p data-loading-description>Your team. Your racing world.<br>Let’s get you closer to the action.</p><ul class="preflight-checks" aria-label="Paddock readiness"><li data-check="team"><span>Team identity</span><span class="check-status" aria-hidden="true">·</span></li><li data-check="visual"><span>Race-day visuals</span><span class="check-status" aria-hidden="true">·</span></li><li data-check="access"><span>Paddock access</span><span class="check-status" aria-hidden="true">·</span></li></ul><div class="readiness-bar" aria-hidden="true"><i data-bar="team"></i><i data-bar="visual"></i><i data-bar="access"></i></div><p class="splash-status" role="status" aria-live="polite" data-loading-status>Preparing your pit wall…</p><a class="entry-primary" data-loading-continue href="/index.html#overview" aria-disabled="true"><span data-continue-label>Enter the paddock</span><span aria-hidden="true">↗</span></a><a class="splash-secondary" href="/login">Sign in to APEX ↗</a><p class="preview-notice" data-preview-notice hidden></p></section><span class="splash-footer">FOR THE FANS. FOR THE RACING. · INDEPENDENT FAN PROJECT</span></main></div><script data-bookmark-route>if(location.pathname==='/'&&['overview','timing','calendar','standings','teams','news'].includes(location.hash.slice(1)))location.replace('/index.html'+location.search+location.hash);</script><script data-entry-ui>__ENTRY_UI__</script><script>__LOADING_UI__</script></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08090c"><meta name="robots" content="noindex"><title>Lights out — APEX</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><style>__ENTRY_CSS__
+.grid-entry{position:relative;isolation:isolate;overflow:hidden;display:grid;align-items:end;min-height:calc(100svh - 90px);background:#101114}
+.grid-entry .grid-photo{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 55%;opacity:1;transform:none;animation:grid-arrival 1s ease-out both}
+.grid-entry:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#07080bf2,transparent 80%),linear-gradient(0deg,#07080bc7,transparent 65%);z-index:1;pointer-events:none}
+.grid-brief{position:relative;z-index:2;padding:clamp(24px,6vw,96px);padding-bottom:max(8vh,32px);color:#fff}
+.grid-team{display:flex;align-items:center;gap:12px;font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase}
+.grid-team i{width:30px;height:4px;background:var(--accent,#ff302e);transform:skewX(-28deg)}
+.grid-brief h1{font:italic 800 clamp(64px,9vw,142px)/.98 'Barlow Condensed',Impact,sans-serif;text-transform:uppercase;margin:16px 0}
+.grid-state{font:500 16px/1.5 Barlow,Arial,sans-serif;color:#dedee3;margin:0;max-width:42ch}
+.grid-progress{display:flex;gap:5px;width:min(300px,100%);margin:22px 0}
+.grid-progress i{height:4px;flex:1;background:#64646a;transform:skewX(-28deg)}
+.grid-progress i[data-complete=true]{background:var(--accent,#ff302e)}
+.grid-brief .entry-primary{width:fit-content;min-width:190px}
+@keyframes grid-arrival{from{transform:scale(1.04)}to{transform:scale(1)}}
+@media(max-width:650px){.grid-entry{min-height:calc(100svh - 80px)}.grid-entry .grid-photo{object-position:60% 35%}.grid-entry:after{background:linear-gradient(0deg,#07080b 6%,#07080bc7 40%,transparent 85%)}}
+@media(prefers-reduced-motion:reduce){.grid-entry .grid-photo{animation:none}}
+[data-loader-view="transition"] .entry-header,[data-loader-view="transition"] .grid-entry,[data-loader-view="transition"] .preview-toolbar{display:none!important}
+.entry-loader{display:none}
+[data-loader-view="transition"] .entry-loader{display:grid}
+.entry-loader{min-height:100vh;min-height:100dvh;place-items:center;background:#08090c;color:#f5f5f5;padding:24px}
+.entry-loader-content{display:grid;justify-items:center;gap:20px}
+.entry-loader .entry-brand{font-size:clamp(48px,12vw,76px)}
+.entry-loader-track{width:118px;height:3px;overflow:hidden;background:#303036}
+.entry-loader-track::before{content:'';display:block;width:45%;height:100%;background:var(--accent,#ff302e);animation:entry-sweep .85s ease-in-out infinite}
+.entry-loader-status{margin:0;color:#c5c5ce;font:500 13px Barlow,Arial,sans-serif}
+@keyframes entry-sweep{from{transform:translateX(-100%)}to{transform:translateX(225%)}}
+@media(prefers-reduced-motion:reduce){.entry-loader-track::before{animation:none;width:100%}}
+</style><script data-team-bootstrap>__TEAM_THEME_CORE__</script><script>
+if(location.pathname!=='/'&&new URLSearchParams(location.search).get('mode')!=='welcome'){
+ document.documentElement.dataset.loaderView='transition';
+}
+</script></head><body data-entry-loading><div class="entry-shell"><nav class="preview-toolbar" aria-label="Entry design previews" data-preview-toolbar hidden><strong>APEX / ENTRY DESIGN REVIEW</strong><a href="/login?preview=1" data-preview-page="login">Login</a><a href="/loading?mode=transition&amp;preview=1" data-preview-page="transition">A · Transition</a><a href="/loading?mode=welcome&amp;preview=1" data-preview-page="welcome">B · Welcome</a></nav><header class="entry-header"><a class="entry-brand" href="/" aria-label="APEX home"><span class="entry-mark" aria-hidden="true"></span>APEX<span class="entry-team-logo" data-entry-logo hidden><img alt=""></span></a><div class="splash-topline"><label class="entry-picker"><span>YOUR TEAM</span><select data-entry-team aria-label="Choose your team"></select></label><a class="entry-back" href="/login">Sign in <span>↗</span></a></div></header><main class="grid-entry">
+ <img class="splash-hero grid-photo" src="/assets/entry/apex-carbon-hero.webp" alt="" decoding="async" loading="lazy">
+ <section class="grid-brief" aria-labelledby="loading-title">
+  <div class="grid-team"><i aria-hidden="true"></i><span data-entry-team-name>APEX Original</span></div>
+  <h1 id="loading-title">Lights out.</h1>
+  <p class="grid-state" data-loading-status role="status">Preparing your pit wall…</p>
+  <div class="grid-progress" aria-hidden="true"><i data-bar="team"></i><i data-bar="visual"></i><i data-bar="access"></i></div>
+  <a class="entry-primary" data-loading-continue href="/index.html#overview" aria-disabled="true"><span data-continue-label>Enter the paddock</span><span aria-hidden="true">↗</span></a>
+  <p class="preview-notice" data-preview-notice hidden></p>
+ </section>
+</main>
+<main class="entry-loader" aria-label="APEX loading screen">
+ <div class="entry-loader-content">
+  <span class="entry-brand"><span class="entry-mark" aria-hidden="true"></span>APEX<span class="entry-team-logo" data-entry-logo hidden><img alt=""></span></span>
+  <div class="entry-loader-track" aria-hidden="true"></div>
+  <p class="entry-loader-status" role="status">Loading APEX…</p>
+  <noscript><a class="entry-back" href="/index.html#overview">Open APEX</a></noscript>
+ </div>
+</main></div><script data-bookmark-route>if(location.pathname==='/'&&['overview','timing','calendar','standings','teams','news'].includes(location.hash.slice(1)))location.replace('/index.html'+location.search+location.hash);</script><script data-entry-ui>__ENTRY_UI__</script><script>__LOADING_UI__</script></body></html>

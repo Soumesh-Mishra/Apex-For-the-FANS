@@ -16,7 +16,9 @@ Existing Google login requires `GOOGLE_CLIENT_ID` and a random `APEX_SESSION_SEC
 
 Set a random server-only `CRON_SECRET` (at least 32 characters). The authenticated `/api/cron/settle` endpoint performs league settlement; the included Hobby-compatible schedule runs daily at 03:00 UTC. Opening a league also refreshes its selected race through the existing API. There are no permanent server timers.
 
-Set `PUBLIC_ORIGIN` to the exact production HTTPS origin when using a custom domain. Leave it unset for Vercel's initial domain: requests use their own HTTPS origin and retain existing same-origin mutation checks. The function strips client-supplied hosting identity headers. Optional `OPENF1_ACCESS_TOKEN` stays server-only; public deployment does not bypass live-feed access restrictions.
+Set `PUBLIC_ORIGIN` to the exact production HTTPS origin when using a custom domain. Leave it unset for Vercel's initial domain: requests use their own HTTPS origin and retain existing same-origin mutation checks. The function strips client-supplied hosting identity headers.
+
+For live timing, set `OPENF1_USERNAME` and `OPENF1_PASSWORD` as sensitive server-side environment variables on the APEX Vercel project. APEX exchanges them for an access token and renews it before expiry. An existing `OPENF1_ACCESS_TOKEN` still works when account credentials are absent. During active sessions, the visible dashboard requests updates about every five seconds and backs off on provider errors. Historical timing is available outside OpenF1's protected session window.
 
 ## Verify and maintain
 

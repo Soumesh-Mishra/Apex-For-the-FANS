@@ -39,7 +39,7 @@ await put('assets/entry/apex-carbon-hero.webp',Buffer.from(site.threeAssets['ape
 for(const [id,car] of Object.entries(site.teamCars))await put('assets/team-cars/'+id+'.webp',Buffer.from(car.dataUrl.split(',')[1],'base64'));
 for(const [id,legend] of Object.entries(site.legendAssets))await put('assets/team-legends/'+id+'.jpg',Buffer.from(legend.dataUrl.split(',')[1],'base64'));
 for(const [url,asset] of Object.entries(site.pwaAssets))if(url.includes('.'))await put(url.slice(1),Buffer.from(asset.body,'base64'));
-await put('landing.html',enhance(site.landingPage));
+await put('loading.html',enhance(site.landingPage));
 // Root branding links stay in the bundled dashboard rather than an unresolved route.
 await put('default.html',enhance(site.page));
 console.log('Bundled Android dashboard, native data proxy adapter, team art and historical recordings.');
