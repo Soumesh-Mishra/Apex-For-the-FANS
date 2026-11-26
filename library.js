@@ -25,7 +25,7 @@ async function openLibraryRace(r){
  $('#library-result').innerHTML='<div class="disclaimer">'+esc(race.date)+' · '+esc(race.Circuit.circuitName)+' · Published race classification</div><div class="library-table"><table class="data-table"><thead><tr><th>POS</th><th>DRIVER</th><th>TEAM</th><th>TIME / STATUS</th><th>PTS</th></tr></thead><tbody>'+rows.map(d=>'<tr><td>'+esc(d.position)+'</td><td>'+esc(d.Driver?.givenName+' '+d.Driver?.familyName)+'</td><td>'+esc(d.Constructor?.name)+'</td><td>'+esc(d.Time?.time||d.status)+'</td><td>'+esc(d.points)+'</td></tr>').join('')+'</tbody></table></div><div class="disclaimer">Jolpica F1 archive · historical results</div>';
  }catch{if(request===libraryState.resultRequest)$('#library-result').innerHTML='<div class="empty">The race archive could not be loaded. Open this race again to retry.</div>'}
 }
-function openLibraryReplay(id){if(!['bahrain-2024','monaco-2024'].includes(id))return;$('#replay-session').value=id;setTimingMode('history');location.hash='timing';loadReplay(id)}
+function openLibraryReplay(id){if(!['bahrain-2024','monaco-2024'].includes(id))return;$('#replay-session').value=id;setTimingMode('history');loadReplay(id)}
 for(let year=new Date().getFullYear();year>=1950;year--){const option=document.createElement('option');option.value=year;option.textContent=year;$('#library-season').appendChild(option)}
 $('#library-season').onchange=loadLibrarySeason;$('#library-search').oninput=renderRaceLibrary;$('#library-replay-only').onchange=renderRaceLibrary;$('#library-retry').onclick=()=>{libraryState.cache.clear();loadLibrarySeason()};$('#library-close').onclick=()=>{libraryState.resultRequest++;$('#library-detail').hidden=true};
 loadLibrarySeason();

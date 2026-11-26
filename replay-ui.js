@@ -21,12 +21,33 @@ $('#replay-restart').addEventListener('click',()=>{replay.time=0;setReplayPlayin
 $('#replay-speed').addEventListener('change',e=>{replay.speed=Number(e.target.value);replay.previous=performance.now()});
 $('#replay-seek').addEventListener('input',e=>{replay.time=Number(e.target.value);replay.previous=performance.now();drawReplay();if(replay.prepared&&replay.time>=replay.prepared.data.duration)setReplayPlaying(false)});
 $('#replay-driver').addEventListener('change',e=>{replay.selected=Number(e.target.value);drawReplay()});
-function setTimingMode(mode){if(!['library','history','results','duel'].includes(mode))mode='library';$('#race-library-panel').classList.toggle('hidden',mode!=='library');$('#historical-panel').classList.toggle('hidden',mode!=='history');$('#published-panel').classList.toggle('hidden',mode!=='results');$('#driver-duel-panel').classList.toggle('hidden',mode!=='duel');$$('[data-timing-mode]').forEach(b=>{b.classList.toggle('selected',b.dataset.timingMode===mode);b.setAttribute('aria-pressed',String(b.dataset.timingMode===mode))});if(mode!=='history')setReplayPlaying(false)}
-$$('[data-timing-mode]').forEach(b=>b.addEventListener('click',()=>setTimingMode(b.dataset.timingMode)));
-$('#overview-race-action').addEventListener('click',()=>setTimingMode('results'));
-$('.replay-preview [data-go="timing"]').addEventListener('click',()=>setTimingMode('history'));
+const timingRoutes={session:'session',results:'results',library:'archive',history:'archive/replay',duel:'archive/duel'};
+function showTimingMode(mode){
+ const archive=['library','history','duel'].includes(mode);
+ $('#timing-archive').classList.toggle('hidden',!archive);
+ for(const [id,view] of [['live-timing-section','session'],['published-results-section','results'],['race-library-panel','library'],['historical-panel','history'],['driver-duel-panel','duel']])$('#'+id).classList.toggle('hidden',mode!==view);
+ $$('[data-timing-mode],[data-archive-mode]').forEach(button=>{
+  const selected=button.dataset.archiveMode?button.dataset.archiveMode===mode:button.dataset.timingMode===(archive?'library':mode);
+  button.classList.toggle('selected',selected);
+  button.setAttribute('aria-pressed',String(selected));
+ });
+ if(mode!=='history')setReplayPlaying(false);
+}
+function setTimingMode(mode){
+ const route=timingRoutes[mode];
+ if(!route)return;
+ location.hash='timing/'+route;
+ showTimingMode(mode);
+}
+function applyTimingRoute(){
+ if(currentView()!=='timing'){if(currentView()!=='overview')setReplayPlaying(false);return;}
+ const route=location.hash.slice('#timing/'.length);
+ showTimingMode(Object.keys(timingRoutes).find(mode=>timingRoutes[mode]===route)||'session');
+}
+$$('[data-timing-mode],[data-archive-mode]').forEach(button=>button.addEventListener('click',()=>setTimingMode(button.dataset.archiveMode||button.dataset.timingMode)));
+window.addEventListener('hashchange',applyTimingRoute);
+applyTimingRoute();
 document.addEventListener('visibilitychange',()=>{if(document.hidden)setReplayPlaying(false)});
-window.addEventListener('hashchange',()=>{if(location.hash!=='#timing'&&location.hash!=='#overview')setReplayPlaying(false)});
 setInterval(()=>{if(!replay.playing||!replay.prepared)return;const now=performance.now();replay.time=Math.min(replay.prepared.data.duration,replay.time+Math.min(1,(now-replay.previous)/1000)*replay.speed);replay.previous=now;drawReplay();if(replay.time>=replay.prepared.data.duration)setReplayPlaying(false)},200);
 loadReplay('bahrain-2024');
 /* REPLAY_UI_END */

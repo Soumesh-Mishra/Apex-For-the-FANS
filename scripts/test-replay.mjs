@@ -37,5 +37,5 @@ assert.equal(core.latest([[1,1],[3,3]],2)[1],1);assert.equal(core.latest([[1,1]]
 assert.equal(core.formatLap(96.753),'1:36.753');assert.equal(core.formatGap(null),'—');assert.equal(core.formatGap('+1 LAP'),'+1 LAP');
 assert.equal((await worker.default.fetch(new Request('https://apex.test/api/history/unknown'))).status,404);
 const page=await(await worker.default.fetch(new Request('https://apex.test/index.html'))).text();
-assert(page.includes("$$('[data-timing-mode]').forEach"),'Browser selector helper preserved when assembling page');
+assert(page.includes("$$('[data-timing-mode],[data-archive-mode]').forEach"),'Browser selector helper preserved when assembling page');
 console.log('Historical replay tests passed.');

@@ -27,7 +27,7 @@ try{
  const paged=await(await request('season=2000&round=1&part=laps&driver=test')).json();assert.equal(paged.rows.length,101);assert.equal(calls,2);
  globalThis.fetch=async url=>url.includes('/sessions?')?Response.json([{session_name:'Race',session_key:123,date_start:'2023-03-05T15:00:00Z',is_cancelled:false},{session_name:'Sprint',session_key:555,date_start:'2023-03-05T12:00:00Z'}]):Response.json([{driver_number:44,lap_start:1,lap_end:20,compound:'MEDIUM'}]);
  const tyres=await(await request('season=2023&round=1&part=stints&date=2023-03-05')).json();assert.equal(tyres.session,123);assert.equal(tyres.rows.length,1);
- const html=await(await worker.fetch(new Request('https://apex.test/index.html'))).text();assert(!/__[A-Z_]+__/.test(html));assert(html.includes('data-timing-mode="duel"'));assert(html.includes('Driver Duel includes historical classifications'));
+ const html=await(await worker.fetch(new Request('https://apex.test/index.html'))).text();assert(!/__[A-Z_]+__/.test(html));assert(html.includes('data-archive-mode="duel"'));assert(html.includes('Driver Duel includes historical classifications'));
  for(const match of html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(match[1]);
  console.log('Passed Driver Duel timing, shared qualifying, representative pace, DNF/grid handling, tyre filtering, input validation, partial data, pagination, source fallback and page syntax checks.');
 }finally{globalThis.fetch=realFetch;}

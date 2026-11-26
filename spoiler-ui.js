@@ -9,18 +9,23 @@ function updateSpoilerControls(){
  renderRaceAction();
 }
 function setSpoilerMode(enabled){
- $("[data-results-revealed]")?.removeAttribute("data-results-revealed");
  SpoilerMode.apply(enabled);window.PersonalPaddock?.setSpoilers(enabled);let persisted=true;try{localStorage.setItem(SpoilerMode.key,String(enabled))}catch{persisted=false}
  updateSpoilerControls();toast((enabled?'Spoiler-free mode on.':'Spoilers are now visible.')+(persisted?'':' This preference could not be saved in this browser.'));
+}
+function revealSpoilerPanel(panel,focus=false){
+ panel.setAttribute('data-spoiler-revealed','');
+ if(focus){
+  if(!panel.hasAttribute('tabindex'))panel.tabIndex=-1;
+  panel.focus({preventScroll:true});
+ }
 }
 $$('[data-spoiler-content]').forEach(content=>{
  const cover=document.createElement('div');cover.className='spoiler-cover';
  const message=document.createElement('p');message.textContent=content.dataset.spoilerMessage||'Hidden while spoiler-free mode is on.';
- const button=document.createElement('button');button.type='button';button.className='text-btn';button.textContent='Show spoilers everywhere';button.onclick=()=>setSpoilerMode(false);
+ const button=document.createElement('button');button.type='button';button.className='text-btn';button.textContent=content.dataset.spoilerLabel||'Reveal this section';button.onclick=()=>revealSpoilerPanel(content,true);
  cover.append(message,button);content.before(cover);
 });
 $('#spoiler-toggle').onclick=()=>setSpoilerMode(document.documentElement.dataset.spoilerFree!=='true');
-$('#spoiler-reveal').onclick=()=>setSpoilerMode(false);
 window.addEventListener('storage',e=>{if(e.key===SpoilerMode.key||e.key===null){SpoilerMode.apply(SpoilerMode.saved());updateSpoilerControls()}});
 updateSpoilerControls();
 /* SPOILER_UI_END */

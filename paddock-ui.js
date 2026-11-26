@@ -86,7 +86,7 @@
    const race=entry().profile.savedRaces.find(r=>r.key===button.dataset.paddockOpen);if(!race)return;
    if(Date.parse(race.date+'T23:59:59Z')>Date.now()&&state.races.some(r=>r.season+'-'+r.round===race.key)){
     $('#race-search').value=race.name;state.scope='all';$$('#calendar-tabs [data-scope]').forEach(button=>button.classList.toggle('selected',button.dataset.scope==='all'));location.hash='calendar';$('#calendar-layout [data-layout="list"]').click();renderCalendar();
-   }else{location.hash='timing';requestAnimationFrame(()=>{setTimingMode('library');openLibraryRace({season:String(race.season),round:String(race.round),raceName:race.name,date:race.date,Circuit:{circuitName:race.circuit}});});}
+   }else{setTimingMode('library');requestAnimationFrame(()=>{openLibraryRace({season:String(race.season),round:String(race.round),raceName:race.name,date:race.date,Circuit:{circuitName:race.circuit}});});}
   });
  }
  const toggleDriver=id=>mutate({type:entry().profile.favouriteDrivers.includes(id)?'driver-remove':'driver-add',value:id});

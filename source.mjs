@@ -1,5 +1,5 @@
 import {navigationMarkup} from './navigation.mjs';
-import {readFile} from 'node:fs/promises';
+import {readFile,readdir} from 'node:fs/promises';
 import {installable} from './pwa/build.mjs';
 export async function loadSite(){
  const [loginTemplate,privacyPage,authUi,carData]=await Promise.all(['login.html','privacy.html','auth-ui.js','data/team-cars.json'].map(path=>readFile(path,'utf8')));
@@ -45,6 +45,13 @@ export async function loadSite(){
  const webCss=await readFile('web-shell.css','utf8'),webUi=await readFile('web-shell.js','utf8'),webMenu=await readFile('web-menu.html','utf8');
  const nav=navigationMarkup();
  const pwa=await installable();
+ const welcome=pwa.enhance(await readFile('welcome.html','utf8'));
+ pwa.assets['/welcome']={type:'text/html; charset=utf-8',body:Buffer.from(welcome).toString('base64')};
+ const types={webp:'image/webp',png:'image/png',ttf:'font/ttf',css:'text/css',js:'text/javascript',txt:'text/plain'};
+ for(const file of await readdir('assets/w14')){
+  const url='/assets/w14/'+file;
+  pwa.assets[url]={type:types[file.split('.').pop()],body:(await readFile('.'+url)).toString('base64')};
+ }
  const [communityPanel,communityCss,communityUi]=await Promise.all(['community.html','community.css','community-ui.js'].map(path=>readFile(path,'utf8')));
  const strategyPage=page.replace('__COMMUNITY_PANEL__',()=>communityPanel).replace('__COMMUNITY_CSS__',()=>communityCss).replace('__COMMUNITY_UI__',()=>communityUi).replace('__STRATEGY_PANEL__',()=>strategyPanel).replace('__STRATEGY_CORE__',()=>strategyCore).replace('__STRATEGY_CSS__',()=>strategyCss).replace('__STRATEGY_UI__',()=>strategyUi);
  const paddockPage=strategyPage.replace('__PADDOCK_PANEL__',()=>paddockPanel).replace('__PADDOCK_CORE__',()=>paddockCore).replace('__PADDOCK_CSS__',()=>paddockCss).replace('__PADDOCK_UI__',()=>paddockUi);

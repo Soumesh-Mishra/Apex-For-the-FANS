@@ -10,9 +10,10 @@ export default {
   async scheduled(event,env={}) { await PredictionAPI.refresh(env); },
   async fetch(request,env={}) {
     const url=new URL(request.url);
-    if(Object.hasOwn(pwaAssets,url.pathname)){
+    const assetPath=url.pathname==='/'?'/welcome':url.pathname;
+    if(Object.hasOwn(pwaAssets,assetPath)){
       if(!['GET','HEAD'].includes(request.method))return new Response('Method not allowed',{status:405,headers:{Allow:'GET, HEAD'}});
-      const asset=pwaAssets[url.pathname];
+      const asset=pwaAssets[assetPath];
       return new Response(request.method==='HEAD'?null:Uint8Array.from(atob(asset.body),c=>c.charCodeAt(0)),{headers:{'Content-Type':asset.type,'Cache-Control':url.pathname==='/sw.js'?'no-cache':'no-store','X-Content-Type-Options':'nosniff',...(url.pathname==='/sw.js'?{'Service-Worker-Allowed':'/'}:{})}});
     }
     if(url.pathname==='/assets/entry/apex-carbon-hero.webp'&&['GET','HEAD'].includes(request.method))return new Response(request.method==='HEAD'?null:Uint8Array.from(atob(threeAssets['apex-carbon-hero.webp']),c=>c.charCodeAt(0)),{headers:{'Content-Type':'image/webp','Cache-Control':'public, max-age=86400','X-Content-Type-Options':'nosniff'}});
@@ -90,7 +91,7 @@ export default {
         return new Response(await upstream.text(),{headers:{'Content-Type':'application/json','Cache-Control':'public, max-age='+ (kind==='session'?30:180)}});
       } catch(e) {return Response.json({error:e.message},{status:502});}
     }
-    if(url.pathname!=='/'&&url.pathname!=='/loading'&&url.pathname!=='/index.html') return new Response('Not found',{status:404});
+    if(url.pathname!=='/pit-wall'&&url.pathname!=='/loading'&&url.pathname!=='/index.html') return new Response('Not found',{status:404});
     return new Response(url.pathname==='/loading'?landingPage:page,{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}});
   }
 };

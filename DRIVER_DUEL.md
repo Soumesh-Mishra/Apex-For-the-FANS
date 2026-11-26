@@ -1,6 +1,6 @@
 # Driver Duel
 
-Open Race Center → Driver Duel, or `/index.html?duel=1#timing`. Historical race cards also offer a Driver duel action.
+Open Race Center → Archive → Driver Duel, or `/index.html#timing/archive/duel`. Historical race cards also offer a Driver duel action.
 
 Choose a season, load a completed Grand Prix and select two different drivers. Compare results, starting grid, classification gains, points, qualifying, representative race pace, fastest recorded laps and pit-stop counts. Switch between lap-time and position charts; click the chart or use the keyboard-accessible lap slider. The expandable table provides the underlying timed laps. Tyre bars show recorded compounds and lap ranges, without filling gaps in the source data.
 

@@ -85,8 +85,8 @@ public class BundleTest {
         for(int i=0;i<40;i++){if("\"passed\"".equals(js("window.__bundleTest")))break;Thread.sleep(250);}
         assertEquals("\"passed\"",js("window.__bundleTest"));
         // Built-in sample comparison is present without a host or Google account.
-        js("document.querySelector('[data-go=timing]').click();document.querySelector('[data-timing-mode=duel]')?.click();");
-        assertEquals("true",js("document.body.textContent.includes('Driver Duel')"));
+        js("document.querySelector('[data-view=timing]').click();document.querySelector('[data-timing-mode=library]').click();document.querySelector('[data-archive-mode=duel]').click();");
+        assertEquals("true",js("location.hash==='#timing/archive/duel' && !document.querySelector('#driver-duel-panel').classList.contains('hidden')"));
     }
     @Test public void personalPaddockSurvivesReloadWithoutAccount() throws Exception {
         ready();

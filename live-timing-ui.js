@@ -1,25 +1,33 @@
 /* LIVE_TIMING_UI_START */
-let timingTimer, timingRequest, timingSnapshot, timingPanelMarkup, latestPublishedRace;
-const weekendSessions=['FirstPractice','SecondPractice','ThirdPractice','SprintQualifying','Sprint','Qualifying'];
-function raceAction(data, published, races, now){
- if(['live','stale','waiting','auth_required'].includes(data?.state)){
-  const start=Date.parse(data.session?.date_start),end=Date.parse(data.session?.date_end);
-  if(start<=now&&now<=end)return 'live';
+let timingTimer, timingRequest, timingSnapshot, timingPanelMarkup, latestPublishedRace, overviewNextSessionAt;
+const weekendSessions={FirstPractice:'Practice 1',SecondPractice:'Practice 2',ThirdPractice:'Practice 3',SprintQualifying:'Sprint qualifying',Sprint:'Sprint',Qualifying:'Qualifying'};
+function nextWeekendSession(races,now){
+ for(const race of races){
+  const slots=[{name:'Race',at:+dateOf(race)},...Object.entries(weekendSessions).filter(([key])=>race[key]?.time).map(([key,name])=>({name,at:+dateOf(race[key])}))];
+  const upcoming=slots.filter(slot=>slot.at>now).sort((a,b)=>a.at-b.at)[0];
+  if(upcoming)return {...upcoming,race};
  }
- if(!published)return 'schedule';
- const next=races.find(r=>+dateOf(r)>now);
- if(next){
-  const starts=weekendSessions.map(key=>next[key]).filter(slot=>slot?.time).map(slot=>+dateOf(slot)).filter(Number.isFinite);
-  if(now>=Math.min(+dateOf(next),...starts)-48*60*60*1000)return 'schedule';
- }
- const laterRace=races.some(r=>+dateOf(r)<=now&&+dateOf(r)>+dateOf(published));
- return laterRace?'schedule':'results';
+}
+function activeTiming(data,now){
+ if(!['live','stale','waiting','auth_required','unavailable'].includes(data?.state))return false;
+ return Date.parse(data.session?.date_start)<=now&&now<=Date.parse(data.session?.date_end);
 }
 function renderRaceAction(){
- const action=raceAction(timingSnapshot,latestPublishedRace,state.races,Date.now());
- const spoilers=document.documentElement.dataset?.spoilerFree==='true';
+ const now=Date.now(),next=nextWeekendSession(state.races,now),active=activeTiming(timingSnapshot,now);
+ const action=active?'session':'calendar';
+ const protectedMode=document.documentElement.dataset?.spoilerFree==='true';
+ overviewNextSessionAt=next?.at;
+ $('#next-session-name').textContent=next?.name||(state.races.length?'Season complete':'Schedule unavailable');
+ if(next){
+  $('#next-name').textContent=next.race.raceName.replace('Grand Prix','GP');
+  const time=new Date(next.at);
+  $('#race-date').textContent=fmtDate(time)+' · '+fmtTime(time);
+ }
  $('#overview-race-action').dataset.raceAction=action;
- $('#overview-race-label').textContent=action==='live'?(spoilers?'Open Race Center':timingSnapshot.state==='live'?'Watch live timing':'Check session timing'):action==='results'?(spoilers?'Reveal results':'View results'):'View schedule';
+ $('#overview-race-label').textContent=active?(protectedMode?'Open session':timingSnapshot.state==='live'?'Watch live timing':'Check session timing'):'View schedule';
+ const results=$('#overview-results-action');
+ results.hidden=!latestPublishedRace;
+ if(latestPublishedRace)results.textContent=(protectedMode?'Reveal ':'')+latestPublishedRace.raceName+' results';
 }
 function initRaceCenterShortcuts(){
  const pinsKey='apex-race-center-pins-v1', panel=$('#timing-pins');
@@ -75,13 +83,12 @@ function initRaceCenterShortcuts(){
   if(duel){duel.disabled=!latestPublishedRace;duel.title=latestPublishedRace?'Compare in the latest completed race':'Waiting for a published race classification';}
  }
  $('#overview-race-action').onclick=()=>{
-  const action=$('#overview-race-action').dataset.raceAction;
-  if(action==='schedule'){location.hash='calendar';return;}
-  if(action==='results'&&document.documentElement.dataset.spoilerFree==='true')$('#results-table').setAttribute('data-results-revealed','');
-  location.hash='timing';
+  if($('#overview-race-action').dataset.raceAction==='session')setTimingMode('session');
+  else location.hash='calendar';
+ };
+ $('#overview-results-action').onclick=()=>{
   setTimingMode('results');
-  const target=$(action==='live'?'#live-timing-section':'#published-results-section');
-  requestAnimationFrame(()=>{target.scrollIntoView({block:'start'});target.focus({preventScroll:true});});
+  if(document.documentElement.dataset.spoilerFree==='true')revealSpoilerPanel($('#results-table'));
  };
  window.addEventListener('apex:paddock-change',renderPins);
  window.addEventListener('apex:timing-update',()=>updatePinTiming(timingSnapshot?.rows));
@@ -91,29 +98,51 @@ function timingLap(seconds){if(!Number.isFinite(Number(seconds))||Number(seconds
 function renderTiming(data){
  const labels={live:'LIVE TIMING',ended:'SESSION ENDED',scheduled:'UPCOMING SESSION',waiting:'AWAITING TIMING',stale:'TIMING DELAYED',auth_required:'TIMING UNAVAILABLE',unavailable:'FEED UNAVAILABLE'};
  const label=labels[data.state]||labels.unavailable,session=data.session;
- const isLive=data.state==='live';
  renderRaceAction();
- const sections=$('#timing-sections');
- const lead=isLive?$('#live-timing-section'):$('#published-results-section');
- if(sections.firstElementChild!==lead)sections.prepend(lead);
+ const isLive=data.state==='live';
+ const leadingStatus=$('#session-status');
+ const statusMarkup='<span class="dot"></span> '+label;
+ if(leadingStatus.innerHTML!==statusMarkup)leadingStatus.innerHTML=statusMarkup;
+ leadingStatus.classList.toggle('green',isLive);
+ setTimingText('#latest-session-state',label);
+ $('#latest-session-state').classList.toggle('green',isLive);
+ setTimingText('#session-summary',session?[session.country_name,session.circuit_short_name,session.session_name].filter(Boolean).join(' · '):'Latest session timing');
  const message=data.state==='auth_required'
   ?'Live timing is unavailable right now. You can still view published results or check the session schedule.'
   :data.message;
- $('#session-status').innerHTML='<span class="dot"></span> '+label;
- $('#session-status').classList.toggle('green',data.state==='live');
- $('#latest-session-state').textContent=label;
- $('#latest-session-state').classList.toggle('green',data.state==='live');
- $('#session-summary').textContent=session?[session.country_name,session.circuit_short_name,session.session_name].filter(Boolean).join(' · '):'Latest session timing';
- const focused=document.activeElement;
- const scroll=$('#latest-session .timing-scroll'),scrollTop=scroll?.scrollTop||0,scrollLeft=scroll?.scrollLeft||0;
+ setTimingText('#timing-message',message||'Waiting for timing.');
+ const timestamp=Date.parse(data.dataAt);
+ const updated=$('#timing-updated');
+ $('#timing-freshness').hidden=!Number.isFinite(timestamp);
+ if(Number.isFinite(timestamp)){
+  updated.dateTime=data.dataAt;
+  setTimingText('#timing-updated',new Date(timestamp).toLocaleString([], {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'}));
+ }
+ updateTimingAge();
  const rows=data.rows||[];
- const markup='<div class="timing-intro"><div class="eyebrow">OPENF1 / '+esc(session?.year||'SESSION')+'</div><h3>'+esc(session?[session.circuit_short_name,session.session_name].filter(Boolean).join(' · '):'Timing unavailable')+'</h3><p role="status">'+esc(message)+'</p>'+(data.dataAt?'<div class="source">LAST UPDATE · <time datetime="'+esc(data.dataAt)+'">'+esc(new Date(data.dataAt).toLocaleString([], {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'}))+'</time></div>':'')+'</div>'+(rows.length?'<div class="timing-scroll" tabindex="0" role="region" aria-label="Session leaderboard"><table class="data-table timing-table"><caption class="timing-caption">'+(data.state==='live'?'Current positions':data.state==='ended'?'Last available session positions':'Last received positions')+' · lap means last completed lap</caption><thead><tr><th scope="col">POS</th><th scope="col">DRIVER</th><th scope="col">LAP</th><th scope="col">LAST LAP</th></tr></thead><tbody>'+rows.map(row=>'<tr><td class="timing-position">'+esc(row.position||'—')+'</td><td><div class="timing-driver" style="--driver-colour:'+(/^#[a-f\d]{6}$/i.test(row.colour)?row.colour:'#919198')+'"><b>'+esc(row.name)+'</b><small>'+esc(row.team)+' · #'+esc(row.number)+'</small></div></td><td>'+esc(row.lap||'—')+'</td><td class="timing-lap">'+esc(timingLap(row.lapTime))+'</td></tr>').join('')+'</tbody></table></div>':'<div class="timing-empty">'+(data.state==='ended'?'No timing was published for this session.':'Driver positions and completed laps will appear here when available.')+'</div>')+'<div class="timing-footer"><a class="text-btn" href="https://openf1.org/" target="_blank" rel="noopener">Data from OpenF1 ↗</a><button class="refresh" data-retry-session>Refresh ↻</button></div>';
- if(markup===timingPanelMarkup)return;
- timingPanelMarkup=markup;
- $('#latest-session').innerHTML=markup;
- const nextScroll=$('#latest-session .timing-scroll');if(nextScroll){nextScroll.scrollTop=scrollTop;nextScroll.scrollLeft=scrollLeft;if(scroll&&focused===scroll)nextScroll.focus({preventScroll:true});}
- const refresh=$('#latest-session [data-retry-session]');refresh.onclick=loadSession;
- if(focused?.matches('[data-retry-session]'))refresh.focus({preventScroll:true});
+ const scroll=$('#latest-session .timing-scroll');
+ scroll.classList.toggle('hidden',!rows.length);
+ $('#timing-empty').hidden=Boolean(rows.length);
+ setTimingText('#timing-empty',data.state==='ended'?'No timing was published for this session.':'Driver positions and completed laps will appear here when available.');
+ setTimingText('#timing-caption',(isLive?'Current positions':data.state==='ended'?'Last available session positions':'Last received positions')+' · lap means last completed lap');
+ const markup=rows.map(row=>'<tr><td class="timing-position">'+esc(row.position||'—')+'</td><td><div class="timing-driver" style="--driver-colour:'+(/^#[a-f\d]{6}$/i.test(row.colour)?row.colour:'#919198')+'"><b>'+esc(row.name)+'</b><small>'+esc(row.team)+' · #'+esc(row.number)+'</small></div></td><td>'+esc(row.lap||'—')+'</td><td class="timing-lap">'+esc(timingLap(row.lapTime))+'</td></tr>').join('');
+ if(markup!==timingPanelMarkup){
+  timingPanelMarkup=markup;
+  const {scrollTop,scrollLeft}=scroll;
+  $('#timing-rows').innerHTML=markup;
+  scroll.scrollTop=scrollTop;
+  scroll.scrollLeft=scrollLeft;
+ }
+}
+function setTimingText(selector,text){
+ const node=$(selector);
+ if(node.textContent!==text)node.textContent=text;
+}
+function updateTimingAge(){
+ const timestamp=Date.parse(timingSnapshot?.dataAt);
+ const minutes=Math.max(0,Math.floor((Date.now()-timestamp)/60000));
+ const age=!Number.isFinite(timestamp)||timingSnapshot.state==='ended'?'':minutes===0?' · less than 1 min ago':minutes<60?' · '+minutes+' min ago':minutes<1440?' · '+Math.floor(minutes/60)+' hr ago':' · '+Math.floor(minutes/1440)+' days ago';
+ setTimingText('#timing-age',age);
 }
 function loadSession(){
  if(timingRequest)return timingRequest;
@@ -124,6 +153,7 @@ function loadSession(){
    const data=await api('live-timing',30000);
    const previous=timingSnapshot;
    const sameSession=!data.session||data.session.session_key===previous?.session?.session_key;
+   if(previous?.session&&!sameSession)$('#latest-session').removeAttribute('data-spoiler-revealed');
    const interruption=['unavailable','auth_required','stale','ended'].includes(data.state);
    timingSnapshot=interruption&&sameSession&&!data.rows?.length&&previous?.rows?.length
     ?{...data,state:data.state==='ended'||(!data.session&&previous.state==='ended')?'ended':'stale',session:data.session||previous.session,rows:previous.rows,dataAt:previous.dataAt}
@@ -135,5 +165,6 @@ function loadSession(){
   finally{timingRequest=null;if(typeof window!=='undefined')window.dispatchEvent(new Event('apex:timing-update'));if(!document.hidden)timingTimer=setTimeout(loadSession,delay);}
  })();return timingRequest;
 }
+$('#retry-timing').onclick=loadSession;
 document.addEventListener('visibilitychange',()=>{clearTimeout(timingTimer);if(!document.hidden)loadSession()});
 /* LIVE_TIMING_UI_END */

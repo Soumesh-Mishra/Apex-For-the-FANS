@@ -22,7 +22,8 @@ assert.equal((await request('/api/cron/settle')).status,401,'Protect scheduled s
 assert.equal((await request('/api/auth/signout',{method:'POST',headers:{Origin:'https://evil.test'}})).status,403);
 assert.equal((await request('/api/auth/signout',{method:'POST',headers:{Origin:'https://apex.test'}})).status,200);
 assert.equal((await request('/api/auth/google',{method:'POST',body:'x'.repeat(22001)})).status,413);
-const html=await readFile('vercel-public/index.html','utf8');assert(!/__[A-Z_]+__/.test(html));
+assert((await readFile('vercel-public/index.html','utf8')).includes('href="/pit-wall#overview"'));
+const html=await readFile('vercel-public/pit-wall.html','utf8');assert(!/__[A-Z_]+__/.test(html));
 for(const name of ['strategy-view','paddock-view','timing-view','calendar-view','leagues-view'])assert(html.includes('id="'+name+'"'),name);
 assert.equal(JSON.parse(await readFile('vercel-public/manifest.webmanifest','utf8')).display,'standalone');
 console.log('Passed Vercel build, shared routes, safe disabled-storage mode, origin checks, request limits, protected cron, snapshot isolation and rollback.');

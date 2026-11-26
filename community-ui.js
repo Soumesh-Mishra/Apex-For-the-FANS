@@ -1,12 +1,12 @@
 (()=>{
  const el=id=>document.querySelector('#community-'+id);
- const join=el('join'), compose=el('compose');
+ const join=el('join'), compose=el('compose'), retry=el('retry');
  let mode='chat',topic='',revision=0,lastFeed='',busy=false,notice='',timer;
  const active=()=>location.hash==='#community' && !document.hidden;
  async function request(path,body){
   const response=await fetch(path,{method:body?'POST':'GET',cache:'no-store',signal:AbortSignal.timeout(12000),headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined});
   const result=await response.json();
-  if(!response.ok) throw Error(result.error||'Community could not load.');
+  if(!response.ok){const error=Error(result.error||'Community could not load.');error.status=response.status;throw error;}
   return result;
  }
  function element(tag,text,cls){
@@ -40,13 +40,23 @@
   clearTimeout(timer);
   if(!active())return;
   const current=++revision;
+  retry.disabled=true;
   try{
    const data=await request('/api/community'+(topic?'?topic='+encodeURIComponent(topic):''));
    if(current!==revision)return;
    showFeed(data);el('status').textContent=notice;
-  }catch(error){if(current===revision)el('status').textContent=error.message+' Retrying shortly.';}
-  finally{if(current===revision && active())timer=setTimeout(refresh,6000);}
+   if(document.activeElement===retry){el('heading').tabIndex=-1;el('heading').focus({preventScroll:true});}
+   retry.hidden=true;
+  }catch{
+   if(current!==revision)return;
+   const message=lastFeed?'Connection interrupted. Showing the last loaded posts.':'Couldn’t load the conversation.';
+   el('status').textContent=[notice,message,'Retrying automatically.'].filter(Boolean).join(' ');
+   retry.hidden=false;
+  }finally{
+   if(current===revision){retry.disabled=false;if(active())timer=setTimeout(refresh,6000);}
+  }
  }
+ retry.onclick=refresh;
  const drafts=new Map();
  function switchTo(next,id=''){
   if(busy)return;
@@ -64,7 +74,7 @@
    el(tab).setAttribute('aria-pressed',String(tab===mode));
   }
   el('heading').textContent=topic?'Discussion':newTopic?'Discussions':'Race chat';
-  el('feed').replaceChildren();el('status').textContent='Loading…';refresh();
+  retry.hidden=true;el('feed').replaceChildren();el('status').textContent='Loading…';refresh();
  }
  for(const tab of ['chat','topics'])el(tab).onclick=()=>switchTo(tab);
  el('back').onclick=()=>switchTo('topics');
@@ -81,7 +91,12 @@
     if(kind==='topic'){busy=false;switchTo('topics',result.id);return;}
    }
    await refresh();
-  }catch(error){notice=error.message;el('status').textContent=notice;}
+  }catch(error){
+   notice=error.status>=400&&error.status<500?error.message:
+    form===join?'Couldn’t confirm your fan name. Try again.':'Couldn’t confirm your post. Your draft is still here. Check the conversation before posting again.';
+   el('status').textContent=notice;
+   retry.hidden=false;
+  }
   finally{button.disabled=false;busy=false;}
  }
  join.onsubmit=compose.onsubmit=submit;

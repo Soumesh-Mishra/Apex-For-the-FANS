@@ -1,6 +1,6 @@
 const APEXEntry=(()=>{
  const all=s=>[...document.querySelectorAll(s)],one=s=>document.querySelector(s);
- function safeNext(value){try{if(typeof value!=='string'||!value.startsWith('/')||value.startsWith('//')||value.includes('\\'))throw Error();const url=new URL(value,location.origin);if(url.origin!==location.origin||!['/index.html','/privacy','/credits'].includes(url.pathname))throw Error();return url.pathname+url.search+url.hash;}catch{return '/index.html#overview';}}
+ function safeNext(value){try{if(typeof value!=='string'||!value.startsWith('/')||value.startsWith('//')||value.includes('\\'))throw Error();const url=new URL(value,location.origin);if(url.origin!==location.origin||!['/index.html','/pit-wall','/privacy','/credits'].includes(url.pathname))throw Error();return url.pathname+url.search+url.hash;}catch{return '/index.html#overview';}}
  function loadingUrl(value){return '/loading?mode=transition&next='+encodeURIComponent(safeNext(value));}
  function applyTeam(value,persist=false){
   const team=TeamThemes.apply(document.documentElement,value);
