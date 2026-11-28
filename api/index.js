@@ -14,13 +14,17 @@ export default {
    const body=['GET','HEAD'].includes(request.method)?undefined:await request.arrayBuffer();
    if(body&&body.byteLength>22000)return Response.json({error:'Request too large'},{status:413});
    const trusted=new Request(new URL(url.pathname+url.search,origin),{method:request.method,headers,body});
-   const env={GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,APEX_SESSION_SECRET:process.env.APEX_SESSION_SECRET,OPENF1_ACCESS_TOKEN:process.env.OPENF1_ACCESS_TOKEN,OPENF1_USERNAME:process.env.OPENF1_USERNAME,OPENF1_PASSWORD:process.env.OPENF1_PASSWORD};
+   const env={GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,APEX_SESSION_SECRET:process.env.APEX_SESSION_SECRET,RESEND_API_KEY:process.env.RESEND_API_KEY,APEX_EMAIL_FROM:process.env.APEX_EMAIL_FROM,OPENF1_ACCESS_TOKEN:process.env.OPENF1_ACCESS_TOKEN,OPENF1_USERNAME:process.env.OPENF1_USERNAME,OPENF1_PASSWORD:process.env.OPENF1_PASSWORD};
    if(url.pathname==='/api/cron/settle'){
     if(request.method!=='GET')return Response.json({error:'Method not allowed'},{status:405});
     if(!process.env.CRON_SECRET||headers.get('Authorization')!=='Bearer '+process.env.CRON_SECRET)return Response.json({error:'Unauthorized'},{status:401});
     const db=store();if(!db)return Response.json({error:'Persistent database is not configured'},{status:503});
     await db.run(PREDICTIONS_STORE=>worker.scheduled({}, {...env,PREDICTIONS_STORE}));
     return Response.json({ok:true},{headers:{'Cache-Control':'no-store'}});
+   }
+   if(url.pathname.startsWith('/api/auth/')){
+    const db=store();
+    if(db)env.AUTH_STORE=action=>db.run(action);
    }
    const durable=url.pathname==='/api/community'||url.pathname==='/api/paddock'||url.pathname==='/api/predictions'||url.pathname.startsWith('/api/predictions/');
    const db=durable?store():null;

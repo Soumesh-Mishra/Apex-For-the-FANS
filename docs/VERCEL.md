@@ -12,7 +12,9 @@ Without a database, Personal Paddock stays in device mode and shared leagues exp
 
 ## Login and scheduling
 
-Existing Google login requires `GOOGLE_CLIENT_ID` and a random `APEX_SESSION_SECRET` of at least 32 characters. Register the final HTTPS production origin with Google. Account sync remains disabled until authentication is configured. Vercel hosting itself is not a user authentication provider. The unfinished AWS Cognito experiment is not part of this deployment.
+Existing Google login requires `GOOGLE_CLIENT_ID` and a random `APEX_SESSION_SECRET` of at least 32 characters. Register the final HTTPS production origin with Google. Account sync requires a configured sign-in method and persistent storage. Vercel hosting itself is not a user authentication provider. The unfinished AWS Cognito experiment is not part of this deployment.
+
+For **email code sign-in**, use a verified sending domain in Resend. Set `RESEND_API_KEY` as a sensitive Vercel variable, and set `APEX_EMAIL_FROM` to a sender such as `APEX <signin@your-verified-domain>`. The same `APEX_SESSION_SECRET` and persistent database configuration are required. An email account and a Google account remain distinct even when their addresses match. Test requesting and verifying a code on the final HTTPS origin after deploying.
 
 Set a random server-only `CRON_SECRET` (at least 32 characters). The authenticated `/api/cron/settle` endpoint performs league settlement; the included Hobby-compatible schedule runs daily at 03:00 UTC. Opening a league also refreshes its selected race through the existing API. There are no permanent server timers.
 

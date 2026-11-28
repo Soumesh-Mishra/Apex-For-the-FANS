@@ -2,6 +2,7 @@ import {spawnSync} from 'node:child_process';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
+import {createPredictionStore} from '../prediction-store.mjs';
 const source=await readFile('dist/server/index.js','utf8');
 const worker=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
 const origin='https://apex.test';
@@ -30,7 +31,7 @@ try{
  for(const patch of [{aud:'wrong.apps.googleusercontent.com'},{iss:'https://other.test'},{exp:now-1},{iat:now+1000},{nonce:'wrong'},{email_verified:false},{sub:''}])assert.equal((await post(await jwt(patch))).status,401,JSON.stringify(patch));
  assert.equal((await post(await jwt({},{alg:'HS256'}))).status,401);
  const parts=validToken.split('.');parts[2]=(parts[2][0]==='A'?'B':'A')+parts[2].slice(1);assert.equal((await post(parts.join('.'))).status,401,'Forged signature rejected');
- const logout=await worker.default.fetch(new Request(origin+'/api/auth/signout',{method:'POST',headers:{Origin:origin,Cookie:sessionCookie,...identity}}),env);assert.equal(logout.status,200);assert.equal(logout.headers.getSetCookie().length,2);assert(logout.headers.getSetCookie().every(value=>value.includes('Max-Age=0')));
+ const logout=await worker.default.fetch(new Request(origin+'/api/auth/signout',{method:'POST',headers:{Origin:origin,Cookie:sessionCookie,...identity}}),env);assert.equal(logout.status,200);assert.equal(logout.headers.getSetCookie().length,3);assert(logout.headers.getSetCookie().every(value=>value.includes('Max-Age=0')));
  assert.equal((await(await get('/api/auth/config',{})).json()).enabled,false,'No fake sign-in without configuration');
  assert.equal((await(await get('/api/auth/me',{})).json()).user,null);
  const disabled=await worker.default.fetch(new Request(origin+'/api/auth/google',{method:'POST'}),{});assert.equal(disabled.status,503);
@@ -38,3 +39,61 @@ try{
  assert.equal((await get('/privacy')).status,200);
  console.log('Passed Google signature/issuer/audience/expiry/nonce checks, CSRF/origin checks, hosting identity binding, session tampering, logout, unconfigured state and login script syntax.');
 }finally{globalThis.fetch=realFetch}
+
+const store=createPredictionStore(':memory:');
+const {GOOGLE_CLIENT_ID,...sessionEnv}=env;
+const emailEnv={...sessionEnv,RESEND_API_KEY:'resend-fixture',APEX_EMAIL_FROM:'APEX <signin@example.com>',AUTH_STORE:async action=>action(store)};
+let delivered=[],rejectDelivery=false;
+globalThis.fetch=async(url,options)=>{
+ assert.equal(url,'https://api.resend.com/emails');
+ assert.equal(options.headers.Authorization,'Bearer resend-fixture');
+ if(rejectDelivery)return Response.json({message:'Fixture outage'},{status:503});
+ const {to,text}=JSON.parse(options.body);
+ delivered.push({address:to[0],code:text.match(/\b\d{6}\b/)[0]});
+ return Response.json({id:'fixture'});
+};
+const emailPost=(action,body,{cookie='',requestOrigin=origin,scope=identity,environment=emailEnv}={})=>
+ worker.default.fetch(new Request(origin+'/api/auth/email/'+action,{method:'POST',headers:{Origin:requestOrigin,'Content-Type':'application/json',Cookie:cookie,...scope},body:JSON.stringify(body)}),environment);
+try{
+ const email='fan@example.com';
+ assert.equal((await(await get('/api/auth/me',emailEnv)).json()).emailEnabled,true);
+ assert.equal((await emailPost('start',{email},{environment:env})).status,503);
+ assert.equal((await emailPost('start',{email},{requestOrigin:'https://other.test'})).status,403);
+ assert.equal((await emailPost('start',{email:'invalid'})).status,400);
+ const start=await emailPost('start',{email:' FAN@example.com '});
+ assert.equal(start.status,200);
+ assert.deepEqual(await start.json(),{ok:true});
+ const flow=start.headers.get('set-cookie');
+ assert.match(flow,/^__Host-apex_email_flow=.*Secure; HttpOnly; SameSite=Lax/);
+ const cookie=flow.split(';')[0],code=delivered[0].code;
+ assert.equal(delivered[0].address,email);
+ assert.notEqual(store.read(state=>Object.values(state.emailAuth.addresses)[0].challenge.digest),code);
+ assert.equal((await emailPost('start',{email})).status,429);
+ assert.equal((await emailPost('verify',{email,code})).status,400);
+ assert.equal((await emailPost('verify',{email,code},{cookie,scope:{}})).status,401);
+ const wrong=code==='000000'?'000001':'000000';
+ assert.equal((await emailPost('verify',{email,code:wrong},{cookie})).status,401);
+ const attempts=await Promise.all([emailPost('verify',{email,code},{cookie}),emailPost('verify',{email,code},{cookie})]);
+ assert.deepEqual(attempts.map(r=>r.status).sort(),[200,401]);
+ const signedIn=attempts.find(r=>r.ok);
+ const sessionCookie=signedIn.headers.getSetCookie().find(value=>value.startsWith('__Host-apex_session=')).split(';')[0];
+ const me=await(await get('/api/auth/me',emailEnv,{Cookie:sessionCookie})).json();
+ assert.equal(me.user.email,email);
+ assert.match(me.user.id,/^email:/);
+ assert.equal(me.googleEnabled,false);
+ const second='second@example.com';
+ const secondStart=await emailPost('start',{email:second});
+ const secondCookie=secondStart.headers.get('set-cookie').split(';')[0],secondCode=delivered.at(-1).code;
+ for(let i=0;i<5;i++)assert.equal((await emailPost('verify',{email:second,code:secondCode==='000000'?'000001':'000000'},{cookie:secondCookie})).status,i===4?429:401);
+ assert.equal((await emailPost('verify',{email:second,code:secondCode},{cookie:secondCookie})).status,429);
+ const expired='expired@example.com';
+ const expiryStart=await emailPost('start',{email:expired});
+ const expiryCookie=expiryStart.headers.get('set-cookie').split(';')[0],expiryCode=delivered.at(-1).code;
+ store.transaction(state=>{for(const record of Object.values(state.emailAuth.addresses))if(record.challenge)record.challenge.expires=0;});
+ assert.equal((await emailPost('verify',{email:expired,code:expiryCode},{cookie:expiryCookie})).status,401);
+ rejectDelivery=true;
+ const failed=await emailPost('start',{email:'failed@example.com'});
+ assert.equal(failed.status,503);
+ assert.equal(failed.headers.get('set-cookie'),null);
+ console.log('Passed email code delivery, normalization, origin, cooldown, session isolation, single use, attempt cap, expiration and delivery failure.');
+}finally{globalThis.fetch=realFetch;store.close();}
